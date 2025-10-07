@@ -1,0 +1,70 @@
+    .nav-bg {
+            background-color: #7c1c20;
+        }
+
+        /* FIX: Ensure the border space is reserved with a transparent border (2px solid transparent) */
+        .nav-hover-border {
+            padding: 8px 12px;
+            /* Key change: Border is always present but transparent, preventing movement */
+            border: 2px solid transparent; 
+            transition: border-color 0.3s ease, color 0.3s ease, background-color 0.3s ease;
+        }
+
+        .nav-hover-border:hover {
+            background-color: transparent !important;
+            /* On hover, only the border-color changes to white */
+            border-color: white; 
+            color: white !important;
+        }
+
+        .register-cta:hover {
+            background-color: #7c1c20 !important;
+        }
+
+        @media (min-width: 768px) {
+            .nav-link-desktop {
+                padding: 0 0;
+            }
+
+            .nav-link-desktop:hover {
+                padding: 2px 4px;
+            }
+
+            /* FIX: Desktop styling must also reserve the border space */
+            .nav-hover-border.md\:p-0 {
+                /* Overriding Flowbite's md:p-0 to ensure space is reserved. 
+                   The padding is adjusted to account for the 2px border on all sides. */
+                padding: 6px 10px; /* 8px - 2px = 6px, 12px - 2px = 10px (Roughly) */
+                border: 2px solid transparent; /* Essential for preventing movement */
+            }
+
+            .nav-hover-border:hover.md\:p-0 {
+                /* Maintain the same padding on hover to keep the element size constant */
+                padding: 6px 10px;
+                border-color: white;
+            }
+            
+            .nav-link-with-border:hover,
+            .register-cta:hover {
+                /* This is primarily for the border-radius and background change effect */
+                border-radius: 0.5rem;
+            }
+        }
+
+        /* Existing color definitions */
+        .text-primary {
+            color: #7c1c20;
+        }
+
+        .bg-primary {
+            background-color: #7c1c20;
+        }
+
+        .border-primary {
+            border-color: #7c1c20;
+        }
+
+        .hover-primary:hover {
+            background-color: #7c1c20;
+            color: white;
+        }
