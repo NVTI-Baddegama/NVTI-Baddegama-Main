@@ -6,10 +6,8 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8f9fa;
-<<<<<<< HEAD
-=======
+
             overflow-x: hidden; /* Hide horizontal scrollbar */
->>>>>>> c558fbcdc61b5932a55cb50f4d910cfe999cc342
         }
         
         /* Custom styles have been removed and replaced with direct Tailwind utility classes in the header tag. */
@@ -36,13 +34,10 @@
         }
     </script>
 
-<<<<<<< HEAD
-<header class="relative w-screen overflow-hidden aspect-video md:min-h-[60vh]">
-        <div class="relative w-screen h-full overflow-hidden">
-=======
+
 <header class="relative overflow-hidden aspect-video md:min-h-[60vh]">
         <div class="relative h-full overflow-hidden">
->>>>>>> c558fbcdc61b5932a55cb50f4d910cfe999cc342
+>>>>>>>>> Temporary merge branch 2
             <!-- Video will cover the proportional container -->
             <video src="https://res.cloudinary.com/dhxfrmepy/video/upload/v1759822024/1006_1_oponlw.mp4"
                 class="absolute top-0 left-0 w-full h-full object-cover" autoplay muted loop playsinline></video>
@@ -92,15 +87,15 @@
                 </p>
 
                 <!-- Call to Action Button (Responsive) -->
-<<<<<<< HEAD
+<<<<<<<<< Temporary merge branch 1
                 <a href="#"
                     class="inline-block px-8 py-3 mt-4 text-lg font-semibold text-white bg-primary-blue rounded-lg shadow-lg hover:bg-blue-800 transition duration-300 ease-in-out transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-blue-300">
                     Explore Our Courses
-=======
+=========
                 <a href="about.php"
                     class="inline-block px-8 py-3 mt-4 text-lg font-semibold text-white bg-primary-blue rounded-lg shadow-lg hover:bg-blue-800 transition duration-300 ease-in-out transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-blue-300">
                     Learn More
->>>>>>> c558fbcdc61b5932a55cb50f4d910cfe999cc342
+>>>>>>>>> Temporary merge branch 2
                 </a>
             </div>
 
@@ -117,8 +112,8 @@
     </main>
 
       
-<<<<<<< HEAD
+<<<<<<<<< Temporary merge branch 1
 <?php include_once('../include/footer.php'); ?>
-=======
+=========
 <?php include_once('../include/footer.php'); ?>
->>>>>>> c558fbcdc61b5932a55cb50f4d910cfe999cc342
+>>>>>>>>> Temporary merge branch 2
