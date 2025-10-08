@@ -6,6 +6,7 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8f9fa;
+            overflow-x: hidden; /* Hide horizontal scrollbar */
         }
         
         /* Custom styles have been removed and replaced with direct Tailwind utility classes in the header tag. */
@@ -32,8 +33,8 @@
         }
     </script>
 
-<header class="relative w-screen overflow-hidden aspect-video md:min-h-[60vh]">
-        <div class="relative w-screen h-full overflow-hidden">
+<header class="relative overflow-hidden aspect-video md:min-h-[60vh]">
+        <div class="relative h-full overflow-hidden">
             <!-- Video will cover the proportional container -->
             <video src="https://res.cloudinary.com/dhxfrmepy/video/upload/v1759822024/1006_1_oponlw.mp4"
                 class="absolute top-0 left-0 w-full h-full object-cover" autoplay muted loop playsinline></video>
