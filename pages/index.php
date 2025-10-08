@@ -87,15 +87,14 @@
                 </p>
 
                 <!-- Call to Action Button (Responsive) -->
-<<<<<<<<< Temporary merge branch 1
                 <a href="#"
                     class="inline-block px-8 py-3 mt-4 text-lg font-semibold text-white bg-primary-blue rounded-lg shadow-lg hover:bg-blue-800 transition duration-300 ease-in-out transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-blue-300">
                     Explore Our Courses
-=========
+
                 <a href="about.php"
                     class="inline-block px-8 py-3 mt-4 text-lg font-semibold text-white bg-primary-blue rounded-lg shadow-lg hover:bg-blue-800 transition duration-300 ease-in-out transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-blue-300">
                     Learn More
->>>>>>>>> Temporary merge branch 2
+
                 </a>
             </div>
 
@@ -112,8 +111,5 @@
     </main>
 
       
-<<<<<<<<< Temporary merge branch 1
+
 <?php include_once('../include/footer.php'); ?>
-=========
-<?php include_once('../include/footer.php'); ?>
->>>>>>>>> Temporary merge branch 2
