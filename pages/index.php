@@ -2,14 +2,6 @@
 
 <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Merriweather:wght@400;700;900&display=swap');
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8f9fa;
-            overflow-x: hidden; /* Hide horizontal scrollbar */
-        }
-        
-        /* Custom styles have been removed and replaced with direct Tailwind utility classes in the header tag. */
 </style>
 
 <script>
@@ -38,14 +30,12 @@
             }
         }
     </script>
-
+<body class="font-sans bg-[#f8f9fa]">
 <header class="relative overflow-hidden aspect-video md:min-h-[60vh]">
         <div class="relative h-full overflow-hidden">
-            <!-- Video will cover the proportional container -->
             <video src="https://res.cloudinary.com/dhxfrmepy/video/upload/v1759822024/1006_1_oponlw.mp4"
                 class="absolute top-0 left-0 w-full h-full object-cover" autoplay muted loop playsinline></video>
             
-            <!-- Overlay and Text -->
             <div class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black bg-opacity-60 p-4">
                 <h1
                     class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold text-white text-center leading-tight tracking-wider uppercase mb-4 font-serif">
@@ -59,10 +49,8 @@
         </div>
     </header>
 
-    <!-- 2. Main About Content Section -->
     <main class="container mx-auto px-4 py-12 md:py-20">
 
-        <!-- Header Section -->
         <section class="text-center mb-12 md:mb-20">
             <h2 class="text-4xl md:text-5xl font-extrabold text-primary-blue mb-4 leading-tight">
                 About NVTI Baddegama
@@ -73,11 +61,9 @@
             </p>
         </section>
 
-        <!-- Main Content Layout (Image + History/Mission/Values) -->
         <section
             class="flex flex-col md:flex-row gap-8 lg:gap-12 items-start bg-white p-6 sm:p-8 md:p-12 rounded-2xl shadow-xl shadow-blue-100 mb-12">
 
-            <!-- Descriptive Text Section (History, Mission, CTA) -->
             <div class="md:w-1/2 w-full space-y-6 order-2 md:order-1">
                 <h3 class="text-3xl md:text-4xl font-bold text-primary-blue pb-2 border-b-2 border-blue-100">
                     Our History and Mission
@@ -89,16 +75,13 @@
                     central hub for cutting-edge vocational and technological training.
                 </p>
 
-                <!-- Call to Action Button (Responsive) -->
                 <a href="about.php"
                     class="inline-block px-8 py-3 mt-4 text-lg font-semibold text-white bg-primary-blue rounded-lg shadow-lg hover:bg-blue-800 transition duration-300 ease-in-out transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-blue-300">
                     Learn More
                 </a>
             </div>
 
-            <!-- Placeholder Image Section -->
             <div class="md:w-1/2 w-full order-1 md:order-2">
-                <!-- Placeholder Image -->
                 <img src="../images/image/about_main.png"
                     alt="A professional photo representing the NVTI Baddgama Vocational Training Center or facility"
                     class="w-full h-auto object-cover rounded-xl shadow-2xl transition duration-300 hover:shadow-2xl hover:scale-[1.01]"
