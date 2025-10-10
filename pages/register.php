@@ -17,7 +17,7 @@
             <p>Your details have been submitted. We will contact you shortly. (Note: This message will not automatically appear without JavaScript.)</p>
         </div>
         
-        <form id="registrationForm" class="space-y-8" action="#" method="POST">
+        <form id="registrationForm" class="space-y-8" action="../lib/registerbacend.php" method="POST">
             <fieldset class="border-t border-gray-200 pt-6">
                 <legend class="text-lg font-semibold text-gray-700 mb-4">1. Personal Details</legend>
 
@@ -89,22 +89,42 @@
                     <div class="grid grid-cols-3 gap-4">
                         <div>
                             <label for="olEnglish" class="block text-xs font-medium text-gray-600 mb-1">English</label>
-                            <input type="text" id="olEnglish" name="olEnglish" placeholder="A, B, C, etc."
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                            <select id="olEnglish" name="olEnglish"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white appearance-none">
+                                <option value="" selected>Select Grade</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="S">S</option>
+                                <option value="F">F</option>
+                            </select>
                         </div>
                         <div>
                             <label for="olMaths" class="block text-xs font-medium text-gray-600 mb-1">Mathematics</label>
-                            <input type="text" id="olMaths" name="olMaths" placeholder="A, B, C, etc."
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                            <select id="olMaths" name="olMaths"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white appearance-none">
+                                <option value="" selected>Select Grade</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="S">S</option>
+                                <option value="F">F</option>
+                            </select>
                         </div>
                         <div>
                             <label for="olScience" class="block text-xs font-medium text-gray-600 mb-1">Science</label>
-                            <input type="text" id="olScience" name="olScience" placeholder="A, B, C, etc."
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                            <select id="olScience" name="olScience"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white appearance-none">
+                                <option value="" selected>Select Grade</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="S">S</option>
+                                <option value="F">F</option>
+                            </select>
                         </div>
                     </div>
                 </div>
-
                 <div class="mt-6">
                     <label for="alCategory" class="block text-sm font-medium text-gray-700 mb-1">G.C.E. A/L Stream/Category (Select one)</label>
                     <select id="alCategory" name="alCategory" required
