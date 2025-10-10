@@ -168,8 +168,8 @@
                 </div>
             </fieldset>
 
-            <div class="pt-6">
-                <button type="submit"
+              <div class="pt-6">
+                <button type="submit" name="submit"
                         class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200 transform hover:scale-[1.01] active:scale-[0.98]">
                     Submit Application
                 </button>

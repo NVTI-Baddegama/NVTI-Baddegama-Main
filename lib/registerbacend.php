@@ -1,106 +1,148 @@
 <?php
 
-include '../include/connection.php';
+include '../include/connection.php'; // $con යනු mysqli object එකකි
 
 if (!$con) {
-
-    die("Database connection failed.");
+    // මෙය connection.php හිදී සම්බන්ධතාවය අසාර්ථක වුවහොත් ක්‍රියාත්මක වේ.
 }
 
 if (isset($_POST['submit'])) {
 
-    $fullName = trim($_POST['fullName']);
-    $nic = trim($_POST['nic']);
-    $address = trim($_POST['address']);
-    $dob = trim($_POST['dob']);
+    // --- 1. දත්ත ලබා ගැනීම සහ Sanitization කිරීම ---
+    // Prepared statements භාවිතා කරන නිසා mysqli_real_escape_string අනවශ්‍ය වුවද, 
+    // මෙහිදී දත්ත පිරිසිදු කිරීම සඳහා එය භාවිතා කරයි.
+
+    // Generate a random 6-digit Student ID
+    do {
+        $StudentID = "VTA-BAD" . rand(100000, 999999);
+        $check_id_query = "SELECT * FROM student_enrollments WHERE Student_id='$StudentID'";
+        $check_id_result = mysqli_query($con, $check_id_query);
+    } while (mysqli_num_rows($check_id_result) > 0);
+    
+    $fullName = mysqli_real_escape_string($con, trim($_POST['fullName']));
+    $nic = mysqli_real_escape_string($con, trim($_POST['nic']));
+    $address = mysqli_real_escape_string($con, trim($_POST['address']));
+    $dob = mysqli_real_escape_string($con, trim($_POST['dob']));
 
     // Contact Information
-    $contactNo = trim($_POST['contactNo']);
-    $whatsappNo = trim($_POST['whatsappNo'] ?? '');
+    $contactNo = mysqli_real_escape_string($con, trim($_POST['contactNo']));
+    $whatsappNo = mysqli_real_escape_string($con, trim($_POST['whatsappNo'] ?? ''));
 
     // Educational Qualifications
-    $olPassStatus = trim($_POST['olPassStatus']);
-    $olEnglish = trim($_POST['olEnglish'] ?? '');
-    $olMaths = trim($_POST['olMaths'] ?? '');
-    $olScience = trim($_POST['olScience'] ?? '');
-    $alCategory = trim($_POST['alCategory']);
+    $olPassStatus = mysqli_real_escape_string($con, trim($_POST['olPassStatus']));
+    $olEnglish = mysqli_real_escape_string($con, trim($_POST['olEnglish'] ?? ''));
+    $olMaths = mysqli_real_escape_string($con, trim($_POST['olMaths'] ?? ''));
+    $olScience = mysqli_real_escape_string($con, trim($_POST['olScience'] ?? ''));
+    $alCategory = mysqli_real_escape_string($con, trim($_POST['alCategory']));
 
     // Course Application
-    $courseOptionOne = trim($_POST['courseOptionOne']);
-    $courseOptionTwo = trim($_POST['courseOptionTwo'] ?? '');
+    $courseOptionOne = mysqli_real_escape_string($con, trim($_POST['courseOptionOne']));
+    $courseOptionTwo = mysqli_real_escape_string($con, trim($_POST['courseOptionTwo'] ?? ''));
 
-    // --- 2. Input Validation and Redirects ---
+
+    // --- 2. Input Validation සහ Redirection (register.php වෙතට) ---
 
     if (empty($fullName)) {
-        header("location:../pages/enrollment_form.php?error=FullName_required");
+        header("location:../pages/register.php?error=Full_Name_Required");
         exit();
     }
 
     if (empty($nic)) {
-        header("location:../pages/enrollment_form.php?error=NIC_required");
+        header("location:../pages/register.php?error=NIC_Required");
         exit();
     }
 
     if (empty($contactNo)) {
-        header("location:../pages/enrollment_form.php?error=ContactNo_required");
+        header("location:../pages/register.php?error=Contact_No_Required");
         exit();
     }
 
     if (empty($courseOptionOne)) {
-        header("location:../pages/enrollment_form.php?error=Course_Option_One_required");
+        header("location:../pages/register.php?error=Course_Option_One_Required");
         exit();
     }
 
-    // --- 3. Check for Duplicate NIC ---
+    // --- 3. Duplicate NIC පරීක්ෂා කිරීම (Prepared Statement භාවිතයෙන්) ---
+    $check_query = "SELECT id FROM student_enrollments WHERE nic = ?";
 
-    // NOTE: For security, use mysqli_real_escape_string($con, $nic) here!
-    $check_query = "SELECT id FROM student_enrollments WHERE nic = '$nic'";
-    $result_check = mysqli_query($con, $check_query);
+    $stmt_check = $con->prepare($check_query);
 
-    if (!$result_check) {
-        // Cannot use error_log()
-        header("location:../pages/enrollment_form.php?error=check_failed");
+    if (!$stmt_check) {
+        header("location:../pages/register.php?error=Check_Failed");
         exit();
     }
 
-    if (mysqli_num_rows($result_check) > 0) {
-        // NIC found, user already registered
-        header("location:../pages/enrollment_form.php?error=NIC_already_registered");
+    $stmt_check->bind_param("s", $nic);
+    $stmt_check->execute();
+    $result_check = $stmt_check->get_result();
+
+    if ($result_check->num_rows > 0) {
+        // NIC දැනටමත් ලියාපදිංචි කර ඇත
+        header("location:../pages/register.php?error=NIC_Already_Registered");
         exit();
     }
+    $stmt_check->close();
 
-    // --- 4. Insert Data into Database ---
-
-    // NOTE: For security, ALL variables must be escaped with mysqli_real_escape_string()
+    // --- 4. දත්ත සමුදායට දත්ත ඇතුළු කිරීම (Prepared Statement භාවිතයෙන්) ---
 
     $insert_query = "INSERT INTO student_enrollments (
-        full_name, nic, address, dob, contact_no, whatsapp_no, 
+        Student_id, full_name, nic, address, dob, contact_no, whatsapp_no, 
         ol_pass_status, ol_english_grade, ol_maths_grade, ol_science_grade, 
         al_category, course_option_one, course_option_two
     ) VALUES (
-        '$fullName', '$nic', '$address', '$dob', '$contactNo', '$whatsappNo', 
-        '$olPassStatus', '$olEnglish', '$olMaths', '$olScience', 
-        '$alCategory', '$courseOptionOne', '$courseOptionTwo'
+        ?,?, ?, ?, ?, ?, ?, 
+        ?, ?, ?, ?, 
+        ?, ?, ?
     )";
 
-    $result_insert = mysqli_query($con, $insert_query);
+    // Insertion statement සකස් කිරීම
+    $stmt_insert = $con->prepare($insert_query);
 
-    if ($result_insert) {
-        // Success
-        header("location:../pages/enrollment_form.php?success=application_submitted");
-        exit();
-    } else {
-        // Failure
-        header("location:../pages/enrollment_form.php?error=stmt_failed");
+    if (!$stmt_insert) {
+        header("location:../pages/register.php?error=Insertion_Preparation_Failed");
         exit();
     }
 
-    // NOTE: The connection remains open here because mysqli_close() was excluded.
-    // In a normal script, it should be called: mysqli_close($con); 
+    // Parameters සම්බන්ධ කිරීම (bind_param)
+    // සියලු parameters 'string' (s) ලෙස සැලකේ.
+    $stmt_insert->bind_param(
+        "ssssssssssssss",
+        $StudentID,
+        $fullName,
+        $nic,
+        $address,
+        $dob,
+        $contactNo,
+        $whatsappNo,
+        $olPassStatus,
+        $olEnglish,
+        $olMaths,
+        $olScience,
+        $alCategory,
+        $courseOptionOne,
+        $courseOptionTwo
+    );
+
+    // Statement එක ක්‍රියාත්මක කිරීම
+    if ($stmt_insert->execute()) {
+        // සාර්ථකත්වය
+        header("location:../pages/register.php?success=Application_Submitted_Successfully");
+        exit();
+    } else {
+        // අසාර්ථකත්වය
+        header("location:../pages/register.php?error=Insertion_Failed");
+        exit();
+    }
+
+    // Statement වසා දැමීම
+    $stmt_insert->close();
+    // සම්බන්ධතාවය වසා දැමීම
+    $con->close();
+
 
 } else {
-    // If accessed without form submission
-    header("location:../pages/enrollment_form.php?error=invalid_access");
+    // Form submission එකකින් තොරව ප්‍රවේශ වුවහොත්
+    header("location:../pages/register.php?error=Invalid_Access");
     exit();
 }
 ?>
