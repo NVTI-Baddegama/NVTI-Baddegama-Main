@@ -17,14 +17,20 @@
             theme: {
                 extend: {
                     colors: {
+                        // Use the dark blue from index.php as the intended primary color
                         'primary-blue': '#1D4ED8', // Dark Blue
                         'secondary-gray': '#4B5563', // Medium Gray
+                        'accent-yellow': '#f59e0b', /* Tailwind amber-500 */
+                        // Custom red for the "View Course" button on about.php (based on nav-bg in style.css)
+                        'primary-red': '#7c1c20', 
                     },
                     fontFamily: {
+                        // Add Inter and Merriweather for global use
                         sans: ['Inter', 'sans-serif'],
                         serif: ['Merriweather', 'serif'],
                     },
                     borderRadius: {
+                        // Add custom border radius sizes
                         'xl': '0.75rem',
                         '2xl': '1rem',
                     }
