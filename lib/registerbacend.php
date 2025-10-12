@@ -14,7 +14,7 @@ if (isset($_POST['submit'])) {
 
     // Generate a random 6-digit Student ID
     do {
-        $StudentID = "VTA-BAD" . rand(100000, 999999);
+        $StudentID = "VTA_BAD" . rand(100000, 999999);
         $check_id_query = "SELECT * FROM student_enrollments WHERE Student_id='$StudentID'";
         $check_id_result = mysqli_query($con, $check_id_query);
     } while (mysqli_num_rows($check_id_result) > 0);
