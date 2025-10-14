@@ -1,3 +1,3 @@
 <?php
-header("Location: admin/pages/loging.php");
+header("Location: admin/pages/");
 ?>
