@@ -17,7 +17,7 @@
             <p>Your details have been submitted. We will contact you shortly. (Note: This message will not automatically appear without JavaScript.)</p>
         </div>
         
-        <form id="registrationForm" class="space-y-8" action="#" method="POST">
+        <form id="registrationForm" class="space-y-8" action="../lib/registerbacend.php" method="POST">
             <fieldset class="border-t border-gray-200 pt-6">
                 <legend class="text-lg font-semibold text-gray-700 mb-4">1. Personal Details</legend>
 
@@ -89,22 +89,42 @@
                     <div class="grid grid-cols-3 gap-4">
                         <div>
                             <label for="olEnglish" class="block text-xs font-medium text-gray-600 mb-1">English</label>
-                            <input type="text" id="olEnglish" name="olEnglish" placeholder="A, B, C, etc."
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                            <select id="olEnglish" name="olEnglish"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white appearance-none">
+                                <option value="" selected>Select Grade</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="S">S</option>
+                                <option value="F">F</option>
+                            </select>
                         </div>
                         <div>
                             <label for="olMaths" class="block text-xs font-medium text-gray-600 mb-1">Mathematics</label>
-                            <input type="text" id="olMaths" name="olMaths" placeholder="A, B, C, etc."
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                            <select id="olMaths" name="olMaths"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white appearance-none">
+                                <option value="" selected>Select Grade</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="S">S</option>
+                                <option value="F">F</option>
+                            </select>
                         </div>
                         <div>
                             <label for="olScience" class="block text-xs font-medium text-gray-600 mb-1">Science</label>
-                            <input type="text" id="olScience" name="olScience" placeholder="A, B, C, etc."
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                            <select id="olScience" name="olScience"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white appearance-none">
+                                <option value="" selected>Select Grade</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="S">S</option>
+                                <option value="F">F</option>
+                            </select>
                         </div>
                     </div>
                 </div>
-
                 <div class="mt-6">
                     <label for="alCategory" class="block text-sm font-medium text-gray-700 mb-1">G.C.E. A/L Stream/Category (Select one)</label>
                     <select id="alCategory" name="alCategory" required
@@ -148,8 +168,8 @@
                 </div>
             </fieldset>
 
-            <div class="pt-6">
-                <button type="submit"
+              <div class="pt-6">
+                <button type="submit" name="submit"
                         class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200 transform hover:scale-[1.01] active:scale-[0.98]">
                     Submit Application
                 </button>
