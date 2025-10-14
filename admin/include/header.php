@@ -82,7 +82,7 @@
                     
                     <!-- Student Management -->
                     <p class="text-xs font-semibold text-gray-400 pt-3 pb-1 uppercase tracking-wider">Students</p>
-                    <a href="#" class="flex items-center p-3 text-sm font-medium rounded-lg text-gray-300 hover:bg-slate-700 hover:text-white transition duration-150">
+                    <a href="student_register.php" class="flex items-center p-3 text-sm font-medium rounded-lg text-gray-300 hover:bg-slate-700 hover:text-white transition duration-150">
                         <!-- Icon: Add Student -->
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM12 18H8a2 2 0 00-2 2v1"></path></svg>
                         Add Student
@@ -108,7 +108,7 @@
                     
                     <!-- Course Management -->
                     <p class="text-xs font-semibold text-gray-400 pt-3 pb-1 uppercase tracking-wider">Courses</p>
-                    <a href="#" class="flex items-center p-3 text-sm font-medium rounded-lg text-gray-300 hover:bg-slate-700 hover:text-white transition duration-150">
+                    <a href="add_course.php" class="flex items-center p-3 text-sm font-medium rounded-lg text-gray-300 hover:bg-slate-700 hover:text-white transition duration-150">
                         <!-- Icon: Add Course -->
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5zM15.75 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM15.75 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM15.75 18.75a.75.75 0 110-1.5.75.75 0 010 1.5zM9.75 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM9.75 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM9.75 18.75a.75.75 0 110-1.5.75.75 0 010 1.5zM21 21L3 21a2 2 0 01-2-2V5a2 2 0 012-2h18a2 2 0 012 2v14a2 2 0 01-2 2z"></path></svg>
                         Add Course
