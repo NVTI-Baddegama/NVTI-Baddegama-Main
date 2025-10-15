@@ -216,7 +216,6 @@ $courses_result = $con->query($courses_query);
         </form>
 
         <div class="login-link">
-            <p>Already have an account? <a href="login.php">Login here</a></p>
             <p><a href="../index.php">Back to Home</a></p>
         </div>
     </div>
