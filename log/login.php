@@ -1,10 +1,13 @@
 <?php
 session_start();
-include '../include/connection.php';
 
 // Redirect if already logged in
 if (isset($_SESSION['staff_id'])) {
     header("Location: ../office/dashboard.php");
+    exit();
+}
+if (isset($_SESSION['admin_username'])) {
+    header("Location: ../admin/pages/Dashboard.php");
     exit();
 }
 ?>
@@ -14,123 +17,76 @@ if (isset($_SESSION['staff_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff Login - NVTI Baddegama</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <title>Staff & Admin Login - NVTI Baddegama</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        .login-container {
-            max-width: 400px;
-            margin: 100px auto;
-            padding: 30px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        /* Apply Poppins font to the body */
+        body {
+            font-family: 'Poppins', sans-serif;
         }
-        .login-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .login-header img {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 15px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #333;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        .form-group input:focus {
-            border-color: #007bff;
-            outline: none;
-        }
-        .btn-login {
-            width: 100%;
-            padding: 12px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-bottom: 15px;
-        }
-        .btn-login:hover {
-            background: #0056b3;
-        }
-        .register-link {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .register-link a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        .alert {
-            padding: 10px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-        }
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+        /* Custom styles for the background gradient and glass effect */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
     </style>
 </head>
-<body>
-    <div class="login-container">
-        <div class="login-header">
-            <img src="../images/logo/NVTI_logo.png" alt="NVTI Logo">
-            <h2>Staff Login</h2>
-            <p>National Vocational Training Institute - Baddegama</p>
-        </div>
+<body class="bg-gradient-to-br from-gray-900 to-slate-800 min-h-screen flex items-center justify-center p-4">
 
-        <?php
-        if (isset($_SESSION['error'])) {
-            echo '<div class="alert alert-error">' . $_SESSION['error'] . '</div>';
-            unset($_SESSION['error']);
-        }
-        if (isset($_SESSION['success'])) {
-            echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
-            unset($_SESSION['success']);
-        }
-        ?>
-
-        <form action="login_process.php" method="POST">
-            <div class="form-group">
-                <label for="staff_id">Staff ID or Service ID:</label>
-                <input type="text" id="staff_id" name="staff_id" required>
+    <div class="w-full max-w-md">
+        <div class="glass-effect rounded-2xl shadow-2xl p-8 space-y-6">
+            
+            <div class="text-center">
+                <img src="../images/logo/NVTI_logo.png" alt="NVTI Logo" class="w-20 h-20 mx-auto mb-4 bg-white rounded-full p-2">
+                <h2 class="text-3xl font-bold text-white">Welcome Back</h2>
+                <p class="text-gray-300">Login to your account</p>
             </div>
 
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+            <?php
+            if (isset($_SESSION['error'])) {
+                echo '<div class="bg-red-500/30 text-red-200 p-3 rounded-lg text-center text-sm">' . $_SESSION['error'] . '</div>';
+                unset($_SESSION['error']);
+            }
+            if (isset($_SESSION['success'])) {
+                echo '<div class="bg-green-500/30 text-green-200 p-3 rounded-lg text-center text-sm">' . $_SESSION['success'] . '</div>';
+                unset($_SESSION['success']);
+            }
+            ?>
+
+            <form action="login_process.php" method="POST" class="space-y-6">
+                <div class="relative">
+                    <span class="absolute left-4 top-3.5 text-gray-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </span>
+                    <input type="text" id="staff_id" name="staff_id" required placeholder="Staff ID / Service ID / Username"
+                           class="w-full bg-gray-700/50 text-white border-2 border-gray-600 rounded-lg py-3 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition duration-300">
+                </div>
+
+                <div class="relative">
+                     <span class="absolute left-4 top-3.5 text-gray-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    </span>
+                    <input type="password" id="password" name="password" required placeholder="Password"
+                           class="w-full bg-gray-700/50 text-white border-2 border-gray-600 rounded-lg py-3 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition duration-300">
+                </div>
+
+                <button type="submit"
+                        class="w-full bg-sky-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:bg-sky-700 focus:outline-none focus:ring-4 focus:ring-sky-500/50 transition duration-300 transform hover:scale-105">
+                    Login
+                </button>
+            </form>
+            
+            <div class="text-center text-gray-400 text-sm space-y-2">
+                <p>Don't have an account? <a href="register.php" class="font-semibold text-sky-400 hover:underline">Register here</a></p>
+                <p><a href="../index.php" class="hover:underline">← Back to Home</a></p>
             </div>
-
-            <button type="submit" class="btn-login">Login</button>
-        </form>
-
-        <div class="register-link">
-            <p>Don't have an account? <a href="register.php">Register here</a></p>
-            <p><a href="../index.php">Back to Home</a></p>
         </div>
     </div>
+
 </body>
 </html>
