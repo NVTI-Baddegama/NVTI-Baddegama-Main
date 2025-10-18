@@ -5,7 +5,7 @@
 <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-teal-500 w-full lg:w-1/2 mx-auto">
     <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Enter Course Details</h3>
 
-    <form action="handlers/course_handler.php" method="POST" class="mt-6">
+    <form action="../lib/course_handler.php" method="POST" class="mt-6" enctype="multipart/form-data">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
             <div>
@@ -44,8 +44,6 @@
                     <option value="" disabled selected>Select a type</option>
                     <option value="Full-time">Full-time</option>
                     <option value="Part-time">Part-time</option>
-                    <option value="Online">Online</option>
-                    <option value="Hybrid">Hybrid</option>
                 </select>
             </div>
             
@@ -68,6 +66,14 @@
                 <input type="text" id="course_fee" name="course_fee" required maxlength="20"
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                        placeholder="e.g., LKR 50,000">
+            </div>
+
+            <div class="md:col-span-2">
+                <label for="course_image" class="block text-sm font-medium text-gray-700 mb-1">Course Card Image</label>
+                <input type="file" id="course_image" name="course_image" accept="image/jpeg, image/png, image/webp"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                       aria-describedby="image_help">
+                <p class="mt-1 text-xs text-gray-500" id="image_help">Allowed formats: JPG, PNG, WEBP. Max 5MB.</p>
             </div>
 
             <div class="md:col-span-2">

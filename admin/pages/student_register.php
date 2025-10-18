@@ -17,7 +17,7 @@
             <p>Your details have been submitted. We will contact you shortly. (Note: This message will not automatically appear without JavaScript.)</p>
         </div>
         
-        <form id="registrationForm" class="space-y-8" action="../lib/registerbacend.php" method="POST">
+        <form id="registrationForm" class="space-y-8" action="../../lib/registerbacend.php" method="POST">
             <fieldset class="border-t border-gray-200 pt-6">
                 <legend class="text-lg font-semibold text-gray-700 mb-4">1. Personal Details</legend>
 
