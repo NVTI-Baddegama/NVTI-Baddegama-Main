@@ -87,6 +87,10 @@
                                     <a href="#"
                                         class="block px-4 py-2 hover:bg-gray-100">Certificate Programs</a>
                                     </li>
+                                <li>
+                                    <a href="all_course.php"
+                                        class="block px-4 py-2 hover:bg-gray-100">All Courses</a>
+                                    </li>
                                 </ul>
                             </div>
                         </li>
