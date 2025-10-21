@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['staff_id'] = $staff['staff_id'];
          $_SESSION['staff_name'] = $staff['first_name'] . ' ' . $staff['last_name'];
             $_SESSION['position'] = $staff['position'];
-            $_SESSION['course_id'] = $staff['course_id'];
+            $_SESSION['course_no'] = $staff['course_no'];
             $_SESSION['profile_photo'] = $staff['profile_photo'];
         header("Location: ../office/dashboard.php");
         exit();

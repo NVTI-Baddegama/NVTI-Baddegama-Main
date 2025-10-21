@@ -10,19 +10,19 @@ if (!isset($_SESSION['staff_id'])) {
 
 $staff_name = $_SESSION['staff_name'];
 $position = $_SESSION['position'];
-$course_id = $_SESSION['course_id'];
+$course_no = $_SESSION['course_no'];
 $profile_photo = $_SESSION['profile_photo'];
 
 // Get courses for tabs (Non-Academic Staff can see all, Academic Staff only their course)
 if ($position === 'Non-Academic Staff') {
     $courses_query = "SELECT * FROM course WHERE status = 'active' ORDER BY course_name";
 } else {
-    $courses_query = "SELECT * FROM course WHERE id = ? AND status = 'active'";
+    $courses_query = "SELECT * FROM course WHERE course_no = ? AND status = 'active'";
 }
 
 $courses_stmt = $con->prepare($courses_query);
 if ($position === 'Academic Staff') {
-    $courses_stmt->bind_param("i", $course_id);
+    $courses_stmt->bind_param("s", $course_no);
 }
 $courses_stmt->execute();
 $courses_result = $courses_stmt->get_result();
@@ -313,9 +313,9 @@ if ($selected_course_id) {
             <p>Position: <strong><?php echo $position; ?></strong></p>
             <?php if ($position === 'Academic Staff' && $course_id): ?>
                 <?php
-                $course_query = "SELECT course_name FROM course WHERE id = ?";
+                $course_query = "SELECT course_name FROM course WHERE course_no = ?";;
                 $course_stmt = $con->prepare($course_query);
-                $course_stmt->bind_param("i", $course_id);
+                $course_stmt->bind_param("s", $course_no);
                 $course_stmt->execute();
                 $course_result = $course_stmt->get_result();
                 if ($course_result->num_rows > 0) {

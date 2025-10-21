@@ -188,27 +188,29 @@ $courses_result = $con->query($courses_query);
             </div>
 
             <div class="form-group" id="course_section">
-                <label for="course_id">Course:</label>
-                <select id="course_id" name="course_id">
-                    <option value="">Select Course</option>
-                    <?php
-                    if ($courses_result && $courses_result->num_rows > 0) {
-                        while ($course = $courses_result->fetch_assoc()) {
-                            echo '<option value="' . $course['id'] . '">' . $course['course_name'] . '</option>';
-                        }
+            <label for="course_no">Course: (For Academic Staff)</label>
+            <select id="course_no" name="course_no"> <option value="">Select Course</option>
+                <?php
+                if ($courses_result && $courses_result->num_rows > 0) {
+                    // Reset result pointer just in case
+                    $courses_result->data_seek(0); 
+                    while ($course = $courses_result->fetch_assoc()) {
+                        // value එක course_no ලෙස වෙනස් කළා
+                        echo '<option value="' . htmlspecialchars($course['course_no']) . '">' . htmlspecialchars($course['course_name']) . '</option>';
                     }
-                    ?>
-                </select>
-            </div>
+                }
+                ?>
+            </select>
+        </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="password">Create Password:</label>
-                    <input type="password" id="password" name="password" minlength="6" required>
+                    <input type="password" id="password" name="password" minlength="6">
                 </div>
                 <div class="form-group">
                     <label for="confirm_password">Confirm Password:</label>
-                    <input type="password" id="confirm_password" name="confirm_password" minlength="6" required>
+                    <input type="password" id="confirm_password" name="confirm_password" minlength="6">
                 </div>
             </div>
 
@@ -224,9 +226,9 @@ $courses_result = $con->query($courses_query);
         function toggleCourseSection() {
             const position = document.getElementById('position').value;
             const courseSection = document.getElementById('course_section');
-            const courseSelect = document.getElementById('course_id');
+            const courseSelect = document.getElementById('course_no');
             
-            if (position === 'Academic Staff') {
+            if (position === 'Instructors') {
                 courseSection.style.display = 'block';
                 courseSelect.required = true;
             } else {
@@ -235,18 +237,7 @@ $courses_result = $con->query($courses_query);
                 courseSelect.value = '';
             }
         }
-
-        // Password confirmation validation
-        document.getElementById('confirm_password').addEventListener('input', function() {
-            const password = document.getElementById('password').value;
-            const confirmPassword = this.value;
-            
-            if (password !== confirmPassword) {
-                this.setCustomValidity('Passwords do not match');
-            } else {
-                this.setCustomValidity('');
-            }
-        });
+        
     </script>
 </body>
 </html>

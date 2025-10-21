@@ -1,20 +1,41 @@
-<?php include_once('../include/header.php'); ?>
+<?php 
+include_once('../include/header.php');
+
+?>
+<?php 
+// --- Dashboard Data Fetching ---
+include_once('../../include/connection.php'); // Go back two folders to get connection
+
+// 1. Get Total Courses
+$result_courses = $con->query("SELECT COUNT(*) as total_courses FROM course");
+$total_courses = $result_courses->fetch_assoc()['total_courses'];
+
+// 2. Get Total Instructors (Specific count)
+$result_instructors = $con->query("SELECT COUNT(*) as total_instructors FROM staff WHERE position = 'Instructors'");
+$total_instructors = $result_instructors->fetch_assoc()['total_instructors'];
+
+// 3. Get Total Non-Academic Staff (Specific count)
+$result_non_academic = $con->query("SELECT COUNT(*) as total_non_academic FROM staff WHERE position = 'Non-Academic Staff'");
+$total_non_academic = $result_non_academic->fetch_assoc()['total_non_academic'];
+
+// 4. Get Total Enrolled Students
+$result_students = $con->query("SELECT COUNT(*) as total_enrolled FROM student_enrollments");
+$total_enrolled = $result_students->fetch_assoc()['total_enrolled'];
+
+?>
 
 <h2 class="text-3xl font-bold text-gray-800 mb-6">Dashboard Overview</h2>
 
-<!-- 1. STATISTIC CARDS (Total Courses, Instructors, Students) -->
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 
-    <!-- Card 1: Total Courses -->
     <div
         class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-primary-accent">
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">Total Courses</p>
-                <p class="text-4xl font-extrabold text-gray-900 mt-1">48</p>
+                <p class="text-4xl font-extrabold text-gray-900 mt-1"><?php echo $total_courses; ?></p>
             </div>
             <div class="bg-primary-accent/10 p-3 rounded-full text-primary-accent">
-                <!-- Icon: Books -->
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -23,19 +44,17 @@
                 </svg>
             </div>
         </div>
-        <p class="text-sm text-gray-400 mt-3">+12% from last month</p>
+        <p class="text-sm text-gray-400 mt-3">Currently active courses</p>
     </div>
 
-    <!-- Card 2: Total Instructors -->
     <div
         class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-indigo-500">
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">Total Instructors</p>
-                <p class="text-4xl font-extrabold text-gray-900 mt-1">15</p>
+                <p class="text-4xl font-extrabold text-gray-900 mt-1"><?php echo $total_instructors; ?></p>
             </div>
             <div class="bg-indigo-500/10 p-3 rounded-full text-indigo-500">
-                <!-- Icon: Instructors -->
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -44,19 +63,31 @@
                 </svg>
             </div>
         </div>
-        <p class="text-sm text-gray-400 mt-3">2 new instructors this week</p>
+        <p class="text-sm text-gray-400 mt-3">Total registered instructors</p>
     </div>
 
-    <!-- Card 3: Total Enrolled Students -->
+    <div
+        class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-teal-500">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">Non-Academic Staff</p>
+                <p class="text-4xl font-extrabold text-gray-900 mt-1"><?php echo $total_non_academic; ?></p>
+            </div>
+            <div class="bg-teal-500/10 p-3 rounded-full text-teal-500">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.505-9-1.745M16 4V2M8 4V2m4 8a1 1 0 100-2 1 1 0 000 2zm0 7a1 1 0 100-2 1 1 0 000 2zM5 16s2.5-3 7-3 7 3 7 3M5 16H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2v6a2 2 0 01-2 2h-2"></path></svg>
+            </div>
+        </div>
+        <p class="text-sm text-gray-400 mt-3">Total registered support staff</p>
+    </div>
+
     <div
         class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-amber-500">
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">Total Enrolled</p>
-                <p class="text-4xl font-extrabold text-gray-900 mt-1">1,245</p>
+                <p class="text-4xl font-extrabold text-gray-900 mt-1"><?php echo $total_enrolled; ?></p>
             </div>
             <div class="bg-amber-500/10 p-3 rounded-full text-amber-500">
-                <!-- Icon: Students -->
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -64,14 +95,12 @@
                 </svg>
             </div>
         </div>
-        <p class="text-sm text-gray-400 mt-3">Highest enrollment in 3 months</p>
+        <p class="text-sm text-gray-400 mt-3">Total student applications</p>
     </div>
 </div>
 
-<!-- 2. MAIN DASHBOARD CONTENT (Chart & Activity Panel) -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-    <!-- Chart Panel (2/3 width on desktop) -->
     <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-lg">
         <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Student Enrollments Over Time</h3>
         <div class="h-80">
@@ -79,7 +108,6 @@
         </div>
     </div>
 
-    <!-- Recent Activity / Quick Actions (1/3 width on desktop) -->
     <div class="lg:col-span-1">
         <div class="bg-white p-6 rounded-xl shadow-lg mb-6">
             <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Quick Actions</h3>
@@ -136,7 +164,6 @@
     </div>
 </div>
 
-<!-- 3. DETAILED TABLE (Recent Enrollments) -->
 <div class="bg-white p-6 rounded-xl shadow-lg mt-8">
     <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Latest Enrollments</h3>
     <div class="overflow-x-auto">
@@ -183,7 +210,7 @@
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">David Lee</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">UX/UI Design Principles</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Jane Doe</td>
+                    <td class="px-6 py-4 whitespace-nowSave">Jane Doe</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-10-24</td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <span
