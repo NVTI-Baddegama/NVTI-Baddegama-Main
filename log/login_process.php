@@ -13,7 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
     
-    $hashed_password_md5 = md5($password);
 
     // --- Staff Check ---
     $query_staff = "SELECT * FROM staff WHERE (staff_id = ? OR service_id = ?) AND status = 'active'";
@@ -22,22 +21,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt_staff->execute();
     $result_staff = $stmt_staff->get_result();
 
-
     if ($result_staff->num_rows == 1) {
     $staff = $result_staff->fetch_assoc();
-
-    // md5 check එක වෙනුවට password_verify භාවිතා කිරීම
+    
+    // NEW Check:
     if (password_verify($password, $staff['password'])) {
-        $_SESSION['staff_id'] = $staff['staff_id'];
-            $_SESSION['staff_name'] = $staff['first_name'] . ' ' . $staff['last_name'];
+         $_SESSION['staff_name'] = $staff['first_name'] . ' ' . $staff['last_name'];
             $_SESSION['position'] = $staff['position'];
             $_SESSION['course_id'] = $staff['course_id'];
             $_SESSION['profile_photo'] = $staff['profile_photo'];
-
-            header("Location: ../office/dashboard.php");
-            exit();
+        header("Location: ../office/dashboard.php");
+        exit();
     }
 }
+
+
+  
 
 
     // --- Admin Check ---
@@ -50,13 +49,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($result_admin->num_rows == 1) {
     $admin = $result_admin->fetch_assoc();
 
-    // md5 check එක වෙනුවට password_verify භාවිතා කිරීම
+    // NEW Check:
     if (password_verify($password, $admin['password'])) {
         $_SESSION['admin_username'] = $admin['username'];
-            header("Location: ../admin/pages/Dashboard.php");
-            exit();
+        header("Location: ../admin/pages/Dashboard.php");
+        exit();
     }
 }
+
+   
 
    
 
