@@ -1,4 +1,18 @@
+
 <?php
+// // Admin ge details meywai
+// $admin_password = 'Staff@123'; // ඔබට අවශ්‍ය මුරපදය
+
+// // Password eke hash eka hadanna
+// $correct_hash = password_hash($admin_password, PASSWORD_DEFAULT);
+
+// echo "New HASH for 'Admin@123' is: <b>" . $correct_hash . "</b>";
+// echo "<br>Please copy this hash and manually update the 'password' column in your 'admin' table in phpMyAdmin.";
+?>
+
+<?php
+
+
 
 // echo "<style>body { font-family: sans-serif; padding: 20px; } .success { color: green; font-weight: bold; } .error { color: red; font-weight: bold; }</style>";
 // echo "<h1>Admin Password Fixer</h1>";
