@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     // NEW Check:
     if (password_verify($password, $staff['password'])) {
+        $_SESSION['staff_id'] = $staff['staff_id'];
          $_SESSION['staff_name'] = $staff['first_name'] . ' ' . $staff['last_name'];
             $_SESSION['position'] = $staff['position'];
             $_SESSION['course_id'] = $staff['course_id'];
