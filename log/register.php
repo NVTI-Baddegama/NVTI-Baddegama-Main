@@ -182,7 +182,7 @@ $courses_result = $con->query($courses_query);
                 <label for="position">Position:</label>
                 <select id="position" name="position" required onchange="toggleCourseSection()">
                     <option value="">Select Position</option>
-                    <option value="instructors">instructors</option>
+                    <option value="Instructors">Instructors</option>
                     <option value="Non-Academic Staff">Non-Academic Staff</option>
                 </select>
             </div>
