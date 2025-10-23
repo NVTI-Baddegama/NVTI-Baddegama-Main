@@ -1,7 +1,8 @@
 <?php
+include_once('../include/header.php');
 include('../../include/connection.php');
 
-include_once('../include/header.php');
+
 
 // if(!isset($_SESSION['username']) || $_SESSION['role'] != 'admin') {
 //     header("Location: ../login.php");
@@ -198,9 +199,7 @@ $courses = mysqli_query($con, $query);
         </div>
     </div>
 
-    
-
-        <    <script>
+       <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- Edit Modal Elements ---
             const editModal = document.getElementById('editModal');
