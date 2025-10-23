@@ -111,8 +111,12 @@ $courses = mysqli_query($con, $query);
                                             Edit
                                         </button>
                                         
-                                        <a href="delete_course.php?id=<?php echo $row['id']; ?>" class="text-red-600 hover:text-red-900 transition duration-150" onclick="return confirm('Are you sure you want to delete this course?');">Delete</a>
-                                    
+                                        <!-- This button triggers the delete modal -->
+                                        <button type="button" class="text-red-600 hover:text-red-900 transition duration-150 delete-btn"
+                                            data-id="<?php echo $row['id']; ?>"
+                                            data-name="<?php echo htmlspecialchars($row['course_name']); ?>">
+                                            Delete
+                                        </button>
                                     </td>
                                 </tr>
                             <?php
@@ -173,66 +177,106 @@ $courses = mysqli_query($con, $query);
         </div>
     </div>
 
+    <!-- Delete Course Modal -->
+    <div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-md">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 class="text-xl font-semibold text-gray-800">Confirm Deletion</h3>
+                <button id="closeDeleteModal" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
+            </div>
+            <div class="p-6">
+                <p class="text-gray-700">Are you sure you want to delete this course?
+                    <br>
+                    <strong id="delete_course_name" class="font-semibold text-gray-900"></strong>
+                </p>
+                <p class="text-sm text-red-600 mt-2">This action cannot be undone.</p>
+            </div>
+            <div class="flex justify-end p-4 bg-gray-50 rounded-b-xl">
+                <button type="button" id="cancelDeleteButton" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 mr-2">Cancel</button>
+                <a id="confirmDeleteButton" href="#" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Delete</a>
+            </div>
+        </div>
+    </div>
+
     
 
-        <script>
+        <    <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Edit Modal Elements ---
             const editModal = document.getElementById('editModal');
             const closeModal = document.getElementById('closeModal');
             const cancelButton = document.getElementById('cancelButton');
             const editButtons = document.querySelectorAll('.edit-btn');
-
-            // Form fields
             const courseIdInput = document.getElementById('edit_course_id');
             const courseNameInput = document.getElementById('edit_course_name');
             const courseFeeInput = document.getElementById('edit_course_fee');
             const statusInput = document.getElementById('edit_status');
 
-            // Function to open the modal
-            const openModal = () => {
+            // --- Delete Modal Elements ---
+            const deleteModal = document.getElementById('deleteModal');
+            const closeDeleteModal = document.getElementById('closeDeleteModal');
+            const cancelDeleteButton = document.getElementById('cancelDeleteButton');
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+            const deleteCourseName = document.getElementById('delete_course_name');
+            const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+
+            // --- Edit Modal Functions ---
+            const openEditModal = () => {
                 editModal.classList.remove('hidden');
                 editModal.classList.add('flex');
             };
-
-            // Function to close the modal
-            const hideModal = () => {
+            const hideEditModal = () => {
                 editModal.classList.add('hidden');
                 editModal.classList.remove('flex');
             };
 
-            // Add click listener to all edit buttons
             editButtons.forEach(button => {
                 button.addEventListener('click', () => {
-                    // Get data from data-* attributes
-                    const id = button.dataset.id;
-                    const name = button.dataset.name;
-                    const fee = button.dataset.fee;
-                    const status = button.dataset.status;
-
-                    // Populate the form fields
-                    courseIdInput.value = id;
-                    courseNameInput.value = name;
-                    courseFeeInput.value = fee;
-                    statusInput.value = status;
-                    
-                    // Show the modal
-                    openModal();
+                    courseIdInput.value = button.dataset.id;
+                    courseNameInput.value = button.dataset.name;
+                    courseFeeInput.value = button.dataset.fee;
+                    statusInput.value = button.dataset.status;
+                    openEditModal();
                 });
             });
 
-            // Close modal events
-            closeModal.addEventListener('click', hideModal);
-            cancelButton.addEventListener('click', hideModal);
-            
-            // Close modal if clicking outside the modal content
+            closeModal.addEventListener('click', hideEditModal);
+            cancelButton.addEventListener('click', hideEditModal);
             editModal.addEventListener('click', (e) => {
-                if (e.target === editModal) {
-                    hideModal();
-                }
+                if (e.target === editModal) hideEditModal();
+            });
+
+            // --- Delete Modal Functions ---
+            const openDeleteModal = () => {
+                deleteModal.classList.remove('hidden');
+                deleteModal.classList.add('flex');
+            };
+            const hideDeleteModal = () => {
+                deleteModal.classList.add('hidden');
+                deleteModal.classList.remove('flex');
+            };
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const id = button.dataset.id;
+                    const name = button.dataset.name;
+                    
+                    // Set the course name in the modal
+                    deleteCourseName.textContent = name;
+                    // Set the href for the final delete button
+                    confirmDeleteButton.href = `delete_course.php?id=${id}`;
+                    
+                    openDeleteModal();
+                });
+            });
+
+            closeDeleteModal.addEventListener('click', hideDeleteModal);
+            cancelDeleteButton.addEventListener('click', hideDeleteModal);
+            deleteModal.addEventListener('click', (e) => {
+                if (e.target === deleteModal) hideDeleteModal();
             });
         });
     </script>
-
 
 </body>
 </html>
