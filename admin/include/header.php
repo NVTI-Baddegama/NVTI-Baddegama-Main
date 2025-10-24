@@ -74,7 +74,7 @@
                 <!-- Menu Items -->
                 <div class="space-y-1">
                     <!-- Dashboard -->
-                    <a href="#" class="flex items-center p-3 text-sm font-semibold rounded-lg bg-primary-accent text-white shadow-lg shadow-primary-accent/30 transition duration-200">
+                    <a href="Dashboard.php" class="flex items-center p-3 text-sm font-semibold rounded-lg bg-primary-accent text-white shadow-lg shadow-primary-accent/30 transition duration-200">
                         <!-- Icon: Dashboard -->
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                         Dashboard
@@ -95,7 +95,7 @@
 
                     <!-- Instructor Management -->
                     <p class="text-xs font-semibold text-gray-400 pt-3 pb-1 uppercase tracking-wider">Instructors</p>
-                    <a href="#" class="flex items-center p-3 text-sm font-medium rounded-lg text-gray-300 hover:bg-slate-700 hover:text-white transition duration-150">
+                    <a href="../../log/register.php" class="flex items-center p-3 text-sm font-medium rounded-lg text-gray-300 hover:bg-slate-700 hover:text-white transition duration-150">
                         <!-- Icon: Add Instructor -->
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm-6-4a6 6 0 00-4 0v1h8v-1m-4 0v-2"></path></svg>
                         Add Instructor
