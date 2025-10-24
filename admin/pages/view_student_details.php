@@ -31,6 +31,13 @@ if ($result->num_rows == 1) {
 ?>
 
 <h2 class="text-3xl font-bold text-gray-800 mb-6">Student Application Details</h2>
+<div class="mb-6">
+    <a href="manage_students.php"
+       class="inline-flex items-center px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 shadow-md transition duration-150">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        Back Student Application List
+    </a>
+</div>
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
