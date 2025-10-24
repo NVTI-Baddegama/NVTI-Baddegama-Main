@@ -1,10 +1,9 @@
-<?php 
+<?php
 session_start(); // Start session to show messages
-include_once('../include/header.php'); 
+include_once('../include/header.php');
 include_once('../../include/connection.php'); // Go back two folders
 
-// --- 1. Get filter options (distinct courses from applications) ---
-// We get the options from the applications themselves
+// --- 1. Get filter options (distinct courses) ---
 $course_options_query = "SELECT DISTINCT course_option_one FROM student_enrollments WHERE course_option_one IS NOT NULL AND course_option_one != '' ORDER BY course_option_one ASC";
 $course_options_result = $con->query($course_options_query);
 
@@ -14,51 +13,84 @@ if (isset($_GET['filter_course']) && !empty($_GET['filter_course'])) {
     $filter_course = trim($_GET['filter_course']);
 }
 
-// --- 3. Build main student query based on filter ---
+// --- 3. Check for active search (NOW by NIC) ---
+$search_nic = '';
+if (isset($_GET['search_nic']) && !empty($_GET['search_nic'])) {
+    $search_nic = trim($_GET['search_nic']);
+}
+
+// --- 4. Build main student query based on filter AND search ---
+$base_query = "SELECT * FROM student_enrollments";
+$where_clauses = [];
+$params = [];
+$types = "";
+
+// Add course filter
 if ($filter_course) {
-    // Filtered query
-    $query = "SELECT * FROM student_enrollments WHERE course_option_one = ? ORDER BY application_date DESC";
-    $stmt = $con->prepare($query);
-    $stmt->bind_param("s", $filter_course);
+    $where_clauses[] = "course_option_one = ?";
+    $params[] = $filter_course;
+    $types .= "s";
+}
+
+// Add search filter (by NIC - using LIKE for partial match)
+if ($search_nic) {
+    $where_clauses[] = "nic LIKE ?"; // Changed from Student_id to nic
+    $params[] = "%" . $search_nic . "%"; // Add wildcards
+    $types .= "s";
+}
+
+// Combine WHERE clauses
+if (!empty($where_clauses)) {
+    $base_query .= " WHERE " . implode(" AND ", $where_clauses);
+}
+
+$base_query .= " ORDER BY application_date DESC";
+
+// Prepare and execute the query
+$stmt = $con->prepare($base_query);
+if ($stmt) {
+    if (!empty($params)) {
+        $stmt->bind_param($types, ...$params);
+    }
     $stmt->execute();
     $result = $stmt->get_result();
 } else {
-    // Unfiltered (default) query
-    $query = "SELECT * FROM student_enrollments ORDER BY application_date DESC";
-    $result = $con->query($query);
+     echo '<div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-6" role="alert">';
+     echo '<p class="font-bold">Error!</p>';
+     echo '<p>Failed to prepare database query: ' . $con->error . '</p>';
+     echo '</div>';
+     $result = false;
 }
+
 ?>
 
 <h2 class="text-3xl font-bold text-gray-800 mb-6">Manage Student Enrollments</h2>
 
 <?php
+// (Success/Error message display code remains the same)
 if (isset($_SESSION['success_msg'])) {
-    echo '<div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg mb-6" role="alert">';
-    echo '<p class="font-bold">Success!</p>';
-    echo '<p>' . htmlspecialchars($_SESSION['success_msg']) . '</p>';
-    echo '</div>';
+    echo '<div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg mb-6" role="alert"><p class="font-bold">Success!</p><p>' . htmlspecialchars($_SESSION['success_msg']) . '</p></div>';
     unset($_SESSION['success_msg']);
 }
 if (isset($_SESSION['error_msg'])) {
-    echo '<div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-6" role="alert">';
-    echo '<p class="font-bold">Error!</p>';
-    echo '<p>' . htmlspecialchars($_SESSION['error_msg']) . '</p>';
-    echo '</div>';
+    echo '<div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-6" role="alert"><p class="font-bold">Error!</p><p>' . htmlspecialchars($_SESSION['error_msg']) . '</p></div>';
     unset($_SESSION['error_msg']);
 }
 ?>
 
-<div class="bg-white p-4 rounded-xl shadow-lg my-6">
-    <form action="manage_students.php" method="GET" class="flex flex-col sm:flex-row sm:items-end sm:gap-4">
+<div class="bg-white p-4 rounded-xl shadow-lg my-6 space-y-4">
+
+    <form action="manage_students.php" method="GET" class="flex flex-col sm:flex-row sm:items-end sm:gap-4 border-b pb-4">
         <div class="flex-grow">
             <label for="filter_course" class="block text-sm font-medium text-gray-700">Filter by Course (Choice 1):</label>
             <select id="filter_course" name="filter_course" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md shadow-sm">
                 <option value="">-- Show All Courses --</option>
                 <?php
                 if ($course_options_result && $course_options_result->num_rows > 0) {
+                     // Reset pointer just in case it was used elsewhere
+                     $course_options_result->data_seek(0);
                     while ($row = $course_options_result->fetch_assoc()) {
                         $course_val = htmlspecialchars($row['course_option_one']);
-                        // Check if this is the currently selected filter
                         $selected = ($filter_course == $course_val) ? 'selected' : '';
                         echo "<option value=\"$course_val\" $selected>$course_val</option>";
                     }
@@ -66,15 +98,44 @@ if (isset($_SESSION['error_msg'])) {
                 ?>
             </select>
         </div>
+         <?php if ($search_nic): ?>
+             <input type="hidden" name="search_nic" value="<?php echo htmlspecialchars($search_nic); ?>">
+         <?php endif; ?>
         <div class="flex gap-3 mt-4 sm:mt-0">
             <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 shadow-md">Filter</button>
-            <a href="manage_students.php" class="w-full sm:w-auto text-center px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 shadow-md">Clear</a>
+            <a href="manage_students.php?search_nic=<?php echo htmlspecialchars($search_nic); // Keep search if clearing filter ?>" class="w-full sm:w-auto text-center px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 shadow-md">Clear Filter</a>
         </div>
     </form>
+
+    <form action="manage_students.php" method="GET" class="flex flex-col sm:flex-row sm:items-end sm:gap-4 pt-4">
+        <div class="flex-grow">
+            <label for="search_nic" class="block text-sm font-medium text-gray-700">Search by NIC:</label> <input type="text" id="search_nic" name="search_nic" value="<?php echo htmlspecialchars($search_nic); ?>" placeholder="Enter NIC (e.g., 90...V or 2000...)" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        </div>
+        <?php if ($filter_course): ?>
+             <input type="hidden" name="filter_course" value="<?php echo htmlspecialchars($filter_course); ?>">
+         <?php endif; ?>
+        <div class="flex gap-3 mt-4 sm:mt-0">
+            <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 shadow-md">Search</button>
+            <a href="manage_students.php?filter_course=<?php echo htmlspecialchars($filter_course); // Keep filter if clearing search ?>" class="w-full sm:w-auto text-center px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 shadow-md">Clear Search</a>
+        </div>
+    </form>
+
 </div>
+
 <div class="bg-white p-6 rounded-xl shadow-lg mt-8">
     <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
-        <?php echo $filter_course ? 'Showing Applications for: ' . htmlspecialchars($filter_course) : 'All Applications'; ?>
+        <?php
+            // Display current filter/search status
+            $status_parts = [];
+            if ($filter_course) $status_parts[] = 'Course: <strong>' . htmlspecialchars($filter_course) . '</strong>';
+            if ($search_nic) $status_parts[] = 'Searching for NIC: <strong>' . htmlspecialchars($search_nic) . '</strong>'; // Changed text
+
+            if (!empty($status_parts)) {
+                 echo 'Showing Applications (' . implode(', ', $status_parts) . ')';
+            } else {
+                echo 'All Applications';
+            }
+        ?>
     </h3>
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
@@ -91,11 +152,9 @@ if (isset($_SESSION['error_msg'])) {
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-                
+
                 <?php
-                // Check if there are any students
                 if ($result && $result->num_rows > 0) {
-                    // Loop through each student
                     while ($student = $result->fetch_assoc()) {
                 ?>
                 <tr>
@@ -113,23 +172,27 @@ if (isset($_SESSION['error_msg'])) {
                         <?php endif; ?>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <a href="view_student_details.php?nic=<?php echo htmlspecialchars($student['nic']); ?>" 
+                        <a href="view_student_details.php?nic=<?php echo htmlspecialchars($student['nic']); ?>"
                            class="text-indigo-600 hover:text-indigo-900">
                            View Details
                         </a>
                     </td>
                 </tr>
                 <?php
-                    } // End of while loop
+                    } // End while loop
                 } else {
-                    // Message if no students are found
-                    echo '<tr><td colspan="8" class="px-6 py-12 text-center text-gray-500">No student applications found.</td></tr>';
+                    $no_results_message = "No student applications found.";
+                    if ($filter_course || $search_nic) {
+                         $no_results_message = "No student applications found matching the current criteria.";
+                    }
+                    echo '<tr><td colspan="8" class="px-6 py-12 text-center text-gray-500">' . $no_results_message . '</td></tr>';
                 }
-                
-                // Close connection
+
+                // Close statement and connection
+                if ($stmt) $stmt->close();
                 $con->close();
                 ?>
-                
+
             </tbody>
         </table>
     </div>

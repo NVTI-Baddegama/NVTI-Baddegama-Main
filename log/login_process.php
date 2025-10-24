@@ -52,6 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // NEW Check:
     if (password_verify($password, $admin['password'])) {
+        $_SESSION['type']=$admin['type'];
+
         $_SESSION['admin_username'] = $admin['username'];
         header("Location: ../admin/pages/Dashboard.php");
         exit();
