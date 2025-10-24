@@ -8,7 +8,7 @@
 
 // echo "New HASH for 'Admin@123' is: <b>" . $correct_hash . "</b>";
 // echo "<br>Please copy this hash and manually update the 'password' column in your 'admin' table in phpMyAdmin.";
-?>
+// ?>
 
 <?php
 

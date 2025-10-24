@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 15, 2025 at 06:07 PM
+-- Generation Time: Oct 23, 2025 at 05:10 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -39,7 +39,7 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`username`, `email`, `password`, `serviceid`) VALUES
-('Admin', 'Admin@gmail.com', '0e7517141fb53f21ee439b355b5a1d0a', 'S001');
+('Admin', 'Admin@gmail.com', '$2y$10$qYIpCAyjePV6qU72TmRaL.ZnEE.5PoLcfp2q7X7JyWTFvergopVAO', 'S001');
 
 -- --------------------------------------------------------
 
@@ -80,8 +80,12 @@ CREATE TABLE `staff` (
   `service_id` varchar(20) NOT NULL,
   `first_name` varchar(50) NOT NULL,
   `last_name` varchar(50) NOT NULL,
+  `nic` varchar(15) NOT NULL,
+  `gender` varchar(10) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `position` enum('Academic Staff','Non-Academic Staff') NOT NULL,
+  `position` varchar(100) NOT NULL,
+  `course_no` varchar(20) DEFAULT NULL,
+  `profile_photo` varchar(255) DEFAULT NULL,
   `status` enum('active','inactive') NOT NULL DEFAULT 'active'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -89,8 +93,10 @@ CREATE TABLE `staff` (
 -- Dumping data for table `staff`
 --
 
-INSERT INTO `staff` (`id`, `staff_id`, `service_id`, `first_name`, `last_name`, `password`, `position`, `status`) VALUES
-(1, 'NVTI-2025-1234', 'ST001', 'Kamal', 'Perera', 'f09e2fa7b19117d5b6637dcc6388fffa', 'Academic Staff', 'active');
+INSERT INTO `staff` (`id`, `staff_id`, `service_id`, `first_name`, `last_name`, `nic`, `gender`, `password`, `position`, `course_no`, `profile_photo`, `status`) VALUES
+(1, 'NVTI-2025-1234', 'ST001', 'Kamal', 'Perera', '901234567V', 'Male', '$2y$10$s.oFbLhzgmIu4DVUVPk9tuK9YXwPA6xJwU6WQEyizu7KXWrJhEeV', 'Instructors', 'ITD001', NULL, 'active'),
+(2, 'NVTI-2025-4914', 'SD0001', 'Chamika', 'Sandeepa', '200625103469', 'Male', '$2y$10$LoAEzXAqKAGlG9sReTDNFuAPbYXwuExyJfcRI6oIyMlp3lI7HPYbu', 'Instructors', 'GD001', 'NVTI-STAFF-1761125168.jpeg', 'active'),
+(3, 'NVTI-2025-3722', 'SD0002', 'manu', 'Nimana', '200625103468', 'Male', '$2y$10$..b5rISFZN7EQBqodwYQLexABVy57h1qb0NPg1VWRIKa80zFoqQ4i', 'Non-Academic Staff', NULL, 'NVTI-STAFF-1761125298.jpeg', 'active');
 
 -- --------------------------------------------------------
 
@@ -111,9 +117,9 @@ CREATE TABLE `student_enrollments` (
   `ol_english_grade` varchar(5) DEFAULT NULL,
   `ol_maths_grade` varchar(5) DEFAULT NULL,
   `ol_science_grade` varchar(5) DEFAULT NULL,
-  `al_category` enum('science','commerce','arts','tech','other') NOT NULL,
-  `course_option_one` varchar(50) NOT NULL,
-  `course_option_two` varchar(50) DEFAULT NULL,
+  `al_category` varchar(50) NOT NULL,
+  `course_option_one` varchar(100) NOT NULL,
+  `course_option_two` varchar(100) DEFAULT NULL,
   `application_date` timestamp NOT NULL DEFAULT current_timestamp(),
   `is_processed` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -123,8 +129,8 @@ CREATE TABLE `student_enrollments` (
 --
 
 INSERT INTO `student_enrollments` (`id`, `Student_id`, `full_name`, `nic`, `address`, `dob`, `contact_no`, `whatsapp_no`, `ol_pass_status`, `ol_english_grade`, `ol_maths_grade`, `ol_science_grade`, `al_category`, `course_option_one`, `course_option_two`, `application_date`, `is_processed`) VALUES
-(1, 'VTA_BAD123456', 'Nimal Silva', '981234567V', 'No. 12, Main Street, Galle', '1998-05-10', '0771234567', '0771234567', 'Yes', 'B', 'C', 'C', 'tech', 'graphic_design', 'it_diploma', '2025-10-10 07:03:21', 0),
-(2, 'VTA_BAD654321', 'Saman Kumara', '990123456V', 'Temple Road, Baddegama', '1999-02-20', '0717654321', '', 'Yes', 'A', 'A', 'A', 'science', 'it_diploma', 'graphic_design', '2025-10-11 08:11:17', 0);
+(1, 'VTA_BAD123456', 'Nimal Silva', '981234567V', 'No. 12, Main Street, Galle', '1998-05-10', '0771234567', '0771234567', 'Yes', 'B', 'C', 'C', 'tech', 'Certificate in Graphic Design', 'Diploma in Information Technology', '2025-10-10 07:03:21', 0),
+(2, 'VTA_BAD654321', 'Saman Kumara', '990123456V', 'Temple Road, Baddegama', '1999-02-20', '0717654321', '', 'Yes', 'A', 'A', 'A', 'science', 'Diploma in Information Technology', 'Certificate in Graphic Design', '2025-10-11 08:11:17', 1);
 
 --
 -- Indexes for dumped tables
@@ -151,7 +157,8 @@ ALTER TABLE `course`
 ALTER TABLE `staff`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `staff_id` (`staff_id`),
-  ADD UNIQUE KEY `service_id` (`service_id`);
+  ADD UNIQUE KEY `service_id` (`service_id`),
+  ADD UNIQUE KEY `nic` (`nic`);
 
 --
 -- Indexes for table `student_enrollments`
@@ -174,7 +181,7 @@ ALTER TABLE `course`
 -- AUTO_INCREMENT for table `staff`
 --
 ALTER TABLE `staff`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `student_enrollments`
