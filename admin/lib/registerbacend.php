@@ -1,6 +1,6 @@
 <?php
 session_start(); // Start session for redirect messages
-include '../include/connection.php'; // $con යනු mysqli object එකකි
+include '../../include/connection.php'; // $con යනු mysqli object එකකි
 
 if (!$con) {
     // This should ideally be handled within connection.php, but double-check
@@ -42,21 +42,21 @@ if (isset($_POST['submit'])) {
 
     // --- 2. Input Validation ---
     if (empty($fullName) || empty($nic) || empty($address) || empty($dob) || empty($contactNo) || empty($olPassStatus) || empty($alCategory) || empty($courseOptionOne)) {
-        header("location:../pages/register.php?error=Please_fill_all_required_fields");
+        header("location:../pages/student_register.php?error=Please_fill_all_required_fields");
         exit();
     }
     // Basic NIC validation (simple length check, adjust regex if needed)
     if (!preg_match('/^([0-9]{9}[vVxX]|[0-9]{12})$/', $nic)) {
-        header("location:../pages/register.php?error=Invalid_NIC_format");
+        header("location:../pages/student_register.php?error=Invalid_NIC_format");
         exit();
     }
     // Basic phone number validation
     if (!preg_match('/^[0-9]{10}$/', $contactNo)) {
-        header("location:../pages/register.php?error=Invalid_Contact_Number_format");
+        header("location:../pages/student_register.php?error=Invalid_Contact_Number_format");
         exit();
     }
      if (!empty($whatsappNo) && !preg_match('/^[0-9]{10}$/', $whatsappNo)) {
-        header("location:../pages/register.php?error=Invalid_WhatsApp_Number_format");
+        header("location:../pages/student_register.php?error=Invalid_WhatsApp_Number_format");
         exit();
     }
 
@@ -64,7 +64,7 @@ if (isset($_POST['submit'])) {
     $check_query = "SELECT id FROM student_enrollments WHERE nic = ?";
     $stmt_check = $con->prepare($check_query);
     if (!$stmt_check) {
-        header("location:../pages/register.php?error=Database_prepare_error_checking_NIC");
+        header("location:../pages/student_register.php?error=Database_prepare_error_checking_NIC");
         exit();
     }
     $stmt_check->bind_param("s", $nic);
@@ -72,7 +72,7 @@ if (isset($_POST['submit'])) {
     $result_check = $stmt_check->get_result();
     if ($result_check->num_rows > 0) {
         $stmt_check->close();
-        header("location:../pages/register.php?error=NIC_Already_Registered");
+        header("location:../pages/student_register.php?error=NIC_Already_Registered");
         exit();
     }
     $stmt_check->close();
@@ -86,7 +86,7 @@ if (isset($_POST['submit'])) {
 
     $stmt_insert = $con->prepare($insert_query);
     if (!$stmt_insert) {
-        header("location:../pages/register.php?error=Database_prepare_error_inserting_data");
+        header("location:../pages/student_register.php?error=Database_prepare_error_inserting_data");
         exit();
     }
 
@@ -113,20 +113,20 @@ if (isset($_POST['submit'])) {
     if ($stmt_insert->execute()) {
         $stmt_insert->close();
         $con->close();
-        header("location:../pages/register.php?success=Application_Submitted_Successfully");
+        header("location:../pages/student_register.php?success=Application_Submitted_Successfully");
         exit();
     } else {
         $error_message = $stmt_insert->error; // Get specific error
         $stmt_insert->close();
         $con->close();
-        header("location:../pages/register.php?error=Application_Submission_Failed_Please_Try_Again"); // Generic error for user
+        header("location:../pages/student_register.php?error=Application_Submission_Failed_Please_Try_Again"); // Generic error for user
         // Log the specific error for debugging: error_log("Student Insert Failed: " . $error_message);
         exit();
     }
 
 } else {
     // If accessed directly without POST
-    header("location:../pages/register.php?error=Invalid_Access_Method");
+    header("location:../pages/student_register.php?error=Invalid_Access_Method");
     exit();
 }
 ?>
