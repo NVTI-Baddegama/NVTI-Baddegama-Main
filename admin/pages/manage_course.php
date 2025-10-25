@@ -7,7 +7,7 @@ include('../../include/connection.php');
 //     exit();
 // }
 
-// --- NEW: Message Handling Logic ---
+// --- Message Handling Logic ---
 $message = '';
 $message_type = ''; // 'success' or 'error'
 
@@ -31,10 +31,20 @@ if (isset($_GET['status'])) {
 
 
 // Retrieve all courses from the database, joining with staff to get instructor name
-$query = "SELECT c.*, s.first_name, s.last_name 
+$query = "SELECT c.*, s.first_name, s.last_name, s.staff_id 
           FROM course c 
           LEFT JOIN staff s ON c.course_no = s.course_no";
 $courses = mysqli_query($con, $query);
+
+// --- NEW: Get all available instructors ---
+// We get instructors who are 'Instructors' AND are either unassigned (course_no IS NULL)
+// OR are already assigned to *this* course (which we handle in the loop)
+$instructor_query = "SELECT staff_id, first_name, last_name, course_no FROM staff WHERE position = 'Instructors'";
+$instructor_result = mysqli_query($con, $instructor_query);
+$instructors_list = [];
+while ($instructor_row = mysqli_fetch_assoc($instructor_result)) {
+    $instructors_list[] = $instructor_row;
+}
 
 ?>
 
@@ -95,11 +105,11 @@ $courses = mysqli_query($con, $query);
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                           <?php
-                        // Check if there are any courses
-                        if (mysqli_num_rows($courses) > 0) {
-                            // Loop through each course
-                            while ($row = mysqli_fetch_assoc($courses)) {
-                        ?>
+                          // Check if there are any courses
+                          if (mysqli_num_rows($courses) > 0) {
+                              // Loop through each course
+                              while ($row = mysqli_fetch_assoc($courses)) {
+                          ?>
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         <?php echo htmlspecialchars($row['course_name']); ?>
@@ -115,7 +125,7 @@ $courses = mysqli_query($con, $query);
                                         ?>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        $<?php echo htmlspecialchars($row['course_fee']); ?>
+                                        LKR <?php echo htmlspecialchars($row['course_fee']); ?>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <?php if ($row['status'] == 'active') : ?>
@@ -129,7 +139,9 @@ $courses = mysqli_query($con, $query);
                                             data-id="<?php echo $row['id']; ?>" 
                                             data-name="<?php echo htmlspecialchars($row['course_name']); ?>" 
                                             data-fee="<?php echo htmlspecialchars($row['course_fee']); ?>" 
-                                            data-status="<?php echo $row['status']; ?>">
+                                            data-status="<?php echo $row['status']; ?>"
+                                            data-course-no="<?php echo htmlspecialchars($row['course_no']); ?>"
+                                            data-staff-id="<?php echo htmlspecialchars($row['staff_id'] ?? ''); ?>">
                                             Edit
                                         </button>
 
@@ -142,19 +154,19 @@ $courses = mysqli_query($con, $query);
                                         </button>
                                     </td>
                                 </tr>
-                            <?php
-                            } // End while loop
-                        } else {
-                            // No courses found
-                            ?>
-                            <tr>
-                                <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                                    No courses found.
-                                </td>
-                            </tr>
-                        <?php
-                        } // End if/else
-                        ?>
+                              <?php
+                              } // End while loop
+                          } else {
+                              // No courses found
+                              ?>
+                              <tr>
+                                  <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                      No courses found.
+                                  </td>
+                              </tr>
+                          <?php
+                          } // End if/else
+                          ?>
                     </tbody>
                 </table>
             </div>
@@ -163,39 +175,59 @@ $courses = mysqli_query($con, $query);
     </div>
 
      <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-lg w-full max-w-lg">
-            <div class="flex justify-between items-center p-4 border-b">
-                <h3 class="text-xl font-semibold text-gray-800">Edit Course</h3>
-                <button id="closeModal" class="text-gray-400 hover:text-gray-600">&times;</button>
-            </div>
-            <form action="../lib/update_course.php" method="POST" class="p-6 space-y-4">
-                <input type="hidden" id="edit_course_id" name="course_id">
-                
-                <div>
-                    <label for="edit_course_name" class="block text-sm font-medium text-gray-700">Course Name</label>
-                    <input type="text" id="edit_course_name" name="course_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
-                </div>
-                
-                <div>
-                    <label for="edit_course_fee" class="block text-sm font-medium text-gray-700">Course Fee</label>
-                    <input type="text" id="edit_course_fee" name="course_fee" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
-                </div>
+         <div class="bg-white rounded-xl shadow-lg w-full max-w-lg">
+             <div class="flex justify-between items-center p-4 border-b">
+                 <h3 class="text-xl font-semibold text-gray-800">Edit Course</h3>
+                 <button id="closeModal" class="text-gray-400 hover:text-gray-600">&times;</button>
+             </div>
+             <form action="../lib/update_course.php" method="POST" class="p-6 space-y-4">
+                 <input type="hidden" id="edit_course_id" name="course_id">
+                 <input type="hidden" id="edit_course_no" name="course_no">
+                 <input type="hidden" id="edit_old_staff_id" name="old_staff_id">
+                 
+                 <div>
+                     <label for="edit_course_name" class="block text-sm font-medium text-gray-700">Course Name</label>
+                     <input type="text" id="edit_course_name" name="course_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                 </div>
 
-                <div>
-                    <label for="edit_status" class="block text-sm font-medium text-gray-700">Status</label>
-                    <select id="edit_status" name="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
+                 <!-- NEW: Instructor Dropdown -->
+                 <div>
+                    <label for="edit_new_staff_id" class="block text-sm font-medium text-gray-700">Instructor</label>
+                    <select id="edit_new_staff_id" name="new_staff_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <option value="">Unassign Instructor</option>
+                        <?php foreach ($instructors_list as $instructor): ?>
+                            <?php 
+                            // Only show instructors who are unassigned OR assigned to this specific course
+                            if ($instructor['course_no'] === null || $instructor['course_no'] === $row['course_no']): 
+                            ?>
+                            <option value="<?php echo htmlspecialchars($instructor['staff_id']); ?>">
+                                <?php echo htmlspecialchars($instructor['first_name'] . ' ' . $instructor['last_name']); ?>
+                            </option>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
                     </select>
-                </div>
+                 </div>
+                 
+                 <div>
+                     <label for="edit_course_fee" class="block text-sm font-medium text-gray-700">Course Fee</label>
+                     <input type="text" id="edit_course_fee" name="course_fee" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                 </div>
 
-                <div class="flex justify-end pt-4">
-                    <button type="button" id="cancelButton" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 mr-2">Cancel</button>
-                    <button type="submit" class="bg-primary-accent text-white px-4 py-2 rounded-lg hover:bg-primary-dark">Update Course</button>
-                </div>
-            </form>
-        </div>
-    </div>
+                 <div>
+                     <label for="edit_status" class="block text-sm font-medium text-gray-700">Status</label>
+                     <select id="edit_status" name="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                         <option value="active">Active</option>
+                         <option value="inactive">Inactive</option>
+                     </select>
+                 </div>
+
+                 <div class="flex justify-end pt-4">
+                     <button type="button" id="cancelButton" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 mr-2">Cancel</button>
+                     <button type="submit" class="bg-primary-accent text-white px-4 py-2 rounded-lg hover:bg-primary-dark">Update Course</button>
+                 </div>
+             </form>
+         </div>
+     </div>
 
     <div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-md">
@@ -230,6 +262,11 @@ $courses = mysqli_query($con, $query);
             const courseNameInput = document.getElementById('edit_course_name');
             const courseFeeInput = document.getElementById('edit_course_fee');
             const statusInput = document.getElementById('edit_status');
+            
+            // --- NEW: Edit Modal Instructor Elements ---
+            const instructorSelect = document.getElementById('edit_new_staff_id');
+            const courseNoInput = document.getElementById('edit_course_no');
+            const oldStaffIdInput = document.getElementById('edit_old_staff_id');
 
             // --- Delete Modal Elements ---
             const deleteModal = document.getElementById('deleteModal');
@@ -255,6 +292,40 @@ $courses = mysqli_query($con, $query);
                     courseNameInput.value = button.dataset.name;
                     courseFeeInput.value = button.dataset.fee;
                     statusInput.value = button.dataset.status;
+
+                    // --- NEW: Populate Instructor Fields ---
+                    courseNoInput.value = button.dataset.courseNo;
+                    oldStaffIdInput.value = button.dataset.staffId;
+                    instructorSelect.value = button.dataset.staffId; // Set dropdown to current instructor
+
+                    // --- NEW: Dynamically update instructor dropdown options ---
+                    // This ensures the *currently assigned* instructor is always an option,
+                    // even if they are assigned to *this* course.
+                    const currentCourseNo = button.dataset.courseNo;
+                    
+                    // Clear existing options (except the "Unassign" one)
+                    Array.from(instructorSelect.options).forEach(option => {
+                        if (option.value !== "") {
+                            option.remove();
+                        }
+                    });
+
+                    // Re-populate from the PHP list, but with dynamic logic
+                    <?php foreach ($instructors_list as $instructor): ?>
+                        var instructorCourseNo = "<?php echo $instructor['course_no'] ?? ''; ?>";
+                        
+                        // Show if: 1. Unassigned OR 2. Assigned to THIS course
+                        if (instructorCourseNo === "" || instructorCourseNo === currentCourseNo) {
+                            const option = document.createElement('option');
+                            option.value = "<?php echo htmlspecialchars($instructor['staff_id']); ?>";
+                            option.textContent = "<?php echo htmlspecialchars($instructor['first_name'] . ' ' . $instructor['last_name']); ?>";
+                            instructorSelect.appendChild(option);
+                        }
+                    <?php endforeach; ?>
+                    
+                    // Reselect the correct instructor
+                    instructorSelect.value = button.dataset.staffId; 
+
                     openEditModal();
                 });
             });
@@ -321,7 +392,7 @@ $courses = mysqli_query($con, $query);
             }
             // --- END: Alert Message Handling ---
         });
-    </script>
+        </script>
 
 </body>
 </html>
