@@ -7,21 +7,73 @@ include('../../include/connection.php');
 //     exit();
 // }
 
-// --- Main Query: Retrieve all modules with their course names ---
-// CORRECTED: Join on modules.course_id = course.id
-$query = "SELECT m.*, c.course_name 
-          FROM modules m 
-          LEFT JOIN course c ON m.course_id = c.id";
-$modules = mysqli_query($con, $query);
+// --- Handle Status Messages ---
+$message = '';
+$message_type = ''; // 'success' or 'error'
+
+if (isset($_GET['status'])) {
+    switch ($_GET['status']) {
+        case 'add_success':
+            $message = 'Module added successfully!';
+            $message_type = 'success';
+            break;
+        case 'add_error':
+            $message = 'Error: Could not add the module.';
+            $message_type = 'error';
+            break;
+        case 'update_success':
+            $message = 'Module updated successfully!';
+            $message_type = 'success';
+            break;
+        case 'update_error':
+            $message = 'Error: Could not update the module.';
+            $message_type = 'error';
+            break;
+        case 'delete_success':
+            $message = 'Module deleted successfully!';
+            $message_type = 'success';
+            break;
+        case 'delete_error':
+            $message = 'Error: Could not delete the module.';
+            $message_type = 'error';
+            break;
+        case 'sql_error':
+            $message = 'Error: A database error occurred.';
+            $message_type = 'error';
+            break;
+        case 'invalid_input':
+            $message = 'Error: Invalid input provided.';
+            $message_type = 'error';
+            break;
+    }
+}
 
 // --- Helper Query: Get all courses for dropdowns ---
-// CORRECTED: Select course.id, not course.course_no
 $course_query = "SELECT id, course_name FROM course ORDER BY course_name";
 $courses_result = mysqli_query($con, $course_query);
 $courses_list = [];
 while ($course_row = mysqli_fetch_assoc($courses_result)) {
     $courses_list[] = $course_row;
 }
+
+// Check for a selected course from the URL
+$selected_course_id = $_GET['course_id'] ?? null;
+
+// --- Main Query: Retrieve all modules with their course names ---
+$query = "SELECT m.*, c.course_name 
+          FROM modules m 
+          LEFT JOIN course c ON m.course_id = c.id";
+
+if ($selected_course_id) {
+    // Sanitize the input to prevent SQL injection
+    $sanitized_course_id = intval($selected_course_id);
+    $query .= " WHERE m.course_id = $sanitized_course_id";
+} else {
+    // If no course is selected, show no modules.
+    $query .= " WHERE 1 = 0"; // This is a safe way to return 0 results
+}
+
+$modules = mysqli_query($con, $query);
 
 ?>
 
@@ -36,28 +88,7 @@ while ($course_row = mysqli_fetch_assoc($courses_result)) {
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Custom Tailwind Configuration -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary-accent': '#10b981',
-                        /* Emerald Green */
-                        'primary-dark': '#059669',
-                        'secondary-dark': '#1e293b',
-                        /* Slate-800 */
-                    },
-                    borderRadius: {
-                        'xl': '0.75rem',
-                    },
-                    fontFamily: {
-                        // Set Inter as the default font
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                },
-            },
-        };
-    </script>
+   
 
     <style>
         /* Apply the Inter font to the whole page */
@@ -73,12 +104,42 @@ while ($course_row = mysqli_fetch_assoc($courses_result)) {
 
         <!-- Header Title -->
         <h2 class="text-3xl font-bold text-gray-800 mb-6">Manage Modules</h2>
+        
+        <!-- Status Message Alert -->
+        <?php if ($message): ?>
+            <div id="statusAlert" class="mb-4 p-4 rounded-lg 
+                <?php echo ($message_type == 'success') ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200'; ?>
+                flex justify-between items-center">
+                <p><?php echo $message; ?></p>
+                <button onclick="document.getElementById('statusAlert').style.display='none'" class="text-2xl font-bold">&times;</button>
+            </div>
+        <?php endif; ?>
+
+
+        <!-- Course Filter Dropdown -->
+        <div class="bg-white p-6 rounded-xl shadow-lg mb-6">
+            <form action="manage_modules.php" method="GET" id="courseFilterForm">
+                <label for="course_id_filter" class="block text-sm font-medium text-gray-700 mb-2">Select a Course to View its Modules</label>
+                <select id="course_id_filter" name="course_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" onchange="this.form.submit()">
+                    <option value="">Select a course...</option>
+                    <?php foreach ($courses_list as $course) : ?>
+                        <option value="<?php echo htmlspecialchars($course['id']); ?>" 
+                                <?php echo ($selected_course_id == $course['id']) ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($course['course_name']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </form>
+        </div>
 
         <!-- Manage Modules Table -->
         <div class="bg-white p-6 rounded-xl shadow-lg mt-8">
             <div class="flex justify-between items-center border-b pb-2 mb-4">
-                <h3 class="text-xl font-semibold text-gray-800">All Modules</h3>
-                <button id="addModuleBtn" class="bg-primary-accent text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition duration-150">
+                <h3 class="text-xl font-semibold text-gray-800">Modules</h3>
+                <button id="addModuleBtn" 
+                        class="bg-primary-accent text-white px-4 py-2 rounded-lg transition duration-150 
+                               <?php echo $selected_course_id ? 'hover:bg-primary-dark' : 'opacity-50 cursor-not-allowed'; ?>"
+                        <?php echo $selected_course_id ? '' : 'disabled'; ?>>
                     Add New Module
                 </button>
             </div>
@@ -100,7 +161,15 @@ while ($course_row = mysqli_fetch_assoc($courses_result)) {
                     <tbody class="bg-white divide-y divide-gray-200">
 
                         <?php
-                        if ($modules && mysqli_num_rows($modules) > 0) {
+                        if (!$selected_course_id) {
+                        ?>
+                            <tr>
+                                <td colspan="3" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                    Please select a course from the dropdown above to see its modules.
+                                </td>
+                            </tr>
+                        <?php
+                        } elseif ($modules && mysqli_num_rows($modules) > 0) {
                             while ($row = mysqli_fetch_assoc($modules)) {
                         ?>
                                 <tr>
@@ -133,7 +202,7 @@ while ($course_row = mysqli_fetch_assoc($courses_result)) {
                             ?>
                             <tr>
                                 <td colspan="3" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                                    No modules found.
+                                    No modules found for this course.
                                 </td>
                             </tr>
                         <?php
@@ -153,7 +222,8 @@ while ($course_row = mysqli_fetch_assoc($courses_result)) {
                 <h3 class="text-xl font-semibold text-gray-800">Add New Module</h3>
                 <button id="closeAddModal" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
             </div>
-            <form action="add_module.php" method="POST" class="p-6 space-y-4">
+            <!-- FIXED: Corrected form action path -->
+            <form action="../lib/add_module.php" method="POST" class="p-6 space-y-4">
                 <div>
                     <label for="add_module_name" class="block text-sm font-medium text-gray-700">Module Name</label>
                     <input type="text" id="add_module_name" name="module_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
@@ -184,7 +254,7 @@ while ($course_row = mysqli_fetch_assoc($courses_result)) {
                 <h3 class="text-xl font-semibold text-gray-800">Edit Module</h3>
                 <button id="closeEditModal" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
             </div>
-            <form action="update_module.php" method="POST" class="p-6 space-y-4">
+            <form action="../lib/update_module.php" method="POST" class="p-6 space-y-4">
                 <input type="hidden" id="edit_module_id" name="module_id">
                 
                 <div>
@@ -235,6 +305,17 @@ while ($course_row = mysqli_fetch_assoc($courses_result)) {
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Hide status alert after 5 seconds ---
+            const statusAlert = document.getElementById('statusAlert');
+            if (statusAlert) {
+                setTimeout(() => {
+                    statusAlert.style.transition = 'opacity 0.5s ease';
+                    statusAlert.style.opacity = '0';
+                    setTimeout(() => statusAlert.style.display = 'none', 500);
+                }, 5000);
+            }
+
             // --- Common Modal Functions ---
             const openModal = (modal) => {
                 modal.classList.remove('hidden');
@@ -257,8 +338,18 @@ while ($course_row = mysqli_fetch_assoc($courses_result)) {
             const addModuleBtn = document.getElementById('addModuleBtn');
             const closeAddModal = document.getElementById('closeAddModal');
             const cancelAddButton = document.getElementById('cancelAddButton');
+            const addCourseIdSelect = document.getElementById('add_course_id');
             
-            addModuleBtn.addEventListener('click', () => openModal(addModal));
+            if (addModuleBtn) {
+                addModuleBtn.addEventListener('click', () => {
+                    // Pre-select the currently filtered course
+                    const currentCourseId = "<?php echo $selected_course_id ?? ''; ?>";
+                    if (currentCourseId) {
+                        addCourseIdSelect.value = currentCourseId;
+                    }
+                    openModal(addModal);
+                });
+            }
             addModalListeners(addModal, closeAddModal, cancelAddButton);
 
             // --- Edit Modal ---
