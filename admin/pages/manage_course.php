@@ -2,12 +2,32 @@
 include_once('../include/header.php');
 include('../../include/connection.php');
 
-
-
 // if(!isset($_SESSION['username']) || $_SESSION['role'] != 'admin') {
-//     header("Location: ../login.php");
-//     exit();
+//     header("Location: ../login.php");
+//     exit();
 // }
+
+// --- NEW: Message Handling Logic ---
+$message = '';
+$message_type = ''; // 'success' or 'error'
+
+if (isset($_GET['status'])) {
+    switch ($_GET['status']) {
+        case 'updated':
+            $message = 'Course updated successfully!';
+            $message_type = 'success';
+            break;
+        case 'deleted':
+            $message = 'Course deleted successfully.';
+            $message_type = 'success';
+            break;
+        case 'error':
+            $message = 'An error occurred. Please try again.';
+            $message_type = 'error';
+            break;
+    }
+}
+// --- END: Message Handling Logic ---
 
 
 // Retrieve all courses from the database, joining with staff to get instructor name
@@ -24,10 +44,8 @@ $courses = mysqli_query($con, $query);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Course Dashboard</title>
-    <!-- Include Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Include Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     
@@ -42,12 +60,16 @@ $courses = mysqli_query($con, $query);
 
     <div class="max-w-7xl mx-auto">
 
-        <!-- Header Title -->
         <h2 class="text-3xl font-bold text-gray-800 mb-6">Manage Courses</h2>
 
-
-
-        <!-- Manage Courses Table -->
+        <?php if (!empty($message)): ?>
+            <div id="alert-message" class="relative <?php echo ($message_type == 'success') ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700'; ?> border px-4 py-3 rounded-lg mb-6" role="alert">
+                <span class="block sm:inline"><?php echo htmlspecialchars($message); ?></span>
+                <button type="button" class="absolute top-0 bottom-0 right-0 px-4 py-3" data-dismiss="alert-message">
+                    <span class="text-2xl font-bold">&times;</span>
+                </button>
+            </div>
+        <?php endif; ?>
         <div class="bg-white p-6 rounded-xl shadow-lg mt-8">
             <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Manage Courses</h3>
             <div class="overflow-x-auto">
@@ -103,7 +125,6 @@ $courses = mysqli_query($con, $query);
                                         <?php endif; ?>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                        <!-- This button triggers the modal -->
                                         <button type="button" class="text-indigo-600 hover:text-indigo-900 transition duration-150 edit-btn" 
                                             data-id="<?php echo $row['id']; ?>" 
                                             data-name="<?php echo htmlspecialchars($row['course_name']); ?>" 
@@ -111,8 +132,9 @@ $courses = mysqli_query($con, $query);
                                             data-status="<?php echo $row['status']; ?>">
                                             Edit
                                         </button>
+
+                                    
                                         
-                                        <!-- This button triggers the delete modal -->
                                         <button type="button" class="text-red-600 hover:text-red-900 transition duration-150 delete-btn"
                                             data-id="<?php echo $row['id']; ?>"
                                             data-name="<?php echo htmlspecialchars($row['course_name']); ?>">
@@ -140,16 +162,13 @@ $courses = mysqli_query($con, $query);
         
     </div>
 
-     <!-- Edit Course Modal -->
-    <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center p-4">
+     <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-lg">
             <div class="flex justify-between items-center p-4 border-b">
                 <h3 class="text-xl font-semibold text-gray-800">Edit Course</h3>
                 <button id="closeModal" class="text-gray-400 hover:text-gray-600">&times;</button>
             </div>
-            <!-- Form to update course -->
-            <form action="update_course.php" method="POST" class="p-6 space-y-4">
-                <!-- Hidden input to store the course ID -->
+            <form action="../lib/update_course.php" method="POST" class="p-6 space-y-4">
                 <input type="hidden" id="edit_course_id" name="course_id">
                 
                 <div>
@@ -178,7 +197,6 @@ $courses = mysqli_query($con, $query);
         </div>
     </div>
 
-    <!-- Delete Course Modal -->
     <div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-md">
             <div class="flex justify-between items-center p-4 border-b">
@@ -194,7 +212,7 @@ $courses = mysqli_query($con, $query);
             </div>
             <div class="flex justify-end p-4 bg-gray-50 rounded-b-xl">
                 <button type="button" id="cancelDeleteButton" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 mr-2">Cancel</button>
-                <a id="confirmDeleteButton" href="#" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Delete</a>
+                <a id="confirmDeleteButton" href="../lib/delete_course.php" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Delete</a>
             </div>
         </div>
     </div>
@@ -264,8 +282,9 @@ $courses = mysqli_query($con, $query);
                     
                     // Set the course name in the modal
                     deleteCourseName.textContent = name;
-                    // Set the href for the final delete button
-                    confirmDeleteButton.href = `delete_course.php?id=${id}`;
+                    
+                    // Set the href for the final delete button - ** NOTE: path corrected **
+                    confirmDeleteButton.href = `../lib/delete_course.php?id=${id}`;
                     
                     openDeleteModal();
                 });
@@ -276,9 +295,33 @@ $courses = mysqli_query($con, $query);
             deleteModal.addEventListener('click', (e) => {
                 if (e.target === deleteModal) hideDeleteModal();
             });
+
+
+            // --- NEW: Alert Message Handling ---
+            const alertMessage = document.getElementById('alert-message');
+            if (alertMessage) {
+                // Find the close button inside this specific alert
+                const closeButton = alertMessage.querySelector('button[data-dismiss="alert-message"]');
+                
+                // Add click listener to close button
+                if (closeButton) {
+                    closeButton.addEventListener('click', () => {
+                        alertMessage.style.display = 'none';
+                    });
+                }
+                
+                // Set timeout to auto-hide the message after 5 seconds
+                setTimeout(() => {
+                    alertMessage.style.transition = 'opacity 0.5s ease';
+                    alertMessage.style.opacity = '0';
+                    setTimeout(() => {
+                        alertMessage.style.display = 'none';
+                    }, 500); // 0.5s for fade animation
+                }, 5000); // 5 seconds
+            }
+            // --- END: Alert Message Handling ---
         });
     </script>
 
 </body>
 </html>
-
