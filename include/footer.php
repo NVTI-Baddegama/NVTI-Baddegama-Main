@@ -91,6 +91,8 @@
                         </svg>
                         <span class="text-gray-300 text-sm">NVTI Baddegama,<br>Main Road, Baddegama,<br>Sri Lanka</span>
                     </div>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d495.8446768056417!2d80.174785!3d6.163234!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae179edef14d4bd%3A0xd146ca8ee5958d80!2sNational%20vocational%20training%20institute!5e0!3m2!1sen!2slk!4v1761382379382!5m2!1sen!2slk" width="200" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    
                     <div class="flex items-center">
                         <svg class="w-5 h-5 text-primary mr-3 flex-shrink-0" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">

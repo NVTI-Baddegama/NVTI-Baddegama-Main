@@ -199,13 +199,9 @@ $courses = mysqli_query($con, $query);
         </div>
     </div>
 
-<<<<<<< HEAD
     
 
         <script>
-=======
-       <script>
->>>>>>> a1121a2a5b2d03d5a5ac02241f6e881cced239e2
         document.addEventListener('DOMContentLoaded', () => {
             // --- Edit Modal Elements ---
             const editModal = document.getElementById('editModal');
