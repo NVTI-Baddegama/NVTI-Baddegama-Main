@@ -386,7 +386,7 @@ $modules = mysqli_query($con, $query);
                     const name = button.dataset.name;
                     
                     deleteModuleName.textContent = name;
-                    confirmDeleteButton.href = `delete_module.php?id=${id}`;
+                    confirmDeleteButton.href = `../lib/delete_module.php?id=${id}`;
                     openModal(deleteModal);
                 });
             });
