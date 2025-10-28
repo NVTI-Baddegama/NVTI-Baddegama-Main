@@ -133,14 +133,15 @@ if ($courses_result && $courses_result->num_rows > 0) {
                             </select>
                         </div>
                     </div>
-                </div>
-                 <div class="mt-6">
+                    <div class="mt-6">
                     <label for="alCategory" class="block text-sm font-medium text-gray-700 mb-1">G.C.E. A/L Stream/Status</label>
                     <select id="alCategory" name="alCategory" required
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 transition duration-150 appearance-none">
                         <option value="" disabled selected>Select A/L Stream/Status</option>
-                        <option value="science">Science Stream (Passed)</option>
+                        <option value="maths">Maths Stream (Passed)</option>
+                        <option value="biology">Biology Stream (Passed)</option>
                         <option value="commerce">Commerce Stream (Passed)</option>
+                        <option value="agriculture">Agriculture Stream (Passed)</option>
                         <option value="arts">Arts Stream (Passed)</option>
                         <option value="tech">Technology Stream (Passed)</option>
                         <option value="awaiting">Awaiting A/L Results</option>
@@ -148,6 +149,9 @@ if ($courses_result && $courses_result->num_rows > 0) {
                         <option value="not_taken">No A/L Taken</option>
                     </select>
                 </div>
+
+                </div>
+                 
             </fieldset>
 
             <fieldset class="border-t border-gray-200 pt-6">
