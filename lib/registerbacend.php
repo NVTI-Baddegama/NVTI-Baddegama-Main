@@ -23,7 +23,8 @@ if (!$con) {
 if (isset($_POST['submit'])) {
 
     // --- 1. දත්ත ලබා ගැනීම ---
-    // (Generate Student ID code - unchanged)
+    
+    // Generate Student ID
     do {
         $StudentID = "VTA_BAD" . rand(100000, 999999);
         $check_id_query = "SELECT Student_id FROM student_enrollments WHERE Student_id = ?";
@@ -34,7 +35,6 @@ if (isset($_POST['submit'])) {
         $stmt_check_id->close();
     } while ($check_id_result->num_rows > 0);
     
-    // (Get POST data - unchanged)
     $fullName = trim($_POST['fullName']);
     $nic = trim($_POST['nic']);
     $address = trim($_POST['address']);
@@ -50,7 +50,6 @@ if (isset($_POST['submit'])) {
     $courseOptionTwo = trim($_POST['courseOptionTwo'] ?? ''); 
 
     // --- 2. Input Validation ---
-    // (Validation code - unchanged)
     if (empty($fullName) || empty($nic) || empty($address) || empty($dob) || empty($contactNo) || empty($olPassStatus) || empty($alCategory) || empty($courseOptionOne)) {
         header("location:../pages/register.php?error=Please_fill_all_required_fields");
         exit();
@@ -64,8 +63,8 @@ if (isset($_POST['submit'])) {
         exit();
     }
 
-    // --- 3. Duplicate NIC Check (Removed) ---
-    // ...
+    // --- 3. Duplicate NIC Check (Removed as per your request) ---
+    // (NIC check block is removed)
 
     // --- 4. දත්ත සමුදායට දත්ත ඇතුළු කිරීම ---
     $insert_query = "INSERT INTO student_enrollments (
@@ -182,7 +181,7 @@ if (isset($_POST['submit'])) {
         $mail = new PHPMailer(true);
         
         // === මෙතන අගයන් 3 වෙනස් කරන්න ===
-        $admin_recipient_email = "infor.abeysekara@gmail.com"; // <-- 1. මෙතනට email එක ලැබිය යුතු ඔබේ email address එක දාන්න
+        $admin_recipient_email = "infor.chamika@gmail.com"; // <-- 1. මෙතනට email එක ලැබිය යුතු ඔබේ email address එක දාන්න
         $sender_gmail_address = "infor@nvtibaddegama.site"; // <-- 2. මෙතනට App Password එක හැදූ Gmail address එක දාන්න
         $sender_app_password = "3CY+C9*etd9Qz9"; // <-- 3. මෙතනට අකුරු 16ක App Password එක දාන්න (හිස්තැන් නැතුව)
         // ==================================
@@ -210,7 +209,7 @@ if (isset($_POST['submit'])) {
             $mail->Body    = "A new student application has been submitted.<br>"
                            . "The student's full details are attached as a PDF file for your records.<br><br>"
                            . "<b>Student Name:</b> " . htmlspecialchars($fullName) . "<br>"
-                           . "<b>NIC:</b> " . htmlspecialchars($nic) . "<br>"
+                           . "<b>NIC:</b> " . htmlspecialchars($nic) . "<br>"s
                            . "<b>Course Choice 1:</b> " . htmlspecialchars($courseOptionOne) . "<br><br>"
                            . "Please log in to the admin panel to process this application.";
             
