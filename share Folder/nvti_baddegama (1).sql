@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 25, 2025 at 06:55 PM
+-- Generation Time: Oct 28, 2025 at 06:07 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -67,8 +67,30 @@ CREATE TABLE `course` (
 --
 
 INSERT INTO `course` (`id`, `course_no`, `course_name`, `nvq_level`, `course_type`, `qualifications`, `course_duration`, `course_fee`, `course_description`, `course_image`, `status`) VALUES
-(1, 'ITD001', 'Diploma in Information Technology', 4, 'Full-time', 'GCE A/L', 12, 'LKR 80,000', 'A comprehensive diploma in IT.', NULL, 'active'),
-(3, 'CS001', 'Web Development', 4, 'Full-time', 'A/L', 12, '20000', 'hjhkdjflkf', 'course_img_68f34bcc4740c_1760775116.png', 'active');
+(1, 'ITD001', 'Diploma in Information Technology', 4, 'Full-time', 'GCE A/L', 12, '80,000', 'A comprehensive diploma in IT.', NULL, 'active'),
+(3, 'CS001', 'Web Development', 4, 'Full-time', 'A/L', 12, '20000', 'hjhkdjflkf', 'course_img_68f34bcc4740c_1760775116.png', 'active'),
+(8, 'GD006', 'Diploma df', 3, 'Hybrid', 'GCE O/L', 7, '40,000', 'hgyj', NULL, 'inactive');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gallery`
+--
+
+CREATE TABLE `gallery` (
+  `id` int(11) NOT NULL,
+  `image_name` text DEFAULT 'img_vta',
+  `image_path` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `gallery`
+--
+
+INSERT INTO `gallery` (`id`, `image_name`, `image_path`, `created_at`) VALUES
+(2, 'test 1', '../uploads/gallery/6900f6ec62ff7_1761670892.png', '2025-10-28 17:01:32'),
+(3, '', '../uploads/gallery/6900f7862e5a4_1761671046.png', '2025-10-28 17:04:06');
 
 -- --------------------------------------------------------
 
@@ -85,6 +107,14 @@ CREATE TABLE `modules` (
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `modules`
+--
+
+INSERT INTO `modules` (`id`, `course_id`, `module_name`, `module_description`, `order_no`, `created_at`, `updated_at`) VALUES
+(1, 1, 'test tee', NULL, NULL, '2025-10-25 22:54:29', '2025-10-25 23:04:48'),
+(2, 3, 'tgtesf', NULL, NULL, '2025-10-25 22:58:41', '2025-10-25 23:05:08');
 
 -- --------------------------------------------------------
 
@@ -113,7 +143,7 @@ CREATE TABLE `staff` (
 
 INSERT INTO `staff` (`id`, `staff_id`, `service_id`, `first_name`, `last_name`, `nic`, `gender`, `password`, `position`, `course_no`, `profile_photo`, `status`) VALUES
 (4, 'NVTI-2025-7386', 'SD0003', 'Chamika', 'Sandeepa', '200625103462', 'Male', '$2y$10$9Xx2GpPa.P3LKGW/jIQsX.wHkabsZxlwjzrY4AWPMq9EkUh67HV/.', 'Instructors', 'ITD001', 'NVTI-STAFF-1761063260.jpg', 'active'),
-(5, 'NVTI-2025-4768', 'SD0004', 'manu', 'Nimana', '200625103467', 'Male', '$2y$10$UXYnBRRstKV4hVQgMSw58epoTV6oM3Lds/jHpPTKFy4pS.wd6R/M6', 'Instructors', 'CS001', 'NVTI-STAFF-1761064514.png', 'active');
+(5, 'NVTI-2025-4768', 'SD0004', 'manu', 'Nimana', '200625103467', 'Male', '$2y$10$UXYnBRRstKV4hVQgMSw58epoTV6oM3Lds/jHpPTKFy4pS.wd6R/M6', 'Instructors', 'GD006', 'NVTI-STAFF-1761064514.png', 'active');
 
 -- --------------------------------------------------------
 
@@ -170,6 +200,12 @@ ALTER TABLE `course`
   ADD UNIQUE KEY `course_no` (`course_no`);
 
 --
+-- Indexes for table `gallery`
+--
+ALTER TABLE `gallery`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `modules`
 --
 ALTER TABLE `modules`
@@ -199,13 +235,19 @@ ALTER TABLE `student_enrollments`
 -- AUTO_INCREMENT for table `course`
 --
 ALTER TABLE `course`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `gallery`
+--
+ALTER TABLE `gallery`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `modules`
 --
 ALTER TABLE `modules`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `staff`
