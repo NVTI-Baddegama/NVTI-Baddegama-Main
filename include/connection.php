@@ -4,10 +4,10 @@
 // $password = ""; 
 // $dbname = "nvti_baddegama"; 
 
-// $servername = "localhost";
-// $username = "root"; 
-// $password = ""; 
-// $dbname = "nvti_baddegama"; 
+$servername = "localhost";
+$username = "root"; 
+$password = ""; 
+$dbname = "nvt_baddegama"; 
 
 // $con = new mysqli($servername, $username, $password, $dbname);
 
@@ -16,10 +16,10 @@
 // }
 ?>
 <?php
-$servername = "nvtibaddegama.site";
-$username = "nvtibadde"; 
-$password = "3CY+C9*etd9Qz9"; 
-$dbname = "nvtibadde_vta_baddegama"; 
+// $servername = "nvtibaddegama.site";
+// $username = "nvtibadde"; 
+// $password = "3CY+C9*etd9Qz9"; 
+// $dbname = "nvtibadde_vta_baddegama"; 
 
 $con = new mysqli($servername, $username, $password, $dbname);
 
