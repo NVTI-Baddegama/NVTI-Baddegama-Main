@@ -182,9 +182,9 @@ if (isset($_POST['submit'])) {
         $mail = new PHPMailer(true);
         
         // === මෙතන අගයන් 3 වෙනස් කරන්න ===
-        $admin_recipient_email = "your-admin-email@gmail.com"; // <-- 1. මෙතනට email එක ලැබිය යුතු ඔබේ email address එක දාන්න
-        $sender_gmail_address = "your-sending-email@gmail.com"; // <-- 2. මෙතනට App Password එක හැදූ Gmail address එක දාන්න
-        $sender_app_password = "your16letterapppassword"; // <-- 3. මෙතනට අකුරු 16ක App Password එක දාන්න (හිස්තැන් නැතුව)
+        $admin_recipient_email = "infor.abeysekara@gmail.com"; // <-- 1. මෙතනට email එක ලැබිය යුතු ඔබේ email address එක දාන්න
+        $sender_gmail_address = "infor@nvtibaddegama.site"; // <-- 2. මෙතනට App Password එක හැදූ Gmail address එක දාන්න
+        $sender_app_password = "3CY+C9*etd9Qz9"; // <-- 3. මෙතනට අකුරු 16ක App Password එක දාන්න (හිස්තැන් නැතුව)
         // ==================================
 
         try {
