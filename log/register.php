@@ -164,6 +164,17 @@ $courses_result = $con->query($courses_query);
                 </div>
             </div>
 
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="contact_no">Contact Number:</label>
+                    <input type="tel" id="contact_no" name="contact_no" pattern="[0-9]{10}" placeholder="07XXXXXXXX" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+            </div>
+
             <div class="form-group">
                 <label>Gender:</label>
                 <div class="radio-group">
@@ -188,29 +199,28 @@ $courses_result = $con->query($courses_query);
             </div>
 
             <div class="form-group" id="course_section">
-            <label for="course_no">Course: (For Academic Staff)</label>
-            <select id="course_no" name="course_no"> <option value="">Select Course</option>
-                <?php
-                if ($courses_result && $courses_result->num_rows > 0) {
-                    // Reset result pointer just in case
-                    $courses_result->data_seek(0); 
-                    while ($course = $courses_result->fetch_assoc()) {
-                        // value එක course_no ලෙස වෙනස් කළා
-                        echo '<option value="' . htmlspecialchars($course['course_no']) . '">' . htmlspecialchars($course['course_name']) . '</option>';
+                <label for="course_no">Course: (For Instructors)</label>
+                <select id="course_no" name="course_no">
+                    <option value="">Select Course</option>
+                    <?php
+                    if ($courses_result && $courses_result->num_rows > 0) {
+                        $courses_result->data_seek(0);
+                        while ($course = $courses_result->fetch_assoc()) {
+                            echo '<option value="' . htmlspecialchars($course['course_no']) . '">' . htmlspecialchars($course['course_name']) . '</option>';
+                        }
                     }
-                }
-                ?>
-            </select>
-        </div>
+                    ?>
+                </select>
+            </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="password">Create Password:</label>
-                    <input type="password" id="password" name="password" minlength="6">
+                    <input type="password" id="password" name="password" minlength="6" required>
                 </div>
                 <div class="form-group">
                     <label for="confirm_password">Confirm Password:</label>
-                    <input type="password" id="confirm_password" name="confirm_password" minlength="6">
+                    <input type="password" id="confirm_password" name="confirm_password" minlength="6" required>
                 </div>
             </div>
 
@@ -237,7 +247,6 @@ $courses_result = $con->query($courses_query);
                 courseSelect.value = '';
             }
         }
-        
     </script>
 </body>
 </html>
