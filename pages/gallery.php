@@ -80,7 +80,7 @@ function render_column($column) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <script src="https://cdn.tailwindcss.com"></script>
+    
     <style>
         /* --- CSS (Animation) --- */
 
@@ -170,3 +170,6 @@ function render_column($column) {
 
 </body>
 </html>
+
+
+<?php include_once('../include/footer.php'); ?>
