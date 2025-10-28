@@ -183,7 +183,7 @@ if (isset($_POST['submit'])) {
         // === මෙතන අගයන් 3 වෙනස් කරන්න ===
         $admin_recipient_email = "chamikasandeepa40@gmail.com"; // <-- 1. මෙතනට email එක ලැබිය යුතු ඔබේ email address එක දාන්න
         $sender_gmail_address = "infor.chamika@gmail.com"; // <-- 2. මෙතනට App Password එක හැදූ Gmail address එක දාන්න
-        $sender_app_password = "kyci rdwf iqwt vdyv"; // <-- 3. මෙතනට අකුරු 16ක App Password එක දාන්න (හිස්තැන් නැතුව)
+        $sender_app_password = "kycirdwfiqwtvdyv"; // <-- 3. මෙතනට අකුරු 16ක App Password එක දාන්න (හිස්තැන් නැතුව)
         // ==================================
 
         try {
