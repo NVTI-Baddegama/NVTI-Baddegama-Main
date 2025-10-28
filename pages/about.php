@@ -7,7 +7,7 @@
         <!-- Header Section -->
         <header class="text-center mb-10 md:mb-16">
             <h1 class="text-5xl md:text-6xl font-extrabold text-primary-blue mb-4 leading-tight">
-                About NVTI Baddgama
+                About NVTI Baddegama
             </h1>
             <p class="text-xl text-secondary-gray max-w-2xl mx-auto">
                 Our commitment is to excellence, innovation, and community development.
@@ -22,7 +22,7 @@
                 <!-- Use a descriptive placeholder image for now, referencing the Vocational Training Center -->
                 <img 
                     src="../images/image/about_main.png" 
-                    alt="A professional photo representing the NVTI Baddgama Vocational Training Center or facility" 
+                    alt="A professional photo representing the NVTI Baddegama Vocational Training Center or facility" 
                     class="w-full h-auto object-cover rounded-lg shadow-xl transition duration-300 hover:shadow-2xl hover:scale-[1.01]"
                 />
             </div>
@@ -33,7 +33,7 @@
                     Our History and Mission
                 </h2>
                 <p class="text-lg leading-relaxed text-secondary-gray">
-                    Established as a vital part of the national vocational training network under the Vocational Training Authority (VTA) initiative, <strong>NVTI Baddgama</strong> was founded to specifically address the skill gap and empower youth in the Southern Province. Our critical vision is to be a central hub for cutting-edge vocational and technological training. Our core mission is not just to educate, but to empower. We equip every individual with the <strong>practical skills, industry certification, and professional confidence</strong> necessary to thrive and contribute meaningfully to Sri Lanka's rapidly evolving global economy.
+                    Established as a vital part of the national vocational training network under the Vocational Training Authority (VTA) initiative, <strong>NVTI Baddegama</strong> was founded to specifically address the skill gap and empower youth in the Southern Province. Our critical vision is to be a central hub for cutting-edge vocational and technological training. Our core mission is not just to educate, but to empower. We equip every individual with the <strong>practical skills, industry certification, and professional confidence</strong> necessary to thrive and contribute meaningfully to Sri Lanka's rapidly evolving global economy.
                 </p>
                 <p class="text-lg leading-relaxed text-secondary-gray">
                     We focus on real-world application, ensuring our graduates are job-ready from day one. By fostering creativity, critical thinking, and strong professional ethics, we prepare the next generation of skilled technicians and innovators.
@@ -74,7 +74,7 @@
         <!-- 3. Facilities and Advantage Section -->
         <div class="bg-gray-100 p-8 md:p-12 rounded-xl shadow-inner mb-12">
             <h2 class="text-4xl font-bold text-gray-800 text-center mb-8">
-                The NVTI Baddgama Advantage
+                The NVTI Baddegama Advantage
             </h2>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -120,7 +120,7 @@
                 Meet Our Dedicated Leadership
             </h2>
             <p class="text-lg text-secondary-gray max-w-3xl mx-auto">
-                The success of NVTI Baddgama is guided by a visionary management team and supported by dedicated faculty members who are passionate about technical education and youth empowerment. We invite you to learn more about the people steering our commitment to excellence.
+                The success of NVTI Baddegama is guided by a visionary management team and supported by dedicated faculty members who are passionate about technical education and youth empowerment. We invite you to learn more about the people steering our commitment to excellence.
             </p>
         </div>
         

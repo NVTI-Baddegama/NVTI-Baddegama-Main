@@ -20,27 +20,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $module_name = $_POST['module_name']; // Handled by prepared statement
         $course_id = intval($_POST['course_id']);
 
+        // Handle optional order_no (now a string).
+        $order_no_input = $_POST['order_no'] ?? null;
+        $order_no = ($order_no_input !== null && $order_no_input !== '') ? $order_no_input : null; // Save as string or NULL
+
         // 4. Prepare the SQL UPDATE statement to prevent SQL injection
-        $query = "UPDATE modules SET module_name = ?, course_id = ? WHERE id = ?";
+        $query = "UPDATE modules SET module_name = ?, course_id = ?, order_no = ? WHERE id = ?";
         
         $stmt = mysqli_prepare($con, $query);
 
         if ($stmt) {
             // 5. Bind the parameters
-            // "sii" means:
+            // "sisi" means:
             // s: module_name (string)
             // i: course_id (integer)
+            // s: order_no (string)
             // i: module_id (integer)
-            mysqli_stmt_bind_param($stmt, "sii", $module_name, $course_id, $module_id);
+            mysqli_stmt_bind_param($stmt, "sisi", $module_name, $course_id, $order_no, $module_id);
 
             // 6. Execute the statement
             if (mysqli_stmt_execute($stmt)) {
-                // Success: Redirect back to the manage_modules page,
-                // pre-selecting the course that was just updated.
+                // Success: Redirect back
                 header("Location: ../pages/manage_modules.php?course_id=" . $course_id . "&status=update_success");
                 exit();
             } else {
-                // Error: Redirect back with an error status
+                // Error: Redirect back
                 header("Location: ../pages/manage_modules.php?course_id=" . $course_id . "&status=update_error");
                 exit();
             }
@@ -56,7 +60,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     } else {
         // Required fields were empty
-        // Redirect back, optionally with a specific error
         $redirect_course_id = isset($_POST['course_id']) ? intval($_POST['course_id']) : '';
         header("Location: ../pages/manage_modules.php?course_id=" . $redirect_course_id . "&status=invalid_input");
         exit();

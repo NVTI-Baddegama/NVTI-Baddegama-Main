@@ -2,6 +2,7 @@
 include_once('../include/header.php');
 include('../../include/connection.php');
 
+// We should check if the user is an admin
 // if(!isset($_SESSION['username']) || $_SESSION['role'] != 'admin') {
 //     header("Location: ../login.php");
 //     exit();
@@ -73,6 +74,9 @@ if ($selected_course_id) {
     $query .= " WHERE 1 = 0"; // This is a safe way to return 0 results
 }
 
+// Sort by the code/letter, then by name
+$query .= " ORDER BY m.order_no ASC, m.module_name ASC"; 
+
 $modules = mysqli_query($con, $query);
 
 ?>
@@ -86,9 +90,6 @@ $modules = mysqli_query($con, $query);
     <title>Manage Modules Dashboard</title>
     <!-- Include Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Custom Tailwind Configuration -->
-   
 
     <style>
         /* Apply the Inter font to the whole page */
@@ -120,7 +121,7 @@ $modules = mysqli_query($con, $query);
         <div class="bg-white p-6 rounded-xl shadow-lg mb-6">
             <form action="manage_modules.php" method="GET" id="courseFilterForm">
                 <label for="course_id_filter" class="block text-sm font-medium text-gray-700 mb-2">Select a Course to View its Modules</label>
-                <select id="course_id_filter" name="course_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" onchange="this.form.submit()">
+                <select id="course_id_filter" name="course_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-10" onchange="this.form.submit()">
                     <option value="">Select a course...</option>
                     <?php foreach ($courses_list as $course) : ?>
                         <option value="<?php echo htmlspecialchars($course['id']); ?>" 
@@ -137,9 +138,7 @@ $modules = mysqli_query($con, $query);
             <div class="flex justify-between items-center border-b pb-2 mb-4">
                 <h3 class="text-xl font-semibold text-gray-800">Modules</h3>
                 <button id="addModuleBtn" 
-                        class="bg-primary-accent text-white px-4 py-2 rounded-lg transition duration-150 
-                               <?php echo $selected_course_id ? 'hover:bg-primary-dark' : 'opacity-50 cursor-not-allowed'; ?>"
-                        <?php echo $selected_course_id ? '' : 'disabled'; ?>>
+                        class="bg-primary-accent text-white px-4 py-2 rounded-lg transition duration-150">
                     Add New Module
                 </button>
             </div>
@@ -149,6 +148,10 @@ $modules = mysqli_query($con, $query);
                         <tr>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tl-lg">
                                 Module Name
+                            </th>
+                            <!-- UPDATED HEADER -->
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Module Code / Letter
                             </th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Course
@@ -164,7 +167,7 @@ $modules = mysqli_query($con, $query);
                         if (!$selected_course_id) {
                         ?>
                             <tr>
-                                <td colspan="3" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                <td colspan="4" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                                     Please select a course from the dropdown above to see its modules.
                                 </td>
                             </tr>
@@ -176,6 +179,10 @@ $modules = mysqli_query($con, $query);
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         <?php echo htmlspecialchars($row['module_name']); ?>
                                     </td>
+                                    <!-- UPDATED COLUMN DATA -->
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <?php echo htmlspecialchars($row['order_no'] ?? 'N/A'); ?>
+                                    </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         <?php echo htmlspecialchars($row['course_name'] ?? 'N/A'); ?>
                                     </td>
@@ -184,7 +191,8 @@ $modules = mysqli_query($con, $query);
                                         <button type="button" class="text-indigo-600 hover:text-indigo-900 transition duration-150 edit-btn" 
                                             data-id="<?php echo $row['id']; ?>" 
                                             data-name="<?php echo htmlspecialchars($row['module_name']); ?>" 
-                                            data-course-id="<?php echo htmlspecialchars($row['course_id']); ?>">
+                                            data-course-id="<?php echo htmlspecialchars($row['course_id']); ?>"
+                                            data-order-no="<?php echo htmlspecialchars($row['order_no']); ?>"> <!-- This now holds text -->
                                             Edit
                                         </button>
                                         
@@ -201,7 +209,7 @@ $modules = mysqli_query($con, $query);
                         } else {
                             ?>
                             <tr>
-                                <td colspan="3" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                <td colspan="4" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                                     No modules found for this course.
                                 </td>
                             </tr>
@@ -222,11 +230,15 @@ $modules = mysqli_query($con, $query);
                 <h3 class="text-xl font-semibold text-gray-800">Add New Module</h3>
                 <button id="closeAddModal" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
             </div>
-            <!-- FIXED: Corrected form action path -->
             <form action="../lib/add_module.php" method="POST" class="p-6 space-y-4">
                 <div>
                     <label for="add_module_name" class="block text-sm font-medium text-gray-700">Module Name</label>
                     <input type="text" id="add_module_name" name="module_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                </div>
+                <!-- UPDATED FIELD -->
+                <div>
+                    <label for="add_order_no" class="block text-sm font-medium text-gray-700">Module Code / Letter</label>
+                    <input type="text" id="add_order_no" name="order_no" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="e.g., A, B, C or M-01, M-02">
                 </div>
                 <div>
                     <label for="add_course_id" class="block text-sm font-medium text-gray-700">Course</label>
@@ -261,9 +273,14 @@ $modules = mysqli_query($con, $query);
                     <label for="edit_module_name" class="block text-sm font-medium text-gray-700">Module Name</label>
                     <input type="text" id="edit_module_name" name="module_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
                 </div>
+                <!-- UPDATED FIELD -->
+                <div>
+                    <label for="edit_order_no" class="block text-sm font-medium text-gray-700">Module Code / Letter</label>
+                    <input type="text" id="edit_order_no" name="order_no" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="e.g., A, B, C or M-01, M-02">
+                </div>
                 <div>
                     <label for="edit_course_id" class="block text-sm font-medium text-gray-700">Course</LabeL>
-                    <select id="edit_course_id" name="course_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                    <select id="edit_course_id" name="course_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-10" required>
                         <option value="">Select a course</option>
                         <?php foreach ($courses_list as $course) : ?>
                             <option value="<?php echo htmlspecialchars($course['id']); ?>">
@@ -361,12 +378,14 @@ $modules = mysqli_query($con, $query);
             const moduleIdInput = document.getElementById('edit_module_id');
             const moduleNameInput = document.getElementById('edit_module_name');
             const courseIdInput = document.getElementById('edit_course_id');
+            const orderNoInput = document.getElementById('edit_order_no'); // This is now a text field
             
             editButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     moduleIdInput.value = button.dataset.id;
                     moduleNameInput.value = button.dataset.name;
                     courseIdInput.value = button.dataset.courseId;
+                    orderNoInput.value = button.dataset.orderNo; // Populates the text field
                     openModal(editModal);
                 });
             });
@@ -386,6 +405,7 @@ $modules = mysqli_query($con, $query);
                     const name = button.dataset.name;
                     
                     deleteModuleName.textContent = name;
+                    // Note: This URL doesn't change, the delete file only needs the ID
                     confirmDeleteButton.href = `../lib/delete_module.php?id=${id}`;
                     openModal(deleteModal);
                 });
@@ -397,4 +417,3 @@ $modules = mysqli_query($con, $query);
 </body>
 
 </html>
-
