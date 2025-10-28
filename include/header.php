@@ -103,7 +103,7 @@
                         
                         <a href="../pages/register.php"
                             class="block py-2 px-3 rounded bg-white text-primary nav-hover-border nav-link-with-border md:border-0 md:p-0 transition duration-300 md:ml-2 register-cta">
-                            Register
+                            Apply Now
                             </a>
                         </li>
                     </ul>

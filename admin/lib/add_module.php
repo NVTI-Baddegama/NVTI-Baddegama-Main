@@ -15,30 +15,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['module_name']) && isset($_POST['course_id']) && !empty($_POST['module_name']) && !empty($_POST['course_id'])) {
 
         // 3. Sanitize and retrieve the data
-        // intval() sanitizes the course_id to be an integer
-        // mysqli_real_escape_string (or prepared statements) for the name
         $module_name = $_POST['module_name'];
         $course_id = intval($_POST['course_id']);
+        
+        // Handle optional order_no (now a string). If empty, it should be NULL.
+        $order_no_input = $_POST['order_no'] ?? null;
+        $order_no = ($order_no_input !== null && $order_no_input !== '') ? $order_no_input : null; // Save as string or NULL
+
 
         // 4. Prepare the SQL INSERT statement to prevent SQL injection
-        $query = "INSERT INTO modules (module_name, course_id) VALUES (?, ?)";
+        $query = "INSERT INTO modules (module_name, course_id, order_no) VALUES (?, ?, ?)";
         
         $stmt = mysqli_prepare($con, $query);
 
         if ($stmt) {
             // 5. Bind the parameters
-            // "si" means the first parameter is a String, the second is an Integer
-            mysqli_stmt_bind_param($stmt, "si", $module_name, $course_id);
+            // "sis" means:
+            // s: module_name (string)
+            // i: course_id (integer)
+            // s: order_no (string)
+            mysqli_stmt_bind_param($stmt, "sis", $module_name, $course_id, $order_no);
 
             // 6. Execute the statement
             if (mysqli_stmt_execute($stmt)) {
-                // Success: Redirect back to the manage_modules page,
-                // pre-selecting the course that was just added to.
-                // We add a status message for potential alerts.
+                // Success: Redirect back
                 header("Location: ../pages/manage_modules.php?course_id=" . $course_id . "&status=add_success");
                 exit();
             } else {
-                // Error: Redirect back with an error status
+                // Error: Redirect back
                 header("Location: ../pages/manage_modules.php?course_id=" . $course_id . "&status=add_error");
                 exit();
             }
@@ -54,7 +58,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     } else {
         // Required fields were empty
-        // Redirect back, optionally with a specific error
         $redirect_course_id = isset($_POST['course_id']) ? intval($_POST['course_id']) : '';
         header("Location: ../pages/manage_modules.php?course_id=" . $redirect_course_id . "&status=invalid_input");
         exit();
