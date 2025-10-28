@@ -81,10 +81,10 @@ if (isset($_SESSION['admin_username'])) {
                 </button>
             </form>
             
-            <div class="text-center text-gray-400 text-sm space-y-2">
+            <!-- <div class="text-center text-gray-400 text-sm space-y-2">
                 <p>Don't have an account? <a href="register.php" class="font-semibold text-sky-400 hover:underline">Register here</a></p>
                 <p><a href="../index.php" class="hover:underline">← Back to Home</a></p>
-            </div>
+            </div> -->
         </div>
     </div>
 
