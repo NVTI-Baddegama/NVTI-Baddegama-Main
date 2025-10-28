@@ -107,12 +107,12 @@ function render_column($column) {
         }
 
         /* Optional: Pause animation on hover */
-        #bento-track:hover {
+        /* #bento-track:hover {
             animation-play-state: paused;
-        }
+        } */
     </style>
 </head>
-<body class="bg-gray-900 text-white antialiased">
+<body class="text-gray-900 antialiased">
 
     <div class="py-12">
         <h1 class="text-center text-4xl font-bold mb-8">NVTI Baddegama Gallery Demo</h1>
