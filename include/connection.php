@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root"; 
 $password = ""; 
-$dbname = "nvt_baddegama"; 
+$dbname = "nvti_baddegama"; 
 
 $con = new mysqli($servername, $username, $password, $dbname);
 
