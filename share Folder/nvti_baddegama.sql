@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 28, 2025 at 06:07 PM
+-- Generation Time: Oct 28, 2025 at 10:43 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -67,9 +67,8 @@ CREATE TABLE `course` (
 --
 
 INSERT INTO `course` (`id`, `course_no`, `course_name`, `nvq_level`, `course_type`, `qualifications`, `course_duration`, `course_fee`, `course_description`, `course_image`, `status`) VALUES
-(1, 'ITD001', 'Diploma in Information Technology', 4, 'Full-time', 'GCE A/L', 12, '80,000', 'A comprehensive diploma in IT.', NULL, 'active'),
-(3, 'CS001', 'Web Development', 4, 'Full-time', 'A/L', 12, '20000', 'hjhkdjflkf', 'course_img_68f34bcc4740c_1760775116.png', 'active'),
-(8, 'GD006', 'Diploma df', 3, 'Hybrid', 'GCE O/L', 7, '40,000', 'hgyj', NULL, 'inactive');
+(1, 'ITD001', 'Diploma in Information Technology', 4, 'Full-time', 'GCE A/L', 12, 'LKR 80,000', 'A comprehensive diploma in IT.', NULL, 'active'),
+(3, 'CS001', 'Web Development', 4, 'Full-time', 'A/L', 12, '20000', 'hjhkdjflkf', 'course_img_68f34bcc4740c_1760775116.png', 'active');
 
 -- --------------------------------------------------------
 
@@ -84,14 +83,6 @@ CREATE TABLE `gallery` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `gallery`
---
-
-INSERT INTO `gallery` (`id`, `image_name`, `image_path`, `created_at`) VALUES
-(2, 'test 1', '../uploads/gallery/6900f6ec62ff7_1761670892.png', '2025-10-28 17:01:32'),
-(3, '', '../uploads/gallery/6900f7862e5a4_1761671046.png', '2025-10-28 17:04:06');
-
 -- --------------------------------------------------------
 
 --
@@ -103,18 +94,10 @@ CREATE TABLE `modules` (
   `course_id` int(11) NOT NULL,
   `module_name` varchar(150) NOT NULL,
   `module_description` text DEFAULT NULL,
-  `order_no` int(11) DEFAULT NULL,
+  `order_no` varchar(20) DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `modules`
---
-
-INSERT INTO `modules` (`id`, `course_id`, `module_name`, `module_description`, `order_no`, `created_at`, `updated_at`) VALUES
-(1, 1, 'test tee', NULL, NULL, '2025-10-25 22:54:29', '2025-10-25 23:04:48'),
-(2, 3, 'tgtesf', NULL, NULL, '2025-10-25 22:58:41', '2025-10-25 23:05:08');
 
 -- --------------------------------------------------------
 
@@ -129,6 +112,8 @@ CREATE TABLE `staff` (
   `first_name` varchar(50) NOT NULL,
   `last_name` varchar(50) NOT NULL,
   `nic` varchar(15) NOT NULL,
+  `contact_no` varchar(15) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
   `gender` varchar(10) NOT NULL,
   `password` varchar(255) NOT NULL,
   `position` varchar(100) NOT NULL,
@@ -141,9 +126,10 @@ CREATE TABLE `staff` (
 -- Dumping data for table `staff`
 --
 
-INSERT INTO `staff` (`id`, `staff_id`, `service_id`, `first_name`, `last_name`, `nic`, `gender`, `password`, `position`, `course_no`, `profile_photo`, `status`) VALUES
-(4, 'NVTI-2025-7386', 'SD0003', 'Chamika', 'Sandeepa', '200625103462', 'Male', '$2y$10$9Xx2GpPa.P3LKGW/jIQsX.wHkabsZxlwjzrY4AWPMq9EkUh67HV/.', 'Instructors', 'ITD001', 'NVTI-STAFF-1761063260.jpg', 'active'),
-(5, 'NVTI-2025-4768', 'SD0004', 'manu', 'Nimana', '200625103467', 'Male', '$2y$10$UXYnBRRstKV4hVQgMSw58epoTV6oM3Lds/jHpPTKFy4pS.wd6R/M6', 'Instructors', 'GD006', 'NVTI-STAFF-1761064514.png', 'active');
+INSERT INTO `staff` (`id`, `staff_id`, `service_id`, `first_name`, `last_name`, `nic`, `contact_no`, `email`, `gender`, `password`, `position`, `course_no`, `profile_photo`, `status`) VALUES
+(4, 'NVTI-2025-7386', 'SD0003', 'Chamika', 'Sandeepa', '200625103462', '0771234567', 'chamika@nvti.lk', 'Male', '$2y$10$9Xx2GpPa.P3LKGW/jIQsX.wHkabsZxlwjzrY4AWPMq9EkUh67HV/.', 'Instructors', 'ITD001', 'NVTI-STAFF-1761063260.jpg', 'active'),
+(5, 'NVTI-2025-4768', 'SD0004', 'manu', 'Nimana', '200625103467', '0771234568', 'manu@nvti.lk', 'Male', '$2y$10$UXYnBRRstKV4hVQgMSw58epoTV6oM3Lds/jHpPTKFy4pS.wd6R/M6', 'Instructors', 'CS001', 'NVTI-STAFF-1761064514.png', 'active'),
+(6, 'NVTI-2025-2872', 'S12349', 'Dayal', 'Tharinda', '200331912060', NULL, NULL, 'Male', '$2y$10$ml7lE0NudZIL/VIw/h86zuydpbsRZmxw/WHCRF2Zp6OUkuEBWX/ca', 'Instructors', 'CS001', 'NVTI-STAFF-1761678560.jpg', 'active');
 
 -- --------------------------------------------------------
 
@@ -152,7 +138,7 @@ INSERT INTO `staff` (`id`, `staff_id`, `service_id`, `first_name`, `last_name`, 
 --
 
 CREATE TABLE `student_enrollments` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
   `Student_id` varchar(50) NOT NULL,
   `full_name` varchar(255) NOT NULL,
   `nic` varchar(12) NOT NULL,
@@ -200,12 +186,6 @@ ALTER TABLE `course`
   ADD UNIQUE KEY `course_no` (`course_no`);
 
 --
--- Indexes for table `gallery`
---
-ALTER TABLE `gallery`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `modules`
 --
 ALTER TABLE `modules`
@@ -224,8 +204,7 @@ ALTER TABLE `staff`
 -- Indexes for table `student_enrollments`
 --
 ALTER TABLE `student_enrollments`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `nic_unique` (`nic`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -235,31 +214,25 @@ ALTER TABLE `student_enrollments`
 -- AUTO_INCREMENT for table `course`
 --
 ALTER TABLE `course`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT for table `gallery`
---
-ALTER TABLE `gallery`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `modules`
 --
 ALTER TABLE `modules`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `staff`
 --
 ALTER TABLE `staff`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `student_enrollments`
 --
 ALTER TABLE `student_enrollments`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
