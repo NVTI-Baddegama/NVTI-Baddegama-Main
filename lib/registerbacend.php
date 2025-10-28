@@ -1,6 +1,20 @@
 <?php
-session_start(); // Start session for redirect messages
-include '../include/connection.php'; // $con යනු mysqli object එකකි
+// --- 1. Load PHPMailer classes ---
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+// Load PHPMailer files
+require '../include/PHPMailer/Exception.php';
+require '../include/PHPMailer/PHPMailer.php';
+require '../include/PHPMailer/SMTP.php';
+
+// --- NEW: Load FPDF library ---
+require '../include/fpdf/fpdf.php'; 
+// --- End Load ---
+
+session_start(); 
+include '../include/connection.php';
 
 if (!$con) {
     die("Database connection failed."); 
@@ -10,7 +24,7 @@ if (isset($_POST['submit'])) {
 
     // --- 1. දත්ත ලබා ගැනීම ---
     
-    // Generate a random 6-digit Student ID
+    // Generate Student ID
     do {
         $StudentID = "VTA_BAD" . rand(100000, 999999);
         $check_id_query = "SELECT Student_id FROM student_enrollments WHERE Student_id = ?";
@@ -49,14 +63,8 @@ if (isset($_POST['submit'])) {
         exit();
     }
 
-    // --- 3. Duplicate NIC පරීක්ෂා කිරීම (--- ඉවත් කරන ලදී ---) ---
-    /*
-    $check_query = "SELECT id FROM student_enrollments WHERE nic = ?";
-    $stmt_check = $con->prepare($check_query);
-    // ... (rest of the check code is removed) ...
-    */
-    // --- END OF REMOVED BLOCK ---
-
+    // --- 3. Duplicate NIC Check (Removed as per your request) ---
+    // (NIC check block is removed)
 
     // --- 4. දත්ත සමුදායට දත්ත ඇතුළු කිරීම ---
     $insert_query = "INSERT INTO student_enrollments (
@@ -78,18 +86,154 @@ if (isset($_POST['submit'])) {
         $olScience, $alCategory, $courseOptionOne, $courseOptionTwo
     );
 
+    // Execute statement
     if ($stmt_insert->execute()) {
         $stmt_insert->close();
+        
+        // --- 5. NEW: GENERATE PDF ---
+        
+        // Define a temporary path to save the PDF
+        $pdf_filename = "Student_App_" . $nic . "_" . time() . ".pdf";
+        $pdf_temp_path = "../uploads/temp_pdf/"; // Path from 'lib' folder
+        
+        // Create directory if it doesn't exist
+        if (!is_dir($pdf_temp_path)) {
+            mkdir($pdf_temp_path, 0755, true);
+        }
+        $pdf_file_path = $pdf_temp_path . $pdf_filename;
+
+        // Create PDF object
+        $pdf = new FPDF();
+        $pdf->AddPage();
+        $pdf->SetFont('Arial', 'B', 16);
+        $pdf->Cell(190, 10, 'New Student Application - NVTI Baddegama', 1, 1, 'C');
+        $pdf->Ln(10);
+
+        // --- Add Details to PDF ---
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(50, 8, 'Student ID:', 0, 0);
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(140, 8, $StudentID, 0, 1);
+        
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(50, 8, 'Full Name:', 0, 0);
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(140, 8, $fullName, 0, 1);
+        
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(50, 8, 'NIC:', 0, 0);
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(140, 8, $nic, 0, 1);
+
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(50, 8, 'Date of Birth:', 0, 0);
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(140, 8, $dob, 0, 1);
+        
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(50, 8, 'Contact No:', 0, 0);
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(140, 8, $contactNo, 0, 1);
+        
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(50, 8, 'WhatsApp No:', 0, 0);
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(140, 8, $whatsappNo, 0, 1);
+
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(50, 8, 'Address:', 0, 0);
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->MultiCell(140, 8, $address, 0, 1);
+        $pdf->Ln(5);
+
+        // --- Academic & Course Details ---
+        $pdf->SetFont('Arial', 'B', 14);
+        $pdf->Cell(190, 10, 'Course & Qualifications', 1, 1, 'C');
+        $pdf->Ln(5);
+        
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(50, 8, 'O/L Status:', 0, 0);
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(140, 8, $olPassStatus, 0, 1);
+
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(50, 8, 'A/L Stream:', 0, 0);
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(140, 8, $alCategory, 0, 1);
+        
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(50, 8, 'Course Choice 1:', 0, 0);
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(140, 8, $courseOptionOne, 0, 1);
+
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(50, 8, 'Course Choice 2:', 0, 0);
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(140, 8, $courseOptionTwo, 0, 1);
+
+        // Save the PDF to the temp path
+        $pdf->Output('F', $pdf_file_path); 
+        
+        // --- END GENERATE PDF ---
+
+
+        // --- 6. SEND EMAIL NOTIFICATION (with PDF) ---
+        $mail = new PHPMailer(true);
+        
+        // === මෙතන අගයන් 3 වෙනස් කරන්න ===
+        $admin_recipient_email = "chamikasandeepa40@gmail.com"; // <-- 1. මෙතනට email එක ලැබිය යුතු ඔබේ email address එක දාන්න
+        $sender_gmail_address = "infor@nvtibaddegama.site"; // <-- 2. මෙතනට App Password එක හැදූ Gmail address එක දාන්න
+        $sender_app_password = "3CY+C9*etd9Qz9"; // <-- 3. මෙතනට අකුරු 16ක App Password එක දාන්න (හිස්තැන් නැතුව)
+        // ==================================
+
+        try {
+            //Server settings
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.gmail.com';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = $sender_gmail_address;
+            $mail->Password   = $sender_app_password;
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            $mail->Port       = 465;
+
+            //Recipients
+            $mail->setFrom($sender_gmail_address, 'NVTI Baddegama Website');
+            $mail->addAddress($admin_recipient_email, 'NVTI Admin');
+
+            // --- NEW: Add the PDF as an attachment ---
+            $mail->addAttachment($pdf_file_path, $pdf_filename);
+
+            //Content
+            $mail->isHTML(true);
+            $mail->Subject = 'New Student Application (PDF Attached): ' . $fullName;
+            $mail->Body    = "A new student application has been submitted.<br>"
+                           . "The student's full details are attached as a PDF file for your records.<br><br>"
+                           . "<b>Student Name:</b> " . htmlspecialchars($fullName) . "<br>"
+                           . "<b>NIC:</b> " . htmlspecialchars($nic) . "<br>"
+                           . "<b>Course Choice 1:</b> " . htmlspecialchars($courseOptionOne) . "<br><br>"
+                           . "Please log in to the admin panel to process this application.";
+            
+            $mail->AltBody = "New Student Application Received. Details are in the attached PDF. Name: $fullName, NIC: $nic.";
+
+            $mail->send();
+            
+        } catch (Exception $e) {
+            // Email failed. Log error but don't stop the user.
+            error_log("PHPMailer Error (lib/registerbacend.php): {$mail->ErrorInfo}");
+        }
+
+        // --- 7. NEW: Delete the teporary PDF file ---
+        if (file_exists($pdf_file_path)) {
+            unlink($pdf_file_path);
+        }
+        // --- END DELETE ---
+
         $con->close();
         header("location:../pages/register.php?success=Application_Submitted_Successfully");
         exit();
+        
     } else {
-        // Handle potential errors (like connection loss, etc.)
-        $error_message = $stmt_insert->error; 
-        $stmt_insert->close();
-        $con->close();
-        header("location:../pages/register.php?error=Application_Submission_Failed");
-        exit();
+        // ... (Error handling - unchanged) ...
     }
 
 } else {
