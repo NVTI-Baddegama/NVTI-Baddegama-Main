@@ -1,22 +1,21 @@
-<?php 
-// Add session_start() at the very top to handle success/error messages
-session_start(); 
-include_once('../include/header.php'); 
+<?php
+session_start();
+include_once('../include/header.php');
 include_once('../../include/connection.php');
 
-// 1. Check if NIC is provided in the URL
-if (!isset($_GET['nic']) || empty($_GET['nic'])) {
-    echo "<div class='p-6'><p class='text-red-500'>Error: No student NIC provided.</p></div>";
+// 1. Check if ID is provided in the URL
+if (!isset($_GET['id']) || empty($_GET['id']) || !is_numeric($_GET['id'])) { // Check if ID is numeric
+    echo "<div class='p-6'><p class='text-red-500'>Error: No valid student ID provided.</p></div>";
     include_once('../include/footer.php');
     exit();
 }
 
-// 2. Get the NIC and fetch data
-$nic = trim($_GET['nic']);
+// 2. Get the ID and fetch data
+$id = (int)$_GET['id']; // Cast to integer for security
 
-$query = "SELECT * FROM student_enrollments WHERE nic = ?";
+$query = "SELECT * FROM student_enrollments WHERE id = ?"; // Fetch by id
 $stmt = $con->prepare($query);
-$stmt->bind_param("s", $nic);
+$stmt->bind_param("i", $id); // Bind integer 'i'
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -24,10 +23,11 @@ $result = $stmt->get_result();
 if ($result->num_rows == 1) {
     $student = $result->fetch_assoc();
 } else {
-    echo "<div class='p-6'><p class='text-red-500'>Error: No student found with NIC: " . htmlspecialchars($nic) . "</p></div>";
+    echo "<div class='p-6'><p class='text-red-500'>Error: No student found with ID: " . htmlspecialchars($id) . "</p></div>";
     include_once('../include/footer.php');
     exit();
 }
+$stmt->close(); // Close statement
 ?>
 
 <h2 class="text-3xl font-bold text-gray-800 mb-6">Student Application Details</h2>
@@ -40,17 +40,15 @@ if ($result->num_rows == 1) {
 </div>
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
     <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-lg">
         
         <div class="border-b pb-4 mb-4">
             <h3 class="text-2xl font-bold text-gray-900"><?php echo htmlspecialchars($student['full_name']); ?></h3>
             <p class="text-sm text-gray-500">Student ID: <?php echo htmlspecialchars($student['Student_id']); ?></p>
         </div>
-
+        
         <div class="space-y-4">
-            
-            <div>
+             <div>
                 <h4 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Personal Details</h4>
                 <div class="mt-2 text-lg text-gray-800 space-y-1">
                     <p><strong>NIC:</strong> <?php echo htmlspecialchars($student['nic']); ?></p>
@@ -58,18 +56,16 @@ if ($result->num_rows == 1) {
                     <p><strong>Address:</strong> <?php echo nl2br(htmlspecialchars($student['address'])); ?></p>
                 </div>
             </div>
-            
-            <div>
+             <div>
                 <h4 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Contact Details</h4>
                 <div class="mt-2 text-lg text-gray-800 space-y-1">
                     <p><strong>Contact No:</strong> <?php echo htmlspecialchars($student['contact_no']); ?></p>
                     <p><strong>WhatsApp No:</strong> <?php echo htmlspecialchars($student['whatsapp_no'] ?? 'N/A'); ?></p>
                 </div>
             </div>
-
             <div>
-                <h4 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Academic Details</h4>
-                <div class="mt-2 text-lg text-gray-800 space-y-1">
+                 <h4 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Academic Details</h4>
+                 <div class="mt-2 text-lg text-gray-800 space-y-1">
                     <p><strong>O/L Passed:</strong> <?php echo htmlspecialchars($student['ol_pass_status']); ?></p>
                     <p><strong>O/L Grades:</strong> 
                         Eng: <strong><?php echo htmlspecialchars($student['ol_english_grade'] ?? '-'); ?></strong> | 
@@ -79,15 +75,13 @@ if ($result->num_rows == 1) {
                     <p><strong>A/L Stream:</strong> <?php echo htmlspecialchars($student['al_category']); ?></p>
                 </div>
             </div>
-
-            <div>
+             <div>
                 <h4 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Course Choices</h4>
                 <div class="mt-2 text-lg text-gray-800 space-y-1">
                     <p><strong>Choice 1:</strong> <?php echo htmlspecialchars($student['course_option_one']); ?></p>
                     <p><strong>Choice 2:</strong> <?php echo htmlspecialchars($student['course_option_two'] ?? 'N/A'); ?></p>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -110,30 +104,23 @@ if ($result->num_rows == 1) {
             </div>
 
             <div class="space-y-3">
-                
-                <?php if ($student['is_processed'] == 0): // Only show "Mark as Processed" if it is still PENDING ?>
-                <a href="../lib/student_action_handler.php?action=process&nic=<?php echo htmlspecialchars($student['nic']); ?>" 
+                <?php if ($student['is_processed'] == 0): ?>
+                <a href="../lib/student_action_handler.php?action=process&id=<?php echo htmlspecialchars($student['id']); ?>" 
                    class="block w-full text-center p-3 font-medium rounded-lg text-white bg-green-600 hover:bg-green-700 transition duration-150">
                     Mark as Processed
                 </a>
                 <?php endif; ?>
 
-                <a href="../lib/student_action_handler.php?action=delete&nic=<?php echo htmlspecialchars($student['nic']); ?>" 
+                <a href="../lib/student_action_handler.php?action=delete&id=<?php echo htmlspecialchars($student['id']); ?>" 
                    class="block w-full text-center p-3 font-medium rounded-lg text-white bg-red-600 hover:bg-red-700 transition duration-150"
                    onclick="return confirm('Are you sure you want to permanently delete this application? This action cannot be undone.');">
                     Delete Application
                 </a>
             </div>
-            
         </div>
     </div>
-
 </div>
-
 <?php 
-// Unset messages after displaying them
-if(isset($_SESSION['success_msg'])) unset($_SESSION['success_msg']);
-if(isset($_SESSION['error_msg'])) unset($_SESSION['error_msg']);
-
+$con->close(); // Close connection
 include_once('../include/footer.php'); 
 ?>
