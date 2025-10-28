@@ -1,48 +1,40 @@
 <?php
-// Start session for success/error messages from course_handler.php
+// Start session for success/error messages
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 include_once('../include/header.php'); // Include header first
 include_once('../../include/connection.php'); // Need connection for fetching recent courses
 
-// --- NEW: Fetch recently added courses ---
-$recent_courses = []; // Initialize empty array
-$query_recent = "SELECT course_no, course_name, nvq_level, course_duration, course_fee 
-                 FROM course 
-                 ORDER BY id DESC -- Order by ID descending to get the newest first
-                 LIMIT 4";       // Limit to 4 results
+// --- Fetch recently added courses ---
+$recent_courses = [];
+$query_recent = "SELECT course_no, course_name, nvq_level, course_duration, course_fee
+                 FROM course
+                 ORDER BY id DESC LIMIT 4";
 $result_recent = $con->query($query_recent);
 if ($result_recent && $result_recent->num_rows > 0) {
     while ($row = $result_recent->fetch_assoc()) {
         $recent_courses[] = $row;
     }
 }
-// --- END NEW ---
-
 ?>
 
 <h2 class="text-3xl font-bold text-gray-800 mb-6">Add New Course</h2>
 
 <?php
 if (isset($_SESSION['success'])) {
-    echo '<div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded relative" role="alert">';
-    echo '<strong class="font-bold">Success!</strong>';
-    echo '<span class="block sm:inline"> ' . htmlspecialchars($_SESSION['success']) . '</span>';
-    echo '</div>';
+    echo '<div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded relative" role="alert"><strong class="font-bold">Success!</strong><span class="block sm:inline"> ' . htmlspecialchars($_SESSION['success']) . '</span></div>';
     unset($_SESSION['success']);
 }
 if (isset($_SESSION['error'])) {
-    echo '<div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded relative" role="alert">';
-    echo '<strong class="font-bold">Error!</strong>';
-    echo '<span class="block sm:inline"> ' . htmlspecialchars($_SESSION['error']) . '</span>';
-    echo '</div>';
+    echo '<div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded relative" role="alert"><strong class="font-bold">Error!</strong><span class="block sm:inline"> ' . htmlspecialchars($_SESSION['error']) . '</span></div>';
     unset($_SESSION['error']);
 }
 ?>
 
 
-<div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-teal-500 w-full lg:w-3/4 mx-auto"> <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Enter Course Details</h3>
+<div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-teal-500 w-full lg:w-3/4 mx-auto">
+    <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Enter Course Details</h3>
 
     <form action="../lib/course_handler.php" method="POST" class="mt-6" enctype="multipart/form-data">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -114,7 +106,8 @@ if (isset($_SESSION['error'])) {
                 <input type="file" id="course_image" name="course_image" accept="image/jpeg, image/png, image/webp"
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
                        aria-describedby="image_help">
-                <p class="mt-1 text-xs text-gray-500" id="image_help">Optional. Allowed: JPG, PNG, WEBP. Max 5MB.</p>
+                <p class="mt-1 text-xs text-gray-500" id="image_help">Optional. Allowed: JPG, PNG, WEBP. Max 1MB.</p>
+                <p id="course_image_error" class="text-red-500 text-xs mt-1"></p>
             </div>
 
             <div class="md:col-span-2">
@@ -150,9 +143,7 @@ if (isset($_SESSION['error'])) {
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 <?php
-                // Check if we fetched any recent courses
                 if (!empty($recent_courses)) {
-                    // Loop through the fetched courses (max 4)
                     foreach ($recent_courses as $course) {
                 ?>
                 <tr>
@@ -163,9 +154,8 @@ if (isset($_SESSION['error'])) {
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?php echo htmlspecialchars($course['course_fee']); ?></td>
                 </tr>
                 <?php
-                    } // End foreach loop
+                    }
                 } else {
-                    // Message if no courses are in the database yet
                     echo '<tr><td colspan="5" class="px-6 py-12 text-center text-gray-500">No courses added yet.</td></tr>';
                 }
                 ?>
@@ -173,10 +163,46 @@ if (isset($_SESSION['error'])) {
         </table>
     </div>
 </div>
+
 <?php
-// Close connection if it was opened
+// Close connection
 if (isset($con)) {
     $con->close();
 }
+// Include footer AFTER the script
 include_once('../include/footer.php');
 ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const courseImageInput = document.getElementById('course_image');
+    const courseImageError = document.getElementById('course_image_error');
+    const maxFileSizeMB_Course = 1; // Max size in MB
+    const maxFileSizeBytes_Course = maxFileSizeMB_Course * 1024 * 1024;
+
+    if (courseImageInput) {
+        courseImageInput.addEventListener('change', function(event) {
+            if (courseImageError) courseImageError.textContent = '';
+            const file = event.target.files[0];
+
+            if (file) {
+                if (file.size > maxFileSizeBytes_Course) {
+                    if (courseImageError) courseImageError.textContent = `Error: File size exceeds ${maxFileSizeMB_Course}MB limit. Please choose a smaller file.`;
+                    event.target.value = null; // Clear selection
+                }
+            }
+        });
+
+        const addCourseForm = courseImageInput.closest('form');
+        if (addCourseForm) {
+            addCourseForm.addEventListener('submit', function(event) {
+                const file = courseImageInput.files[0];
+                if (file && file.size > maxFileSizeBytes_Course) {
+                    if (courseImageError) courseImageError.textContent = `Error: File size exceeds ${maxFileSizeMB_Course}MB limit. Cannot submit.`;
+                    event.preventDefault(); // Stop submission
+                }
+            });
+        }
+    }
+});
+</script>
