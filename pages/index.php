@@ -70,7 +70,7 @@
                 </h3>
                 <p class="text-base md:text-lg leading-relaxed text-secondary-gray">
                     Established as a vital part of the national vocational training network under the Vocational
-                    Training Authority (VTA) initiative, **NVTI Baddegama** was founded to specifically
+                    Training Authority (VTA) initiative, <strong>NVTI Baddegama</strong> was founded to specifically
                     address the skill gap and empower youth in the Southern Province. Our critical vision is to be a
                     central hub for cutting-edge vocational and technological training.
                 </p>
