@@ -167,7 +167,7 @@ if (!isset($_SESSION['admin_username']) || !isset($admin_type_from_db) || $admin
                     </a>
 
                     <p class="text-xs font-semibold text-gray-400 pt-3 pb-1 uppercase tracking-wider">Content & Media</p>
-                    <a href="#" class="flex items-center p-3 text-sm font-medium rounded-lg text-gray-300 hover:bg-slate-700 hover:text-white transition duration-150">
+                    <a href="manage images.php" class="flex items-center p-3 text-sm font-medium rounded-lg text-gray-300 hover:bg-slate-700 hover:text-white transition duration-150">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-2-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         Manage Images
                     </a>
