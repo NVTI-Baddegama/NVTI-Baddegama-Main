@@ -5,6 +5,12 @@ include_once('../include/header.php'); // header.php should handle session_start
 // --- Database Connection ---
 include_once('../../include/connection.php');
 
+// Check if admin is logged in
+if (!isset($_SESSION['admin_username'])) {
+    header("Location: ../../log/login.php");
+    exit();
+}
+
 // --- 1. Fetch Statistics ---
 $total_courses = $con->query("SELECT COUNT(*) as count FROM course")->fetch_assoc()['count'];
 $total_instructors = $con->query("SELECT COUNT(*) as count FROM staff WHERE position = 'Instructors'")->fetch_assoc()['count'];
@@ -54,7 +60,7 @@ $chart_data_json = json_encode($chart_data);
 
 ?>
 
-<h2 class="text-3xl font-bold text-gray-800 mb-6">Dashboard Overview</h2>
+<h2 class="text-3xl font-bold text-gray-800 mb-6">Admin Dashboard Overview</h2>
 
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-green-500">
@@ -126,6 +132,10 @@ $chart_data_json = json_encode($chart_data);
                  <a href="manage_staff.php" class="w-full flex items-center justify-center p-3 text-sm font-medium rounded-lg text-green-700 border border-green-600 hover:bg-green-50 transition duration-150">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5m-5 0a2 2 0 100-4m0 4a2 2 0 110-4m-9-2h.01M7 12h.01M7 16h.01M4 20h4l-2 2h-2zm-3-4a2 2 0 012-2h12a2 2 0 012 2v2a2 2 0 01-2 2H3a2 2 0 01-2-2v-2z"></path></svg>
                     Manage Staff
+                 </a>
+                 <a href="manage_students.php" class="w-full flex items-center justify-center p-3 text-sm font-medium rounded-lg text-blue-700 border border-blue-600 hover:bg-blue-50 transition duration-150">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0l5.95-5.95a1 1 0 011.414 0l2.121 2.12a1 1 0 010 1.415L15 21z"></path></svg>
+                    Manage Students
                  </a>
             </div>
         </div>
