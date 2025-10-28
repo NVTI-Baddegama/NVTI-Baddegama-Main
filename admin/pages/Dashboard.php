@@ -12,19 +12,30 @@ $total_non_academic = $con->query("SELECT COUNT(*) as count FROM staff WHERE pos
 $total_enrolled = $con->query("SELECT COUNT(*) as count FROM student_enrollments")->fetch_assoc()['count'];
 
 // --- 2. Fetch Data for "Recent Activity" ---
+$latest_student = null; // Initialize
 $latest_student_result = $con->query("SELECT full_name, application_date FROM student_enrollments ORDER BY application_date DESC LIMIT 1");
-$latest_student = $latest_student_result->fetch_assoc();
+if($latest_student_result && $latest_student_result->num_rows > 0) {
+    $latest_student = $latest_student_result->fetch_assoc();
+}
+
+$latest_course = null; // Initialize
 $latest_course_result = $con->query("SELECT course_name, id FROM course ORDER BY id DESC LIMIT 1");
-$latest_course = $latest_course_result->fetch_assoc();
+if($latest_course_result && $latest_course_result->num_rows > 0) {
+    $latest_course = $latest_course_result->fetch_assoc();
+}
+
+$latest_staff = null; // Initialize
 $latest_staff_result = $con->query("SELECT first_name, last_name, position, id FROM staff ORDER BY id DESC LIMIT 1");
-$latest_staff = $latest_staff_result->fetch_assoc();
+if($latest_staff_result && $latest_staff_result->num_rows > 0) {
+    $latest_staff = $latest_staff_result->fetch_assoc();
+}
 
 // --- 3. Fetch Data for "Latest Enrollments" Table ---
 $enrollments = [];
-$enrollment_query = "SELECT Student_id, full_name, nic, course_option_one, application_date, is_processed
+$enrollment_query = "SELECT id, Student_id, full_name, nic, course_option_one, application_date, is_processed
                      FROM student_enrollments
                      ORDER BY application_date DESC
-                     LIMIT 5";
+                     LIMIT 5"; // Get latest 5 enrollments
 $enrollment_result = $con->query($enrollment_query);
 if ($enrollment_result && $enrollment_result->num_rows > 0) {
     while ($row = $enrollment_result->fetch_assoc()) {
@@ -32,25 +43,32 @@ if ($enrollment_result && $enrollment_result->num_rows > 0) {
     }
 }
 
-// --- NEW: 4. Fetch Data for Enrollment Chart (Last 7 Days) ---
+// --- 4. Fetch Data for Enrollment Chart (Last 7 Days) ---
 $chart_data = [];
 $chart_labels = [];
+// Generate labels for the last 7 days first
+for ($i = 6; $i >= 0; $i--) {
+    $date = date('Y-m-d', strtotime("-$i days"));
+    $chart_labels[] = date('M j', strtotime($date)); // Format: Oct 29
+    $chart_data[date('Y-m-d', strtotime($date))] = 0; // Initialize count for each day to 0
+}
+
+// Query enrollments within the last 7 days and update counts
 $enrollment_chart_query = "SELECT DATE(application_date) as enrollment_date, COUNT(*) as count
                            FROM student_enrollments
                            WHERE application_date >= CURDATE() - INTERVAL 7 DAY
-                           GROUP BY DATE(application_date)
-                           ORDER BY enrollment_date ASC";
+                           GROUP BY DATE(application_date)";
 $chart_result = $con->query($enrollment_chart_query);
 if ($chart_result) {
     while ($row = $chart_result->fetch_assoc()) {
-        $chart_labels[] = date('M j', strtotime($row['enrollment_date'])); // Format date like "Oct 24"
-        $chart_data[] = (int)$row['count'];
+        if (isset($chart_data[$row['enrollment_date']])) {
+            $chart_data[$row['enrollment_date']] = (int)$row['count']; // Update count for the specific date
+        }
     }
 }
 // Convert PHP arrays to JSON for JavaScript
-$chart_labels_json = json_encode($chart_labels);
-$chart_data_json = json_encode($chart_data);
-// --- END NEW ---
+$chart_labels_json = json_encode(array_values($chart_labels)); // Use the generated labels
+$chart_data_json = json_encode(array_values($chart_data)); // Use the data array (ordered by date)
 
 ?>
 
@@ -115,6 +133,7 @@ $chart_data_json = json_encode($chart_data);
             <canvas id="enrollmentChart"></canvas>
         </div>
     </div>
+
     <div class="lg:col-span-1 space-y-6">
         <div class="bg-white p-6 rounded-xl shadow-lg">
             <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Quick Actions</h3>
@@ -203,7 +222,7 @@ $chart_data_json = json_encode($chart_data);
                             <?php endif; ?>
                         </td>
                          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <a href="view_student_details.php?nic=<?php echo htmlspecialchars($student['nic']); ?>" class="text-indigo-600 hover:text-indigo-900">View</a>
+                             <a href="view_student_details.php?id=<?php echo htmlspecialchars($student['id']); ?>" class="text-indigo-600 hover:text-indigo-900">View</a>
                         </td>
                     </tr>
                     <?php endforeach; ?>
@@ -228,61 +247,40 @@ include_once('../include/footer.php');
 ?>
 
 <script>
-    // Wait for the DOM to be fully loaded
     document.addEventListener('DOMContentLoaded', () => {
-        // Get the canvas element
         const ctx = document.getElementById('enrollmentChart');
-
-        // Check if the canvas element exists and Chart.js is loaded
         if (ctx && typeof Chart !== 'undefined') {
-            // Get the data from PHP (converted to JSON)
             const chartLabels = <?php echo $chart_labels_json; ?>;
             const chartData = <?php echo $chart_data_json; ?>;
 
-            // Create the chart
             new Chart(ctx, {
-                type: 'line', // Type of chart (line, bar, pie etc.)
+                type: 'line',
                 data: {
-                    labels: chartLabels, // X-axis labels (Dates)
+                    labels: chartLabels,
                     datasets: [{
-                        label: 'Enrollments', // Legend label
-                        data: chartData,      // Y-axis data (Counts)
-                        fill: true,          // Fill area under the line
-                        borderColor: 'rgb(79, 70, 229)', // Line color (Indigo)
-                        backgroundColor: 'rgba(79, 70, 229, 0.1)', // Fill color
-                        tension: 0.1         // Line curve (0 for straight lines)
+                        label: 'Enrollments',
+                        data: chartData,
+                        fill: true,
+                        borderColor: 'rgb(79, 70, 229)', // Indigo
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        tension: 0.1
                     }]
                 },
                 options: {
-                    responsive: true, // Make it responsive
-                    maintainAspectRatio: false, // Don't maintain aspect ratio to fill container height
+                    responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
                         y: {
-                            beginAtZero: true, // Start Y-axis at 0
-                             ticks: {
-                                // Ensure only whole numbers are shown on Y-axis
-                                stepSize: 1
-                            }
+                            beginAtZero: true,
+                             ticks: { stepSize: 1 }
                         }
                     },
-                    plugins: {
-                        legend: {
-                            display: true // Show legend
-                        },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                        },
-                    }
+                    plugins: { legend: { display: true }, tooltip: { mode: 'index', intersect: false } }
                 }
             });
         } else {
-            // Log an error if canvas or Chart.js is missing
-            console.error("Could not find canvas element with ID 'enrollmentChart' or Chart.js library is not loaded.");
-            // Optionally display a message to the user in the chart area
-             if(ctx) {
-                 ctx.getContext('2d').fillText("Chart could not be loaded.", 10, 50);
-             }
+            console.error("Chart canvas or Chart.js library not found.");
+             if(ctx) { ctx.getContext('2d').fillText("Chart could not be loaded.", 10, 50); }
         }
     });
 </script>
