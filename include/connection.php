@@ -1,4 +1,9 @@
 <?php
+// $servername = "localhost";
+// $username = "root"; 
+// $password = ""; 
+// $dbname = "nvti_baddegama"; 
+
 $servername = "localhost";
 $username = "root"; 
 $password = ""; 
