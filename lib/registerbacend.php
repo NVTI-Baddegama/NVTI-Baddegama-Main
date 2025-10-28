@@ -209,7 +209,7 @@ if (isset($_POST['submit'])) {
             $mail->Body    = "A new student application has been submitted.<br>"
                            . "The student's full details are attached as a PDF file for your records.<br><br>"
                            . "<b>Student Name:</b> " . htmlspecialchars($fullName) . "<br>"
-                           . "<b>NIC:</b> " . htmlspecialchars($nic) . "<br>"s
+                           . "<b>NIC:</b> " . htmlspecialchars($nic) . "<br>"
                            . "<b>Course Choice 1:</b> " . htmlspecialchars($courseOptionOne) . "<br><br>"
                            . "Please log in to the admin panel to process this application.";
             
