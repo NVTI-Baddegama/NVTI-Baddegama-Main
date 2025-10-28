@@ -242,7 +242,7 @@ $modules = mysqli_query($con, $query);
                 </div>
                 <div>
                     <label for="add_course_id" class="block text-sm font-medium text-gray-700">Course</label>
-                    <select id="add_course_id" name="course_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                    <select id="add_course_id" name="course_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-10" required>
                         <option value="">Select a course</option>
                         <?php foreach ($courses_list as $course) : ?>
                             <option value="<?php echo htmlspecialchars($course['id']); ?>">
