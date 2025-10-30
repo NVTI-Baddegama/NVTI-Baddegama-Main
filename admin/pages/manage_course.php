@@ -399,5 +399,6 @@ $instructors_json = json_encode($instructors_list);
             }
         });
     </script>
+    <?php include_once('../include/footer.php'); ?>
     </body>
 </html>
