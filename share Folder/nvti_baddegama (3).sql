@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 30, 2025 at 09:39 AM
+-- Generation Time: Oct 30, 2025 at 06:21 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -59,7 +59,6 @@ CREATE TABLE `course` (
   `course_fee` varchar(20) NOT NULL,
   `course_description` text NOT NULL,
   `course_image` varchar(255) DEFAULT NULL,
-  `category` int(11) DEFAULT NULL,
   `status` enum('active','inactive') NOT NULL DEFAULT 'active'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -67,9 +66,9 @@ CREATE TABLE `course` (
 -- Dumping data for table `course`
 --
 
-INSERT INTO `course` (`id`, `course_no`, `course_name`, `nvq_level`, `course_type`, `qualifications`, `course_duration`, `course_fee`, `course_description`, `course_image`, `category`, `status`) VALUES
-(1, 'ITD001', 'Diploma in Information Technology', 4, 'Full-time', 'GCE A/L', 12, 'LKR 80,000', 'A comprehensive diploma in IT.', NULL, 1, 'active'),
-(3, 'CS001', 'Web Development', 4, 'Full-time', 'A/L', 12, '20000', 'hjhkdjflkf', 'course_img_68f34bcc4740c_1760775116.png', 1, 'active');
+INSERT INTO `course` (`id`, `course_no`, `course_name`, `nvq_level`, `course_type`, `qualifications`, `course_duration`, `course_fee`, `course_description`, `course_image`, `status`) VALUES
+(1, 'ITD00', 'Diploma in Information Technology', 4, 'Full-time', 'GCE A/L', 12, 'LKR 80,000', 'A comprehensive diploma in IT.', 'course_1761843433_690398e90bcba.png', 'active'),
+(3, 'CS00', 'Web Development', 4, 'Full-time', 'A/L', 12, '20000', 'hjhkdjflkf', 'course_1761843050_6903976aa188d.png', 'active');
 
 -- --------------------------------------------------------
 
@@ -105,6 +104,20 @@ CREATE TABLE `gallery` (
   `image_path` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `gallery`
+--
+
+INSERT INTO `gallery` (`id`, `image_name`, `image_path`, `created_at`) VALUES
+(1, 'test 1', '../uploads/gallery/69039c6326ce8_1761844323.png', '2025-10-30 17:12:03'),
+(3, 'frtgb', '../uploads/gallery/69039e0d5b0f4_1761844749.png', '2025-10-30 17:19:09'),
+(4, 'test 12', '../uploads/gallery/69039e5669eb7_1761844822.jpg', '2025-10-30 17:20:22'),
+(5, 'test 1hg', '../uploads/gallery/69039e6650456_1761844838.jpg', '2025-10-30 17:20:38'),
+(6, 'fth', '../uploads/gallery/69039e731c06a_1761844851.jpg', '2025-10-30 17:20:51'),
+(7, 'tyyhj', '../uploads/gallery/69039e7cf33f7_1761844860.jpg', '2025-10-30 17:21:01'),
+(8, 'ftghff', '../uploads/gallery/69039e8390dc2_1761844867.jpg', '2025-10-30 17:21:07'),
+(9, 'vfgh', '../uploads/gallery/69039e8a4cf28_1761844874.jpg', '2025-10-30 17:21:14');
 
 -- --------------------------------------------------------
 
@@ -151,12 +164,13 @@ CREATE TABLE `staff` (
 --
 
 INSERT INTO `staff` (`id`, `staff_id`, `service_id`, `first_name`, `last_name`, `nic`, `contact_no`, `email`, `gender`, `password`, `position`, `course_no`, `profile_photo`, `status`, `login_status`) VALUES
-(4, 'NVTI-2025-7386', 'SD0003', 'Chamika', 'Sandeepa', '200625103462', '0771234567', 'chamika@nvti.lk', 'Male', '$2y$10$9Xx2GpPa.P3LKGW/jIQsX.wHkabsZxlwjzrY4AWPMq9EkUh67HV/.', 'Instructors', 'ITD001', 'NVTI-STAFF-1761063260.jpg', 'active', 0),
-(5, 'NVTI-2025-4768', 'SD0004', 'manu', 'Nimana', '200625103467', '0771234568', 'manu@nvti.lk', 'Male', '$2y$10$UXYnBRRstKV4hVQgMSw58epoTV6oM3Lds/jHpPTKFy4pS.wd6R/M6', 'Instructors', 'CS001', 'NVTI-STAFF-1761064514.png', 'active', 0),
-(6, 'NVTI-2025-2872', 'S12349', 'Dayal', 'Tharinda', '200331912060', NULL, NULL, 'Male', '$2y$10$ml7lE0NudZIL/VIw/h86zuydpbsRZmxw/WHCRF2Zp6OUkuEBWX/ca', 'Instructors', 'CS001', 'NVTI-STAFF-1761678560.jpg', 'active', 0),
+(4, 'NVTI-2025-7386', 'SD0003', 'Chamika', 'Sandeepa', '200625103462', '0771234567', 'chamika@nvti.lk', 'Male', '$2y$10$9Xx2GpPa.P3LKGW/jIQsX.wHkabsZxlwjzrY4AWPMq9EkUh67HV/.', 'Instructors', NULL, 'NVTI-STAFF-1761063260.jpg', 'active', 0),
+(5, 'NVTI-2025-4768', 'SD0004', 'manu', 'Nimana', '200625103467', '0771234568', 'manu@nvti.lk', 'Male', '$2y$10$UXYnBRRstKV4hVQgMSw58epoTV6oM3Lds/jHpPTKFy4pS.wd6R/M6', 'Instructors', NULL, 'NVTI-STAFF-1761064514.png', 'active', 0),
+(6, 'NVTI-2025-2872', 'S12349', 'Dayal', 'Tharinda', '200331912060', NULL, NULL, 'Male', '$2y$10$ml7lE0NudZIL/VIw/h86zuydpbsRZmxw/WHCRF2Zp6OUkuEBWX/ca', 'Instructors', NULL, 'NVTI-STAFF-1761678560.jpg', 'active', 0),
 (7, 'NVTI-2025-4234', 'S12309', 'Lochana', 'Nimna', '200600912445', '0703102312', 'nadeeshnuwantha@gmail.com', 'Male', '$2y$10$0sb8JEAYAGgXtF1DMXkqy.at4QTnM.l0jj1HJwFvL2swgdZRWV0nC', 'Non-Academic Staff', NULL, 'NVTI-STAFF-1761681594.png', 'active', 0),
-(8, 'NVTI-2025-3559', 'S123450', 'Ravindu', 'Chandeepa', '747813292v', '0703102312', 'nadeeshnujhy@gmail.com', 'Male', '$2y$10$e2IJ4jyk.XdvPIWGjauAe.047gtTeqf5ieYxcQTb0rZ4eEgYHo586', 'Instructors', 'CS001', NULL, 'active', 0),
-(9, 'NVTI-2025-3218', 'S123111', 'Test', 'Staff', '747812323v', '0703102312', 'nadeeshgfs@gmail.com', 'Male', '$2y$10$yX0wHzbD8tGsqTOj2CUkPeoN8bV5Npjk3YVH2EdvfOPbdukANMxHm', 'Non-Academic Staff', NULL, 'NVTI-STAFF-1761806505.png', 'active', 0);
+(8, 'NVTI-2025-3559', 'S123450', 'Ravindu', 'Chandeepa', '747813292v', '0703102312', 'nadeeshnujhy@gmail.com', 'Male', '$2y$10$e2IJ4jyk.XdvPIWGjauAe.047gtTeqf5ieYxcQTb0rZ4eEgYHo586', 'Instructors', NULL, NULL, 'active', 0),
+(9, 'NVTI-2025-3218', 'S123111', 'Test', 'Staff', '747812323v', '0703102312', 'nadeeshgfs@gmail.com', 'Male', '$2y$10$yX0wHzbD8tGsqTOj2CUkPeoN8bV5Npjk3YVH2EdvfOPbdukANMxHm', 'Non-Academic Staff', NULL, 'NVTI-STAFF-1761806505.png', 'active', 0),
+(10, 'NVTI-2025-2671', 'frtf', 'sanjana', 'supun', '111111111111', '0771234567', 'fcgb@fdgbfh', 'Male', '$2y$10$aTjuj/EHI8Npwvx9rblei.raGcM/kZ53qDGq7qbp8iBK7w36Esv9a', 'Instructors', 'ITD00', NULL, 'active', 0);
 
 -- --------------------------------------------------------
 
@@ -218,8 +232,7 @@ ALTER TABLE `admin`
 --
 ALTER TABLE `course`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `course_no` (`course_no`),
-  ADD KEY `category` (`category`);
+  ADD UNIQUE KEY `course_no` (`course_no`);
 
 --
 -- Indexes for table `course_categories`
@@ -227,6 +240,12 @@ ALTER TABLE `course`
 ALTER TABLE `course_categories`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `category_name` (`category_name`);
+
+--
+-- Indexes for table `gallery`
+--
+ALTER TABLE `gallery`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `modules`
@@ -266,6 +285,12 @@ ALTER TABLE `course_categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `gallery`
+--
+ALTER TABLE `gallery`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
 -- AUTO_INCREMENT for table `modules`
 --
 ALTER TABLE `modules`
@@ -275,7 +300,7 @@ ALTER TABLE `modules`
 -- AUTO_INCREMENT for table `staff`
 --
 ALTER TABLE `staff`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `student_enrollments`
@@ -286,12 +311,6 @@ ALTER TABLE `student_enrollments`
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `course`
---
-ALTER TABLE `course`
-  ADD CONSTRAINT `course_ibfk_1` FOREIGN KEY (`category`) REFERENCES `course_categories` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `modules`
