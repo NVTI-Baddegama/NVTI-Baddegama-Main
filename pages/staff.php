@@ -104,7 +104,6 @@
                         <h3 class="text-lg font-semibold mb-2">Details</h3>
                         <p class="mb-2"><strong>Email:</strong> <a id="modalEmail" href="" class="text-blue-500"></a></p>
                         <p class="mb-2"><strong>Contact No:</strong> <span id="modalContact"></span></p>
-                        <p class="mb-2"><strong>NIC:</strong> <span id="modalNIC"></span></p>
                         <p class="mb-2"><strong>Gender:</strong> <span id="modalGender"></span></p>
                         <p class="mb-2"><strong>Assigned Course:</strong> <span id="modalCourse"></span></p>
                     </div>
@@ -127,7 +126,6 @@
             const modalName = document.getElementById('modalName');
             const modalPosition = document.getElementById('modalPosition');
             const modalContact = document.getElementById('modalContact');
-            const modalNIC = document.getElementById('modalNIC');
             const modalGender = document.getElementById('modalGender');
             const modalCourse = document.getElementById('modalCourse');
             const modalEmail = document.getElementById('modalEmail');
@@ -161,7 +159,6 @@
                             modalEmail.textContent = data.email || 'N/A';
                             modalEmail.href = `mailto:${data.email || ''}`;
                             modalContact.textContent = data.contact_no || 'N/A';
-                            modalNIC.textContent = data.nic || 'N/A';
                             modalGender.textContent = data.gender || 'N/A';
                             modalCourse.textContent = data.course_no || 'N/A';
 
