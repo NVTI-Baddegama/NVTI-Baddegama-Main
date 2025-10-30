@@ -7,16 +7,14 @@ $staff_id = null;
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $staff_id = (int)$_GET['id'];
 } else {
-    // ID එකක් නැත්නම් error එකක් JSON විදිහට output කරන්න
     header('Content-Type: application/json');
     http_response_code(400); // Bad Request
     echo json_encode(['error' => 'Invalid Staff ID']);
     exit;
 }
 
-// 3. !! Database එකෙන් දත්ත ගන්න (Prepared Statement)
-//    !! ඔබේ 'staff' table එකට සහ column වලට අනුව සකස් කර ඇත
-//    CONCAT මගින් first_name සහ last_name එකතු කර 'full_name' ලෙස ගනී
+$sql = "SELECT * FROM course WHERE course_no";
+
 $sql = "SELECT 
             staff_id, 
             CONCAT(first_name, ' ', last_name) AS full_name, 
