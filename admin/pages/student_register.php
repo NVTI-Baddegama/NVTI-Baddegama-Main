@@ -1,7 +1,7 @@
 <?php session_start();?>
 <?php 
 include_once('../include/header.php'); 
-include_once('../include/connection.php'); // Include connection here
+include_once('../../include/connection.php'); // Include connection here
 
 // --- NEW: Fetch courses from database ---
 $courses = []; // Initialize an empty array
@@ -206,7 +206,7 @@ if ($courses_result && $courses_result->num_rows > 0) {
   }
   ?>
   <div id="alert-container"></div>
-  <link rel="stylesheet" href="../css/alert.css">
+  <link rel="stylesheet" href="../../css/alert.css">
 
   <script>
     function showAlert(type, title, message) {
@@ -265,10 +265,9 @@ if ($courses_result && $courses_result->num_rows > 0) {
     };
   </script>
   
-<script src="../js/passcheck.js"></script> <?php 
+<script src="../../js/passcheck.js"></script> <?php 
 // Close connection if opened
 if (isset($con)) {
     $con->close(); 
 }
-include_once('../include/footer.php'); 
 ?>

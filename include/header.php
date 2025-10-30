@@ -111,7 +111,7 @@ if (isset($con)) { // Check if connection exists
                             class="block py-2 px-3 text-white rounded nav-hover-border nav-link-with-border md:p-0 transition duration-300">Gallery</a>
                     </li>
                     <li>
-                        <a href="../pages/downloads.php"
+                        <a href="../docs/index.php"
                             class="block py-2 px-3 text-white rounded nav-hover-border nav-link-with-border md:p-0 transition duration-300">Downloads</a>
                     </li>
                     <li>
