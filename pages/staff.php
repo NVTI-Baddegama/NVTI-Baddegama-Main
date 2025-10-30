@@ -91,8 +91,8 @@
                 <div id="modalDetails" class="md:flex hidden">
                     
                     <div class="md:w-1/3 p-4 flex-shrink-0 flex items-center justify-center"> 
-                        <img id="modalImage" class="w-48 h-48 rounded-full object-cover shadow-md hidden" src="" alt="Profile Photo"> 
-                        <div id="modalAvatar" class="w-48 h-48 rounded-full bg-gray-300 flex items-center justify-center shadow-md hidden"> 
+                        <img id="modalImage" class="w-50 h-50  object-cover shadow-md hidden" src="" alt="Profile Photo"> 
+                        <div id="modalAvatar" class="w-50 h-50  bg-gray-300 flex items-center justify-center shadow-md hidden"> 
                             <span id="modalAvatarLetter" class="text-gray-700 text-7xl font-bold"></span> 
                         </div>
                     </div>
