@@ -140,11 +140,7 @@ $current_staff = $staff_result->fetch_assoc();
     </style>
 </head>
 <body>
-    <div class="mobile-menu-toggle" onclick="toggleMobileMenu()" id="mobileMenuToggle">
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
+    
 
     <header class="dashboard-header">
         <div class="header-content">
