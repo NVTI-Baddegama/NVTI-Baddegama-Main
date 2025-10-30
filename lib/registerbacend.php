@@ -10,20 +10,20 @@ require '../include/PHPMailer/PHPMailer.php';
 require '../include/PHPMailer/SMTP.php';
 
 // --- NEW: Load FPDF library ---
-require '../include/fpdf/fpdf.php'; 
+require '../include/fpdf/fpdf.php';
 // --- End Load ---
 
-session_start(); 
+session_start();
 include '../include/connection.php';
 
 if (!$con) {
-    die("Database connection failed."); 
+    die("Database connection failed.");
 }
 
 if (isset($_POST['submit'])) {
 
     // --- 1. දත්ත ලබා ගැනීම ---
-    
+
     // Generate Student ID
     do {
         $StudentID = "VTA_BAD" . rand(100000, 999999);
@@ -34,7 +34,7 @@ if (isset($_POST['submit'])) {
         $check_id_result = $stmt_check_id->get_result();
         $stmt_check_id->close();
     } while ($check_id_result->num_rows > 0);
-    
+
     $fullName = trim($_POST['fullName']);
     $nic = trim($_POST['nic']);
     $address = trim($_POST['address']);
@@ -46,8 +46,8 @@ if (isset($_POST['submit'])) {
     $olMaths = trim($_POST['olMaths'] ?? '');
     $olScience = trim($_POST['olScience'] ?? '');
     $alCategory = trim($_POST['alCategory']);
-    $courseOptionOne = trim($_POST['courseOptionOne']); 
-    $courseOptionTwo = trim($_POST['courseOptionTwo'] ?? ''); 
+    $courseOptionOne = trim($_POST['courseOptionOne']);
+    $courseOptionTwo = trim($_POST['courseOptionTwo'] ?? '');
 
     // --- 2. Input Validation ---
     if (empty($fullName) || empty($nic) || empty($address) || empty($dob) || empty($contactNo) || empty($olPassStatus) || empty($alCategory) || empty($courseOptionOne)) {
@@ -81,21 +81,32 @@ if (isset($_POST['submit'])) {
 
     $stmt_insert->bind_param(
         "ssssssssssssss",
-        $StudentID, $fullName, $nic, $address, $dob, 
-        $contactNo, $whatsappNo, $olPassStatus, $olEnglish, $olMaths, 
-        $olScience, $alCategory, $courseOptionOne, $courseOptionTwo
+        $StudentID,
+        $fullName,
+        $nic,
+        $address,
+        $dob,
+        $contactNo,
+        $whatsappNo,
+        $olPassStatus,
+        $olEnglish,
+        $olMaths,
+        $olScience,
+        $alCategory,
+        $courseOptionOne,
+        $courseOptionTwo
     );
 
     // Execute statement
     if ($stmt_insert->execute()) {
         $stmt_insert->close();
-        
+
         // --- 5. NEW: GENERATE PDF ---
-        
+
         // Define a temporary path to save the PDF
         $pdf_filename = "Student_App_" . $nic . "_" . time() . ".pdf";
         $pdf_temp_path = "../uploads/temp_pdf/"; // Path from 'lib' folder
-        
+
         // Create directory if it doesn't exist
         if (!is_dir($pdf_temp_path)) {
             mkdir($pdf_temp_path, 0755, true);
@@ -114,12 +125,12 @@ if (isset($_POST['submit'])) {
         $pdf->Cell(50, 8, 'Student ID:', 0, 0);
         $pdf->SetFont('Arial', '', 12);
         $pdf->Cell(140, 8, $StudentID, 0, 1);
-        
+
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(50, 8, 'Full Name:', 0, 0);
         $pdf->SetFont('Arial', '', 12);
         $pdf->Cell(140, 8, $fullName, 0, 1);
-        
+
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(50, 8, 'NIC:', 0, 0);
         $pdf->SetFont('Arial', '', 12);
@@ -129,12 +140,12 @@ if (isset($_POST['submit'])) {
         $pdf->Cell(50, 8, 'Date of Birth:', 0, 0);
         $pdf->SetFont('Arial', '', 12);
         $pdf->Cell(140, 8, $dob, 0, 1);
-        
+
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(50, 8, 'Contact No:', 0, 0);
         $pdf->SetFont('Arial', '', 12);
         $pdf->Cell(140, 8, $contactNo, 0, 1);
-        
+
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(50, 8, 'WhatsApp No:', 0, 0);
         $pdf->SetFont('Arial', '', 12);
@@ -150,7 +161,7 @@ if (isset($_POST['submit'])) {
         $pdf->SetFont('Arial', 'B', 14);
         $pdf->Cell(190, 10, 'Course & Qualifications', 1, 1, 'C');
         $pdf->Ln(5);
-        
+
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(50, 8, 'O/L Status:', 0, 0);
         $pdf->SetFont('Arial', '', 12);
@@ -160,7 +171,7 @@ if (isset($_POST['submit'])) {
         $pdf->Cell(50, 8, 'A/L Stream:', 0, 0);
         $pdf->SetFont('Arial', '', 12);
         $pdf->Cell(140, 8, $alCategory, 0, 1);
-        
+
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(50, 8, 'Course Choice 1:', 0, 0);
         $pdf->SetFont('Arial', '', 12);
@@ -172,29 +183,37 @@ if (isset($_POST['submit'])) {
         $pdf->Cell(140, 8, $courseOptionTwo, 0, 1);
 
         // Save the PDF to the temp path
-        $pdf->Output('F', $pdf_file_path); 
-        
+        $pdf->Output('F', $pdf_file_path);
+
         // --- END GENERATE PDF ---
 
 
         // --- 6. SEND EMAIL NOTIFICATION (with PDF) ---
         $mail = new PHPMailer(true);
-        
+
         // === මෙතන අගයන් 3 වෙනස් කරන්න ===
-        $admin_recipient_email = "chamikasandeepa40@gmail.com"; // <-- 1. මෙතනට email එක ලැබිය යුතු ඔබේ email address එක දාන්න
+        $admin_recipient_email = "earlakshmanvtasl@gmail.com"; // <-- 1. මෙතනට email එක ලැබිය යුතු ඔබේ email address එක දාන්න
         $sender_gmail_address = "infor@nvtibaddegama.site"; // <-- 2. මෙතනට App Password එක හැදූ Gmail address එක දාන්න
         $sender_app_password = "3CY+C9*etd9Qz9"; // <-- 3. මෙතනට අකුරු 16ක App Password එක දාන්න (හිස්තැන් නැතුව)
         // ==================================
 
         try {
             //Server settings
-            $mail->isSMTP();
-            $mail->Host       = 'smtp.gmail.com';
-            $mail->SMTPAuth   = true;
-            $mail->Username   = $sender_gmail_address;
-            $mail->Password   = $sender_app_password;
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-            $mail->Port       = 465;
+            // $mail->isSMTP();
+            // $mail->Host       = 'smtp.gmail.com';
+            // $mail->SMTPAuth   = true;
+            // $mail->Username   = $sender_gmail_address;
+            // $mail->Password   = $sender_app_password;
+            // $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            // $mail->Port       = 465;
+
+            $mail->isSMTP();                                            
+            $mail->Host       = 'smtp.mailgun.org';                     
+            $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+            $mail->Username   = 'nvtibaddegama.site@chamika.nvtibaddegama.site';               // SMTP username
+            $mail->Password   = 'QM\Wd6|,56R1';                  // SMTP password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+            $mail->Port       = 587;
 
             //Recipients
             $mail->setFrom($sender_gmail_address, 'NVTI Baddegama Website');
@@ -207,16 +226,15 @@ if (isset($_POST['submit'])) {
             $mail->isHTML(true);
             $mail->Subject = 'New Student Application (PDF Attached): ' . $fullName;
             $mail->Body    = "A new student application has been submitted.<br>"
-                           . "The student's full details are attached as a PDF file for your records.<br><br>"
-                           . "<b>Student Name:</b> " . htmlspecialchars($fullName) . "<br>"
-                           . "<b>NIC:</b> " . htmlspecialchars($nic) . "<br>"
-                           . "<b>Course Choice 1:</b> " . htmlspecialchars($courseOptionOne) . "<br><br>"
-                           . "Please log in to the admin panel to process this application.";
-            
+                . "The student's full details are attached as a PDF file for your records.<br><br>"
+                . "<b>Student Name:</b> " . htmlspecialchars($fullName) . "<br>"
+                . "<b>NIC:</b> " . htmlspecialchars($nic) . "<br>"
+                . "<b>Course Choice 1:</b> " . htmlspecialchars($courseOptionOne) . "<br><br>"
+                . "Please log in to the admin panel to process this application.";
+
             $mail->AltBody = "New Student Application Received. Details are in the attached PDF. Name: $fullName, NIC: $nic.";
 
             $mail->send();
-            
         } catch (Exception $e) {
             // Email failed. Log error but don't stop the user.
             error_log("PHPMailer Error (lib/registerbacend.php): {$mail->ErrorInfo}");
@@ -231,13 +249,10 @@ if (isset($_POST['submit'])) {
         $con->close();
         header("location:../pages/register.php?success=Application_Submitted_Successfully");
         exit();
-        
     } else {
         // ... (Error handling - unchanged) ...
     }
-
 } else {
     header("location:../pages/register.php?error=Invalid_Access_Method");
     exit();
 }
-?>
