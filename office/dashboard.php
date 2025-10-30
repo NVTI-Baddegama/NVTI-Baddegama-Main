@@ -11,18 +11,8 @@ if (!isset($_SESSION['staff_id'])) {
 $staff_name = $_SESSION['staff_name'];
 $position = $_SESSION['position'];
 $course_no = $_SESSION['course_no'];
-$profile_photo = $_SESSION['profile_photo'];
+$profile_photo = $_SESSION['profile_photo'] ?? null;
 $staff_id = $_SESSION['staff_id'];
-
-// Check if login_status column exists, if not add it
-$check_column = "SHOW COLUMNS FROM staff LIKE 'login_status'";
-$column_result = $con->query($check_column);
-
-if ($column_result->num_rows == 0) {
-    // Add the column if it doesn't exist
-    $add_column = "ALTER TABLE staff ADD COLUMN login_status TINYINT(1) DEFAULT 0";
-    $con->query($add_column);
-}
 
 // Check if this is the first login
 $first_login_check = "SELECT login_status FROM staff WHERE staff_id = ?";
@@ -30,15 +20,8 @@ $login_stmt = $con->prepare($first_login_check);
 $login_stmt->bind_param("s", $staff_id);
 $login_stmt->execute();
 $login_result = $login_stmt->get_result();
-
-$show_password_modal = false;
-if ($login_result->num_rows > 0) {
-    $login_data = $login_result->fetch_assoc();
-    $show_password_modal = ($login_data['login_status'] == 0);
-} else {
-    // If no result, assume first login
-    $show_password_modal = true;
-}
+$login_data = $login_result->fetch_assoc();
+$show_password_modal = ($login_data['login_status'] == 0);
 
 // Handle search
 $search_nic = isset($_GET['search_nic']) ? trim($_GET['search_nic']) : '';
@@ -160,12 +143,16 @@ $current_staff = $staff_result->fetch_assoc();
             </div>
             <div class="header-right">
                 <div class="profile-menu">
-                    <?php if ($profile_photo): ?>
-                        <img src="../uploads/profile_photos/<?php echo $profile_photo; ?>" alt="Profile" class="profile-photo">
+                    <?php if (!empty($profile_photo) && file_exists("../uploads/profile_photos/" . $profile_photo)): ?>
+                        <img src="../uploads/profile_photos/<?php echo htmlspecialchars($profile_photo); ?>" alt="Profile" class="profile-photo">
+                    <?php else: ?>
+                        <div class="default-avatar">
+                            <?php echo strtoupper(substr($staff_name, 0, 1)); ?>
+                        </div>
                     <?php endif; ?>
                     <div>
-                        <strong><?php echo $staff_name; ?></strong><br>
-                        <small><?php echo $position; ?></small>
+                        <strong><?php echo htmlspecialchars($staff_name); ?></strong><br>
+                        <small><?php echo htmlspecialchars($position); ?></small>
                     </div>
                     <div class="profile-dropdown">
                         <a href="#" onclick="openProfileModal()">Profile</a>
@@ -189,8 +176,8 @@ $current_staff = $staff_result->fetch_assoc();
         ?>
         
         <div class="welcome-section">
-            <h2>Welcome, <?php echo $staff_name; ?>!</h2>
-            <p>Position: <strong><?php echo $position; ?></strong></p>
+            <h2>Welcome, <?php echo htmlspecialchars($staff_name); ?>!</h2>
+            <p>Position: <strong><?php echo htmlspecialchars($position); ?></strong></p>
             <?php if ($position === 'Instructors' && $course_no): ?>
                 <?php
                 $course_query = "SELECT course_name FROM course WHERE course_no = ?";
@@ -200,7 +187,7 @@ $current_staff = $staff_result->fetch_assoc();
                 $course_result = $course_stmt->get_result();
                 if ($course_result->num_rows > 0) {
                     $course = $course_result->fetch_assoc();
-                    echo "<p>Assigned Course: <strong>" . $course['course_name'] . "</strong></p>";
+                    echo "<p>Assigned Course: <strong>" . htmlspecialchars($course['course_name']) . "</strong></p>";
                 }
                 ?>
             <?php endif; ?>
@@ -331,6 +318,12 @@ $current_staff = $staff_result->fetch_assoc();
                 <div class="form-group">
                     <label for="profile_photo">Profile Photo:</label>
                     <input type="file" id="profile_photo" name="profile_photo" accept="image/*">
+                    <?php if (!empty($current_staff['profile_photo'])): ?>
+                        <div class="current-photo">
+                            <p>Current photo:</p>
+                            <img src="../uploads/profile_photos/<?php echo htmlspecialchars($current_staff['profile_photo']); ?>" alt="Current Profile" style="max-width: 100px; max-height: 100px;">
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <div class="form-group">
                     <label for="first_name">First Name:</label>
@@ -456,11 +449,6 @@ $current_staff = $staff_result->fetch_assoc();
             const newPassword = document.getElementById('modal_new_password').value;
             const confirmPassword = document.getElementById('modal_confirm_password').value;
             
-            if (!newPassword || !confirmPassword) {
-                alert('Please fill in both password fields.');
-                return;
-            }
-            
             if (newPassword !== confirmPassword) {
                 alert('Passwords do not match!');
                 return;
@@ -484,7 +472,6 @@ $current_staff = $staff_result->fetch_assoc();
                 if (data.success) {
                     alert(data.message);
                     document.getElementById('passwordModal').style.display = 'none';
-                    location.reload(); // Reload to hide the modal
                 } else {
                     alert(data.message);
                 }
@@ -507,7 +494,6 @@ $current_staff = $staff_result->fetch_assoc();
             .then(data => {
                 if (data.success) {
                     document.getElementById('passwordModal').style.display = 'none';
-                    location.reload(); // Reload to hide the modal
                 } else {
                     alert(data.message);
                 }
