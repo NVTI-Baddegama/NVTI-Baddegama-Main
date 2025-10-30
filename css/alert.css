@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+
+
+/* Container for the alerts */
+#alert-container {
+    position: fixed;
+    top: 1.25rem;
+    right: 1.25rem;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 90%;
+    max-width: 24rem;
+}
+
+/* Individual alert styling */
+.alert {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    color: white;
+    transform: translateX(120%);
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    opacity: 0;
+}
+
+.alert.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.alert-error {
+    background-color: #ef4444;
+    /* red-500 */
+}
+
+.alert-success {
+    background-color: #22c55e;
+    /* green-500 */
+}
+
+.alert-info {
+    background-color: #3b82f6;
+    /* blue-500 */
+}
+
+.alert-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 0.75rem;
+}
+
+.alert-content {
+    flex-grow: 1;
+}
+
+.alert-title {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.alert-message {
+    font-weight: 400;
+    font-size: 0.875rem;
+}

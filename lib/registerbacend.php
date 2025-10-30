@@ -50,7 +50,7 @@ if (isset($_POST['submit'])) {
     $courseOptionTwo = trim($_POST['courseOptionTwo'] ?? '');
 
     // --- 2. Input Validation ---
-    if (empty($fullName) || empty($nic) || empty($address) || empty($dob) || empty($contactNo) || empty($olPassStatus) || empty($alCategory) || empty($courseOptionOne)) {
+    if (empty($fullName) || empty($nic) || empty($address) || empty($dob) ||empty($olPassStatus) || empty($contactNo) || empty($courseOptionOne)) {
         header("location:../pages/register.php?error=Please_fill_all_required_fields");
         exit();
     }
@@ -60,6 +60,16 @@ if (isset($_POST['submit'])) {
     }
     if (!preg_match('/^[0-9]{10}$/', $contactNo)) {
         header("location:../pages/register.php?error=Invalid_Contact_Number_format");
+        exit();
+    }
+
+    if (!empty($whatsappNo) && !preg_match('/^[0-9]{10}$/', $whatsappNo)) {
+        header("location:../pages/register.php?error=Invalid_WhatsApp_Number_format");
+        exit();
+    }
+
+    if($olPassStatus == "Yes" && ($olEnglish == "" || $olMaths == "" || $olScience == "")){
+        header("location:../pages/register.php?error=Please_fill_all_O_L_grades");
         exit();
     }
 
@@ -192,7 +202,7 @@ if (isset($_POST['submit'])) {
         $mail = new PHPMailer(true);
 
         // === මෙතන අගයන් 3 වෙනස් කරන්න ===
-        $admin_recipient_email = "earlakshmanvtasl@gmail.com"; // <-- 1. මෙතනට email එක ලැබිය යුතු ඔබේ email address එක දාන්න
+        $admin_recipient_email = "infor.chamika@gmail.com"; // <-- 1. මෙතනට email එක ලැබිය යුතු ඔබේ email address එක දාන්න
         $sender_gmail_address = "infor@nvtibaddegama.site"; // <-- 2. මෙතනට App Password එක හැදූ Gmail address එක දාන්න
         $sender_app_password = "3CY+C9*etd9Qz9"; // <-- 3. මෙතනට අකුරු 16ක App Password එක දාන්න (හිස්තැන් නැතුව)
         // ==================================
