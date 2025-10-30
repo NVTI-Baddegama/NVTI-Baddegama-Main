@@ -16,6 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $service_id = trim($_POST['service_id']);
     $gender = $_POST['gender'];
     $position = $_POST['position'];
+    $contact_no = trim($_POST['contact_no']); // <-- ADD THIS
+    $email = trim($_POST['email']); // <-- ADD THIS
     
     // Handle course_id (it might be empty if Non-Academic)
     $course_no = !empty($_POST['course_no']) ? trim($_POST['course_no']) : NULL;
@@ -94,13 +96,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $staff_id = "NVTI-$year-$rand_num";
 
     // --- 9. Insert data into the database ---
-    $insert_query = "INSERT INTO staff (staff_id, service_id, first_name, last_name, nic, gender, password, position, course_no, profile_photo, status) 
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active')";
+    $insert_query = "INSERT INTO staff (staff_id, service_id, first_name, last_name, nic, contact_no, email, gender, password, position, course_no, profile_photo, status) 
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active')";
                      
     $stmt_insert = $con->prepare($insert_query);
     
     $stmt_insert->bind_param(
-    "ssssssssss", // 'i' එක 's' (string) කළා
+    "ssssssssssss", // 'i' එක 's' (string) කළා
     $staff_id, 
     $service_id, 
     $first_name, 
