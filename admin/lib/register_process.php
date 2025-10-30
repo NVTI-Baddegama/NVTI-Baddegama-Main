@@ -108,6 +108,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $first_name, 
     $last_name, 
     $nic,
+    $contact_no,
+    $email,
     $gender,
     $hashed_password, 
     $position, 
