@@ -81,7 +81,7 @@ $result = $stmt->get_result();
                          class="w-full h-36 md:h-48 object-cover transition-transform duration-500 group-hover:scale-110">
                     
                     <span class="absolute top-2 right-2 inline-block rounded-md bg-green-600 px-2 py-1 text-xs font-semibold text-white shadow-md">
-                        NVQ Lvl <?php echo htmlspecialchars($course['nvq_level']); ?>
+                        NVQ L  <?php echo htmlspecialchars($course['nvq_level']); ?>
                     </span>
                 </div>
 
