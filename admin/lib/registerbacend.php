@@ -5,16 +5,16 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 // Load PHPMailer files
-require '../include/PHPMailer/Exception.php';
-require '../include/PHPMailer/PHPMailer.php';
-require '../include/PHPMailer/SMTP.php';
+require '../../include/PHPMailer/Exception.php';
+require '../../include/PHPMailer/PHPMailer.php';
+require '../../include/PHPMailer/SMTP.php';
 
 // --- NEW: Load FPDF library ---
-require '../include/fpdf/fpdf.php';
+require '../../include/fpdf/fpdf.php';
 // --- End Load ---
 
 session_start();
-include '../include/connection.php';
+include '../../include/connection.php';
 
 if (!$con) {
     die("Database connection failed.");
@@ -51,25 +51,25 @@ if (isset($_POST['submit'])) {
 
     // --- 2. Input Validation ---
     if (empty($fullName) || empty($nic) || empty($address) || empty($dob) ||empty($olPassStatus) || empty($contactNo) || empty($courseOptionOne)) {
-        header("location:../pages/register.php?error=Please_fill_all_required_fields");
+        header("location:../pages/student_register.php?error=Please_fill_all_required_fields");
         exit();
     }
     if (!preg_match('/^([0-9]{9}[vVxX]|[0-9]{12})$/', $nic)) {
-        header("location:../pages/register.php?error=Invalid_NIC_format");
+        header("location:../pages/student_register.php?error=Invalid_NIC_format");
         exit();
     }
     if (!preg_match('/^[0-9]{10}$/', $contactNo)) {
-        header("location:../pages/register.php?error=Invalid_Contact_Number_format");
+        header("location:../pages/student_register.php?error=Invalid_Contact_Number_format");
         exit();
     }
 
     if (!empty($whatsappNo) && !preg_match('/^[0-9]{10}$/', $whatsappNo)) {
-        header("location:../pages/register.php?error=Invalid_WhatsApp_Number_format");
+        header("location:../pages/student_register.php?error=Invalid_WhatsApp_Number_format");
         exit();
     }
 
     if($olPassStatus == "Yes" && ($olEnglish == "" || $olMaths == "" || $olScience == "")){
-        header("location:../pages/register.php?error=Please_fill_all_O_L_grades");
+        header("location:../pages/student_register.php?error=Please_fill_all_O_L_grades");
         exit();
     }
 
@@ -85,7 +85,7 @@ if (isset($_POST['submit'])) {
 
     $stmt_insert = $con->prepare($insert_query);
     if (!$stmt_insert) {
-        header("location:../pages/register.php?error=Database_prepare_error_inserting_data");
+        header("location:../pages/student_register.php?error=Database_prepare_error_inserting_data");
         exit();
     }
 
@@ -115,7 +115,7 @@ if (isset($_POST['submit'])) {
 
         // Define a temporary path to save the PDF
         $pdf_filename = "Student_App_" . $nic . "_" . time() . ".pdf";
-        $pdf_temp_path = "../uploads/temp_pdf/"; // Path from 'lib' folder
+        $pdf_temp_path = "../../uploads/temp_pdf/"; // Path from 'lib' folder
 
         // Create directory if it doesn't exist
         if (!is_dir($pdf_temp_path)) {
@@ -257,12 +257,12 @@ if (isset($_POST['submit'])) {
         // --- END DELETE ---
 
         $con->close();
-        header("location:../pages/register.php?success=Application_Submitted_Successfully");
+        header("location:../pages/student_register.php?success=Application_Submitted_Successfully");
         exit();
     } else {
         // ... (Error handling - unchanged) ...
     }
 } else {
-    header("location:../pages/register.php?error=Invalid_Access_Method");
+    header("location:../pages/student_register.php?error=Invalid_Access_Method");
     exit();
 }
