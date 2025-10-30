@@ -26,16 +26,8 @@ if ($courses_result && $courses_result->num_rows > 0) {
                 Please provide all required details accurately for processing your application.
             </p>
         </header>
-
-        <?php 
-        // Start session if not already started
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-        ?>
             
-        
-        
+
         <form id="registrationForm" class="space-y-8" action="../lib/registerbacend.php" method="POST">
             <fieldset class="border-t border-gray-200 pt-6">
                 <legend class="text-lg font-semibold text-gray-700 mb-4">1. Personal Details</legend>
@@ -263,9 +255,17 @@ if ($courses_result && $courses_result->num_rows > 0) {
         window.history.replaceState({ path: url.href }, '', url.href);
       }
     };
-  </script>
-  
-<script src="../../js/passcheck.js"></script> <?php 
+
+</script>
+
+
+<script src="../../js/passcheck.js"></script> 
+
+
+<?php include_once('../include/footer.php'); ?>
+
+
+<?php 
 // Close connection if opened
 if (isset($con)) {
     $con->close(); 
