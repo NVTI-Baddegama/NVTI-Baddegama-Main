@@ -1,7 +1,7 @@
 <?php session_start();?>
 <?php 
 include_once('../include/header.php'); 
-include_once('../include/connection.php'); // Include connection here
+include_once('../../include/connection.php'); // Include connection here
 
 // --- NEW: Fetch courses from database ---
 $courses = []; // Initialize an empty array
