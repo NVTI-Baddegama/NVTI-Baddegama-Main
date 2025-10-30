@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 30, 2025 at 03:54 AM
+-- Generation Time: Oct 30, 2025 at 07:30 AM
 -- Server version: 9.1.0
 -- PHP Version: 8.3.14
 
@@ -118,21 +118,23 @@ CREATE TABLE IF NOT EXISTS `staff` (
   `course_no` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `profile_photo` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `status` enum('active','inactive') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'active',
+  `login_status` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `staff_id` (`staff_id`),
   UNIQUE KEY `service_id` (`service_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `staff`
 --
 
-INSERT INTO `staff` (`id`, `staff_id`, `service_id`, `first_name`, `last_name`, `nic`, `contact_no`, `email`, `gender`, `password`, `position`, `course_no`, `profile_photo`, `status`) VALUES
-(4, 'NVTI-2025-7386', 'SD0003', 'Chamika', 'Sandeepa', '200625103462', '0771234567', 'chamika@nvti.lk', 'Male', '$2y$10$9Xx2GpPa.P3LKGW/jIQsX.wHkabsZxlwjzrY4AWPMq9EkUh67HV/.', 'Instructors', 'ITD001', 'NVTI-STAFF-1761063260.jpg', 'active'),
-(5, 'NVTI-2025-4768', 'SD0004', 'manu', 'Nimana', '200625103467', '0771234568', 'manu@nvti.lk', 'Male', '$2y$10$UXYnBRRstKV4hVQgMSw58epoTV6oM3Lds/jHpPTKFy4pS.wd6R/M6', 'Instructors', 'CS001', 'NVTI-STAFF-1761064514.png', 'active'),
-(6, 'NVTI-2025-2872', 'S12349', 'Dayal', 'Tharinda', '200331912060', NULL, NULL, 'Male', '$2y$10$ml7lE0NudZIL/VIw/h86zuydpbsRZmxw/WHCRF2Zp6OUkuEBWX/ca', 'Instructors', 'CS001', 'NVTI-STAFF-1761678560.jpg', 'active'),
-(7, 'NVTI-2025-4234', 'S12309', 'Lochana', 'Nimna', '200600912445', '0703102312', 'nadeeshnuwantha@gmail.com', 'Male', '$2y$10$0sb8JEAYAGgXtF1DMXkqy.at4QTnM.l0jj1HJwFvL2swgdZRWV0nC', 'Non-Academic Staff', NULL, 'NVTI-STAFF-1761681594.png', 'active'),
-(8, 'NVTI-2025-3559', 'S123450', 'Ravindu', 'Chandeepa', '747813292v', '0703102312', 'nadeeshnujhy@gmail.com', 'Male', '$2y$10$e2IJ4jyk.XdvPIWGjauAe.047gtTeqf5ieYxcQTb0rZ4eEgYHo586', 'Instructors', 'CS001', NULL, 'active');
+INSERT INTO `staff` (`id`, `staff_id`, `service_id`, `first_name`, `last_name`, `nic`, `contact_no`, `email`, `gender`, `password`, `position`, `course_no`, `profile_photo`, `status`, `login_status`) VALUES
+(4, 'NVTI-2025-7386', 'SD0003', 'Chamika', 'Sandeepa', '200625103462', '0771234567', 'chamika@nvti.lk', 'Male', '$2y$10$9Xx2GpPa.P3LKGW/jIQsX.wHkabsZxlwjzrY4AWPMq9EkUh67HV/.', 'Instructors', 'ITD001', 'NVTI-STAFF-1761063260.jpg', 'active', 0),
+(5, 'NVTI-2025-4768', 'SD0004', 'manu', 'Nimana', '200625103467', '0771234568', 'manu@nvti.lk', 'Male', '$2y$10$UXYnBRRstKV4hVQgMSw58epoTV6oM3Lds/jHpPTKFy4pS.wd6R/M6', 'Instructors', 'CS001', 'NVTI-STAFF-1761064514.png', 'active', 0),
+(6, 'NVTI-2025-2872', 'S12349', 'Dayal', 'Tharinda', '200331912060', NULL, NULL, 'Male', '$2y$10$ml7lE0NudZIL/VIw/h86zuydpbsRZmxw/WHCRF2Zp6OUkuEBWX/ca', 'Instructors', 'CS001', 'NVTI-STAFF-1761678560.jpg', 'active', 0),
+(7, 'NVTI-2025-4234', 'S12309', 'Lochana', 'Nimna', '200600912445', '0703102312', 'nadeeshnuwantha@gmail.com', 'Male', '$2y$10$0sb8JEAYAGgXtF1DMXkqy.at4QTnM.l0jj1HJwFvL2swgdZRWV0nC', 'Non-Academic Staff', NULL, 'NVTI-STAFF-1761681594.png', 'active', 0),
+(8, 'NVTI-2025-3559', 'S123450', 'Ravindu', 'Chandeepa', '747813292v', '0703102312', 'nadeeshnujhy@gmail.com', 'Male', '$2y$10$e2IJ4jyk.XdvPIWGjauAe.047gtTeqf5ieYxcQTb0rZ4eEgYHo586', 'Instructors', 'CS001', NULL, 'active', 0),
+(9, 'NVTI-2025-3218', 'S123111', 'Test', 'Staff', '747812323v', '0703102312', 'nadeeshgfs@gmail.com', 'Male', '$2y$10$yX0wHzbD8tGsqTOj2CUkPeoN8bV5Npjk3YVH2EdvfOPbdukANMxHm', 'Non-Academic Staff', NULL, 'NVTI-STAFF-1761806505.png', 'active', 0);
 
 -- --------------------------------------------------------
 
