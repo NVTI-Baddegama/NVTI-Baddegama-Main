@@ -5,11 +5,11 @@ $username = "root";
 $password = ""; 
 $dbname = "nvti_baddegama"; 
 
-// $con = new mysqli($servername, $username, $password, $dbname);
+$con = new mysqli($servername, $username, $password, $dbname);
 
-// if ($con->connect_error) {
-//     die("Connection failed: " . $con->connect_error);
-// }
+if ($con->connect_error) {
+    die("Connection failed: " . $con->connect_error);
+}
 ?>
 <?php
 // $servername = "nvtibaddegama.site";
@@ -17,9 +17,9 @@ $dbname = "nvti_baddegama";
 // $password = "3CY+C9*etd9Qz9"; 
 // $dbname = "nvtibadde_vta_baddegama"; 
 
-$con = new mysqli($servername, $username, $password, $dbname);
+// $con = new mysqli($servername, $username, $password, $dbname);
 
-if ($con->connect_error) {
-    die("Connection failed: " . $con->connect_error);
-}
+// if ($con->connect_error) {
+//     die("Connection failed: " . $con->connect_error);
+// }
 ?>
