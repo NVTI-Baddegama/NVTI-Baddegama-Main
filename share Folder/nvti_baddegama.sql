@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Oct 30, 2025 at 07:30 AM
--- Server version: 9.1.0
--- PHP Version: 8.3.14
+-- Host: 127.0.0.1
+-- Generation Time: Oct 30, 2025 at 09:39 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -27,16 +27,12 @@ SET time_zone = "+00:00";
 -- Table structure for table `admin`
 --
 
-DROP TABLE IF EXISTS `admin`;
-CREATE TABLE IF NOT EXISTS `admin` (
-  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `serviceid` varchar(11) COLLATE utf8mb4_general_ci NOT NULL,
-  `type` varchar(11) COLLATE utf8mb4_general_ci NOT NULL,
-  PRIMARY KEY (`username`),
-  UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `serviceid` (`serviceid`)
+CREATE TABLE `admin` (
+  `username` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `serviceid` varchar(11) NOT NULL,
+  `type` varchar(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -52,30 +48,63 @@ INSERT INTO `admin` (`username`, `email`, `password`, `serviceid`, `type`) VALUE
 -- Table structure for table `course`
 --
 
-DROP TABLE IF EXISTS `course`;
-CREATE TABLE IF NOT EXISTS `course` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `course_no` varchar(12) COLLATE utf8mb4_general_ci NOT NULL,
-  `course_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `nvq_level` int NOT NULL,
-  `course_type` enum('Full-time','Part-time','Online','Hybrid') COLLATE utf8mb4_general_ci NOT NULL,
-  `qualifications` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `course_duration` int NOT NULL,
-  `course_fee` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
-  `course_description` text COLLATE utf8mb4_general_ci NOT NULL,
-  `course_image` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `status` enum('active','inactive') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'active',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `course_no` (`course_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `course` (
+  `id` int(11) NOT NULL,
+  `course_no` varchar(12) NOT NULL,
+  `course_name` varchar(100) NOT NULL,
+  `nvq_level` int(11) NOT NULL,
+  `course_type` enum('Full-time','Part-time','Online','Hybrid') NOT NULL,
+  `qualifications` varchar(255) NOT NULL,
+  `course_duration` int(11) NOT NULL,
+  `course_fee` varchar(20) NOT NULL,
+  `course_description` text NOT NULL,
+  `course_image` varchar(255) DEFAULT NULL,
+  `category` int(11) DEFAULT NULL,
+  `status` enum('active','inactive') NOT NULL DEFAULT 'active'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `course`
 --
 
-INSERT INTO `course` (`id`, `course_no`, `course_name`, `nvq_level`, `course_type`, `qualifications`, `course_duration`, `course_fee`, `course_description`, `course_image`, `status`) VALUES
-(1, 'ITD001', 'Diploma in Information Technology', 4, 'Full-time', 'GCE A/L', 12, 'LKR 80,000', 'A comprehensive diploma in IT.', NULL, 'active'),
-(3, 'CS001', 'Web Development', 4, 'Full-time', 'A/L', 12, '20000', 'hjhkdjflkf', 'course_img_68f34bcc4740c_1760775116.png', 'active');
+INSERT INTO `course` (`id`, `course_no`, `course_name`, `nvq_level`, `course_type`, `qualifications`, `course_duration`, `course_fee`, `course_description`, `course_image`, `category`, `status`) VALUES
+(1, 'ITD001', 'Diploma in Information Technology', 4, 'Full-time', 'GCE A/L', 12, 'LKR 80,000', 'A comprehensive diploma in IT.', NULL, 1, 'active'),
+(3, 'CS001', 'Web Development', 4, 'Full-time', 'A/L', 12, '20000', 'hjhkdjflkf', 'course_img_68f34bcc4740c_1760775116.png', 1, 'active');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `course_categories`
+--
+
+CREATE TABLE `course_categories` (
+  `id` int(11) NOT NULL,
+  `category_name` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `course_categories`
+--
+
+INSERT INTO `course_categories` (`id`, `category_name`) VALUES
+(2, 'Building and Construction'),
+(3, 'Electrical and Electronic'),
+(4, 'Hotel and Tourism'),
+(1, 'ICT and Multimedia Technology'),
+(5, 'Personal Community Development');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gallery`
+--
+
+CREATE TABLE `gallery` (
+  `id` int(11) NOT NULL,
+  `image_name` text DEFAULT 'img_vta',
+  `image_path` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -83,17 +112,14 @@ INSERT INTO `course` (`id`, `course_no`, `course_name`, `nvq_level`, `course_typ
 -- Table structure for table `modules`
 --
 
-DROP TABLE IF EXISTS `modules`;
-CREATE TABLE IF NOT EXISTS `modules` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `course_id` int NOT NULL,
-  `module_name` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
-  `module_description` text COLLATE utf8mb4_general_ci,
-  `order_no` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `fk_course_module` (`course_id`)
+CREATE TABLE `modules` (
+  `id` int(11) NOT NULL,
+  `course_id` int(11) NOT NULL,
+  `module_name` varchar(150) NOT NULL,
+  `module_description` text DEFAULT NULL,
+  `order_no` varchar(20) DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -102,27 +128,23 @@ CREATE TABLE IF NOT EXISTS `modules` (
 -- Table structure for table `staff`
 --
 
-DROP TABLE IF EXISTS `staff`;
-CREATE TABLE IF NOT EXISTS `staff` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `staff_id` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
-  `service_id` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
-  `first_name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `last_name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `nic` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
-  `contact_no` varchar(15) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `email` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `gender` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `position` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `course_no` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `profile_photo` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `status` enum('active','inactive') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'active',
-  `login_status` tinyint(1) DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `staff_id` (`staff_id`),
-  UNIQUE KEY `service_id` (`service_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `staff` (
+  `id` int(11) NOT NULL,
+  `staff_id` varchar(20) NOT NULL,
+  `service_id` varchar(20) NOT NULL,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
+  `nic` varchar(15) NOT NULL,
+  `contact_no` varchar(15) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `gender` varchar(10) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `position` varchar(100) NOT NULL,
+  `course_no` varchar(20) DEFAULT NULL,
+  `profile_photo` varchar(255) DEFAULT NULL,
+  `status` enum('active','inactive') NOT NULL DEFAULT 'active',
+  `login_status` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `staff`
@@ -142,27 +164,25 @@ INSERT INTO `staff` (`id`, `staff_id`, `service_id`, `first_name`, `last_name`, 
 -- Table structure for table `student_enrollments`
 --
 
-DROP TABLE IF EXISTS `student_enrollments`;
-CREATE TABLE IF NOT EXISTS `student_enrollments` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `Student_id` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `full_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `nic` varchar(12) COLLATE utf8mb4_general_ci NOT NULL,
-  `address` text COLLATE utf8mb4_general_ci NOT NULL,
+CREATE TABLE `student_enrollments` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `Student_id` varchar(50) NOT NULL,
+  `full_name` varchar(255) NOT NULL,
+  `nic` varchar(12) NOT NULL,
+  `address` text NOT NULL,
   `dob` date NOT NULL,
-  `contact_no` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
-  `whatsapp_no` varchar(15) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ol_pass_status` enum('Yes','No') COLLATE utf8mb4_general_ci NOT NULL,
-  `ol_english_grade` varchar(5) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ol_maths_grade` varchar(5) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ol_science_grade` varchar(5) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `al_category` enum('science','commerce','arts','tech','other') COLLATE utf8mb4_general_ci NOT NULL,
-  `course_option_one` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `course_option_two` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `application_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `is_processed` tinyint(1) DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `contact_no` varchar(15) NOT NULL,
+  `whatsapp_no` varchar(15) DEFAULT NULL,
+  `ol_pass_status` enum('Yes','No') NOT NULL,
+  `ol_english_grade` varchar(5) DEFAULT NULL,
+  `ol_maths_grade` varchar(5) DEFAULT NULL,
+  `ol_science_grade` varchar(5) DEFAULT NULL,
+  `al_category` enum('science','commerce','arts','tech','other') NOT NULL,
+  `course_option_one` varchar(100) NOT NULL,
+  `course_option_two` varchar(100) DEFAULT NULL,
+  `application_date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `is_processed` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `student_enrollments`
@@ -182,8 +202,96 @@ INSERT INTO `student_enrollments` (`id`, `Student_id`, `full_name`, `nic`, `addr
 (12, 'VTA_BAD996338', 'Chamika Test', '200456723456', 'Baddegama', '2001-03-10', '0778128743', '0778128743', 'Yes', 'A', 'A', 'B', 'commerce', 'Diploma in Information Technology', 'Web Development', '2025-10-29 16:35:37', 0);
 
 --
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`username`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `serviceid` (`serviceid`);
+
+--
+-- Indexes for table `course`
+--
+ALTER TABLE `course`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `course_no` (`course_no`),
+  ADD KEY `category` (`category`);
+
+--
+-- Indexes for table `course_categories`
+--
+ALTER TABLE `course_categories`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `category_name` (`category_name`);
+
+--
+-- Indexes for table `modules`
+--
+ALTER TABLE `modules`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_course_module` (`course_id`);
+
+--
+-- Indexes for table `staff`
+--
+ALTER TABLE `staff`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `staff_id` (`staff_id`),
+  ADD UNIQUE KEY `service_id` (`service_id`);
+
+--
+-- Indexes for table `student_enrollments`
+--
+ALTER TABLE `student_enrollments`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `course`
+--
+ALTER TABLE `course`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `course_categories`
+--
+ALTER TABLE `course_categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `modules`
+--
+ALTER TABLE `modules`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `staff`
+--
+ALTER TABLE `staff`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `student_enrollments`
+--
+ALTER TABLE `student_enrollments`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `course`
+--
+ALTER TABLE `course`
+  ADD CONSTRAINT `course_ibfk_1` FOREIGN KEY (`category`) REFERENCES `course_categories` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `modules`

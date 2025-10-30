@@ -38,7 +38,7 @@
                 <p class="text-lg leading-relaxed text-secondary-gray">
                     We focus on real-world application, ensuring our graduates are job-ready from day one. By fostering creativity, critical thinking, and strong professional ethics, we prepare the next generation of skilled technicians and innovators.
                 </p>
-                <a href="#" class="inline-block px-6 py-3 text-white font-semibold rounded-lg bg-[#7c1c20] hover:bg-[#4e1416] transition duration-200 opacity-90" tabindex="-1">View Course</a>
+                <a href="all_course.php" class="inline-block px-6 py-3 text-white font-semibold rounded-lg bg-[#7c1c20] hover:bg-[#4e1416] transition duration-200 opacity-90" tabindex="-1">View Course</a>
                
             </div>
         </div>
