@@ -5,6 +5,16 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 include_once('../include/header.php'); // Include header first
 include_once('../../include/connection.php'); // Need connection for fetching recent courses
+// --- NEW: Fetch Categories for Dropdown ---
+$categories = [];
+$category_query = "SELECT * FROM course_categories ORDER BY category_name ASC";
+$category_result = $con->query($category_query);
+if ($category_result && $category_result->num_rows > 0) {
+    while ($row = $category_result->fetch_assoc()) {
+        $categories[] = $row;
+    }
+}
+// --- END NEW ---
 
 // --- Fetch recently added courses ---
 $recent_courses = [];
@@ -79,6 +89,20 @@ if (isset($_SESSION['error'])) {
                     <option value="Hybrid">Hybrid</option>
                 </select>
             </div>
+            
+            <div>
+            <label for="category_id" class="block text-sm font-medium text-gray-700 mb-1">Course Category</label>
+            <select id="category_id" name="category_id" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none bg-white">
+                <option value="" disabled selected>Select a category</option>
+                <?php
+                foreach ($categories as $category) {
+                    echo '<option value="' . $category['id'] . '">' . htmlspecialchars($category['category_name']) . '</option>';
+                }
+                ?>
+            </select>
+        </div>
+
 
             <div class="md:col-span-2">
                 <label for="qualifications" class="block text-sm font-medium text-gray-700 mb-1">Qualifications Required</label>

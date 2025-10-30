@@ -18,6 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $qualifications = trim($_POST['qualifications']);
     $course_duration = trim($_POST['course_duration']); // This is a number
     $course_fee = trim($_POST['course_fee']);
+    $category_id = trim($_POST['category_id']);
     $course_description = trim($_POST['course_description']);
 
     $new_file_name = null; // Initialize image file name as null
@@ -92,11 +93,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $insert_query = "INSERT INTO course (
         course_no, course_name, nvq_level, course_type, 
         qualifications, course_duration, course_fee, course_description, 
-        course_image, status
+        course_image, category, status
     ) VALUES (
         ?, ?, ?, ?, 
         ?, ?, ?, ?, 
-        ?, 'active'
+        ?, ?, 'active'
     )";
 
     $stmt_insert = $con->prepare($insert_query);
@@ -110,7 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // --- 6. Bind Parameters ---
     // bind_param string changed from "ssisssss" to "ssissssss" (added 's' for course_image)
     $stmt_insert->bind_param(
-        "ssissssss",
+        "ssissssssi",
         $course_no,
         $course_name,
         $nvq_level,
@@ -119,7 +120,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $course_duration,
         $course_fee,
         $course_description,
-        $new_file_name // This will be the file name or NULL
+        $new_file_name, // This will be the file name or NULL
+        $category_id
     );
 
     // --- 7. Execute Statement and Redirect ---
