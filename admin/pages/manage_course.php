@@ -157,7 +157,8 @@ $instructors_json = json_encode($instructors_list);
         
     </div>
 
-    <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto  items-start justify-center p-4">
+   
+         <div id="editModal" class="fixed inset-0 z-50 bg-gray-600 bg-opacity-50 hidden overflow-y-scroll p-20 items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-lg">
             <div class="flex justify-between items-center p-4 border-b">
                 <h3 class="text-xl font-semibold text-gray-800">Edit Course</h3>
