@@ -1,7 +1,20 @@
 <?php
 include_once('../include/header.php');
+// NEW: Include database connection
+include_once('../include/connection.php');
+
+// --- NEW: Fetch images from DB ---
+$sql = "SELECT image_name, image_path FROM gallery ORDER BY created_at DESC";
+$result = $con->query($sql);
+$images = [];
+if ($result && $result->num_rows > 0) {
+    // Fetch all images into an array
+    $images = $result->fetch_all(MYSQLI_ASSOC);
+}
+// --- END: Fetch images ---
+
 // --- PHP ---
-// Define the structure of our bento grid.
+// Define the *structure* of our bento grid.
 // We'll use an array of "columns". Each column can have one or more items.
 $galleryColumns = [
     // Column 1: One tall image
@@ -51,6 +64,34 @@ $galleryColumns = [
     ],
 ];
 
+// --- NEW: Dynamically populate the gallery slots with DB images ---
+if (!empty($images)) {
+    $imageCount = count($images);
+    $imageCounter = 0;
+
+    // Loop through each column and item by reference (&) to modify them
+    foreach ($galleryColumns as &$column) { 
+        foreach ($column['items'] as &$item) { 
+            // Get the next image, looping back to the start if we run out
+            $currentImage = $images[$imageCounter % $imageCount];
+
+            $db_path = $currentImage['image_path'];
+            // This replaces the "../" with "../admin/" to create the correct public path
+            $public_path = str_replace('../', '../admin/', $db_path);
+
+            $item['src'] = htmlspecialchars($public_path);
+            $item['alt'] = htmlspecialchars($currentImage['image_name']);
+            // --- END: PATH CORRECTION ---
+
+            $imageCounter++;
+        }
+    }
+    unset($column); // Unset references after loop
+    unset($item);
+}
+// --- END NEW ---
+
+
 /**
  * Helper function to render a single gallery item (an image).
  */
@@ -85,8 +126,8 @@ function render_column($column) {
         /* --- CSS (Animation) --- */
 
         /* Define the scrolling animation.
-          It moves from 0 to the left by the *exact width* of the
-          original set of images, which we calculate in JavaScript.
+           It moves from 0 to the left by the *exact width* of the
+           original set of images, which we calculate in JavaScript.
         */
         @keyframes scroll-left {
             0% {
@@ -94,7 +135,7 @@ function render_column($column) {
             }
             100% {
                 /* '--scroll-width' is a custom variable we will set via JS.
-                  We use calc() to make it a negative value.
+                   We use calc() to make it a negative value.
                 */
                 transform: translateX(calc(var(--scroll-width, 1000px) * -1));
             }
@@ -115,7 +156,7 @@ function render_column($column) {
 <body class="text-gray-900 antialiased">
 
     <div class="py-12">
-        <h1 class="text-center text-4xl font-bold mb-8">NVTI Baddegama Gallery Demo</h1>
+        <h1 class="text-center text-4xl font-bold mb-8">NVTI Baddegama Gallery</h1>
 
         <div class="w-full max-w-none mx-auto overflow-hidden" 
              style="mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);">
@@ -124,7 +165,7 @@ function render_column($column) {
                 
                 <?php
                 // --- PHP (Render Loop) ---
-                // Loop through our PHP array and render the first set of columns.
+                // Loop through our (now dynamic) PHP array and render the first set.
                 foreach ($galleryColumns as $column) {
                     echo render_column($column);
                 }
@@ -141,6 +182,12 @@ function render_column($column) {
             // 1. Get all the original items (the columns)
             const originalItems = Array.from(track.children);
             
+            // Check if there are no items (e.g., DB was empty)
+            if (originalItems.length === 0) {
+                 track.innerHTML = '<p class="text-center text-gray-500 w-full">Gallery is empty.</p>';
+                 return; // Stop the script
+            }
+
             // 2. Calculate the total width of these original items
             let originalWidth = 0;
             const trackStyles = window.getComputedStyle(track);
