@@ -14,14 +14,31 @@ $course_no = $_SESSION['course_no'];
 $profile_photo = $_SESSION['profile_photo'];
 $staff_id = $_SESSION['staff_id'];
 
+// Check if login_status column exists, if not add it
+$check_column = "SHOW COLUMNS FROM staff LIKE 'login_status'";
+$column_result = $con->query($check_column);
+
+if ($column_result->num_rows == 0) {
+    // Add the column if it doesn't exist
+    $add_column = "ALTER TABLE staff ADD COLUMN login_status TINYINT(1) DEFAULT 0";
+    $con->query($add_column);
+}
+
 // Check if this is the first login
 $first_login_check = "SELECT login_status FROM staff WHERE staff_id = ?";
 $login_stmt = $con->prepare($first_login_check);
 $login_stmt->bind_param("s", $staff_id);
 $login_stmt->execute();
 $login_result = $login_stmt->get_result();
-$login_data = $login_result->fetch_assoc();
-$show_password_modal = ($login_data['login_status'] == 0);
+
+$show_password_modal = false;
+if ($login_result->num_rows > 0) {
+    $login_data = $login_result->fetch_assoc();
+    $show_password_modal = ($login_data['login_status'] == 0);
+} else {
+    // If no result, assume first login
+    $show_password_modal = true;
+}
 
 // Handle search
 $search_nic = isset($_GET['search_nic']) ? trim($_GET['search_nic']) : '';
@@ -439,6 +456,11 @@ $current_staff = $staff_result->fetch_assoc();
             const newPassword = document.getElementById('modal_new_password').value;
             const confirmPassword = document.getElementById('modal_confirm_password').value;
             
+            if (!newPassword || !confirmPassword) {
+                alert('Please fill in both password fields.');
+                return;
+            }
+            
             if (newPassword !== confirmPassword) {
                 alert('Passwords do not match!');
                 return;
@@ -462,6 +484,7 @@ $current_staff = $staff_result->fetch_assoc();
                 if (data.success) {
                     alert(data.message);
                     document.getElementById('passwordModal').style.display = 'none';
+                    location.reload(); // Reload to hide the modal
                 } else {
                     alert(data.message);
                 }
@@ -484,6 +507,7 @@ $current_staff = $staff_result->fetch_assoc();
             .then(data => {
                 if (data.success) {
                     document.getElementById('passwordModal').style.display = 'none';
+                    location.reload(); // Reload to hide the modal
                 } else {
                     alert(data.message);
                 }
