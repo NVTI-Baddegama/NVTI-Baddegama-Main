@@ -174,13 +174,6 @@ $instructors_json = json_encode($instructors_list);
                     <label for="edit_course_name" class="block text-sm font-medium text-gray-700">Course Name</label>
                     <input type="text" id="edit_course_name" name="course_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
                 </div>
-
-                <div>
-                    <label for="edit_new_staff_id" class="block text-sm font-medium text-gray-700">Instructor</label>
-                    <select id="edit_new_staff_id" name="new_staff_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                        <option value="">Unassign Instructor</option>
-                    </select>
-                </div>
                 
                 <div>
                     <label for="edit_course_fee" class="block text-sm font-medium text-gray-700">Course Fee</label>
@@ -243,7 +236,7 @@ $instructors_json = json_encode($instructors_list);
             const courseNameInput = document.getElementById('edit_course_name');
             const courseFeeInput = document.getElementById('edit_course_fee');
             const statusInput = document.getElementById('edit_status');
-            const instructorSelect = document.getElementById('edit_new_staff_id');
+           
             const courseNoInput = document.getElementById('edit_course_no');
             const oldStaffIdInput = document.getElementById('edit_old_staff_id');
 
@@ -304,8 +297,7 @@ $instructors_json = json_encode($instructors_list);
 
                     // --- Build the Instructor Dropdown ---
 
-                    // 1. Reset the dropdown, keeping "Unassign"
-                    instructorSelect.innerHTML = '<option value="">Unassign Instructor</option>';
+                    
 
                     // 2. Loop through ALL instructors and add them
                     allInstructors.forEach(instructor => {
@@ -319,11 +311,11 @@ $instructors_json = json_encode($instructors_list);
                             option.classList.add('text-gray-400');
                         }
                         
-                        instructorSelect.appendChild(option);
+                        
                     });
                     
                     // 3. Pre-select the current instructor (or "Unassign" if staffId is "")
-                    instructorSelect.value = currentStaffId || ''; 
+                   
 
                     openEditModal();
                 });
