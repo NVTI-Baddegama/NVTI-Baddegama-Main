@@ -206,7 +206,7 @@ if ($courses_result && $courses_result->num_rows > 0) {
   }
   ?>
   <div id="alert-container"></div>
-  <link rel="stylesheet" href="../css/alert.css">
+  <link rel="stylesheet" href="../../css/alert.css">
 
   <script>
     function showAlert(type, title, message) {
@@ -265,10 +265,9 @@ if ($courses_result && $courses_result->num_rows > 0) {
     };
   </script>
   
-<script src="../js/passcheck.js"></script> <?php 
+<script src="../../js/passcheck.js"></script> <?php 
 // Close connection if opened
 if (isset($con)) {
     $con->close(); 
 }
-include_once('../include/footer.php'); 
 ?>
