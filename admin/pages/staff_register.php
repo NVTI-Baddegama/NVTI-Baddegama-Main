@@ -75,6 +75,17 @@ if ($courses_result && $courses_result->num_rows > 0) {
                 </label>
             </div>
         </div>
+        
+        <div class="form-row">
+                <div class="form-group">
+                    <label for="contact_no">Contact No:</label>
+                    <input type="tel" id="contact_no" name="contact_no" pattern="[0-9]{10}" placeholder="07XXXXXXXX" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address:</label>
+                    <input type="email" id="email" name="email" placeholder="example@gmail.com" required>
+                </div>
+            </div>
 
         <div class="form-group">
             <label for="position">Position:</label>
