@@ -4,7 +4,17 @@
 
     $sql = "SELECT id, first_name, last_name, position, profile_photo 
             FROM staff 
-            WHERE status = 'active'";
+            WHERE status = 'active'
+            ORDER BY 
+              CASE 
+                WHEN position = 'Assistant Director' THEN 1
+                WHEN position = 'Training Officer' THEN 2
+                WHEN position = 'Instructors' THEN 3
+                WHEN position = 'Non-Academy Staff' THEN 4
+                ELSE 5 -- This puts any other positions at the end
+              END ASC, 
+              first_name ASC, 
+              last_name ASC";
     
     $result = $con->query($sql);
 
