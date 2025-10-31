@@ -1,37 +1,38 @@
 <?php include_once('../include/header.php'); ?>
 
 <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Merriweather:wght@400;700;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Merriweather:wght@400;700;900&display=swap');
 </style>
 
 <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        // Use the dark blue from index.php as the intended primary color
-                        'primary-blue': '#1D4ED8', // Dark Blue
-                        'secondary-gray': '#4B5563', // Medium Gray
-                        'accent-yellow': '#f59e0b', /* Tailwind amber-500 */
-                        // Custom red for the "View Course" button on about.php (based on nav-bg in style.css)
-                        'primary-red': '#7c1c20', 
-                    },
-                    fontFamily: {
-                        // Add Inter and Merriweather for global use
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Merriweather', 'serif'],
-                    },
-                    borderRadius: {
-                        // Add custom border radius sizes
-                        'xl': '0.75rem',
-                        '2xl': '1rem',
-                    }
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    // Use the dark blue from index.php as the intended primary color
+                    'primary-blue': '#1D4ED8', // Dark Blue
+                    'secondary-gray': '#4B5563', // Medium Gray
+                    'accent-yellow': '#f59e0b', /* Tailwind amber-500 */
+                    // Custom red for the "View Course" button on about.php (based on nav-bg in style.css)
+                    'primary-red': '#7c1c20',
+                },
+                fontFamily: {
+                    // Add Inter and Merriweather for global use
+                    sans: ['Inter', 'sans-serif'],
+                    serif: ['Merriweather', 'serif'],
+                },
+                borderRadius: {
+                    // Add custom border radius sizes
+                    'xl': '0.75rem',
+                    '2xl': '1rem',
                 }
             }
         }
-    </script>
+    }
+</script>
+
 <body class="font-sans bg-[#f8f9fa]">
-<header class="relative overflow-hidden aspect-video md:min-h-[60vh]">
+    <header class="relative overflow-hidden aspect-video md:min-h-[60vh]">
         <div class="relative h-full overflow-hidden">
             <video src="https://res.cloudinary.com/dhxfrmepy/video/upload/v1759822024/1006_1_oponlw.mp4"
                 class="absolute top-0 left-0 w-full h-full object-cover" autoplay muted loop playsinline></video>
@@ -89,7 +90,62 @@
             </div>
 
         </section>
+
+        <section class="py-12 md:py-20">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-primary-blue mb-12 leading-tight text-center">
+                Our Leaders
+            </h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <div class="bg-white rounded-2xl shadow-xl shadow-blue-100 overflow-hidden transition duration-300 ease-in-out hover:shadow-2xl">
+                    <img class="w-full h-[300px] object-cover" src="../images/leaders/ad.jpeg" alt="Placeholder image for card 1">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-primary-blue mb-2">Assistent Director</h3>
+                        <p class="text-secondary-gray">
+                            Providing essential leadership and strategic support, the Assistant Director is key to bridging high-level vision with effective daily operations and team guidance
+                        </p>
+                       
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-xl shadow-blue-100 overflow-hidden transition duration-300 ease-in-out hover:shadow-2xl">
+                    <img class="w-full h-[300px] object-cover" src="../images/leaders/to.jpeg" alt="Placeholder image for card 2">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-primary-blue mb-2">Training Officer</h3>
+                        <p class="text-secondary-gray">
+                            A dedicated champion of professional growth, the Training Officer plays a vital role in developing talent and equipping our team with the skills needed to excel.
+                        </p>
+                       
+                    </div>
+                </div>
+
+
+                <div class="bg-white rounded-2xl shadow-xl shadow-blue-100 overflow-hidden transition duration-300 ease-in-out hover:shadow-2xl">
+                    <img class="w-full h-[300px] object-cover" src="https://via.placeholder.com/400x300/FBCFE8/333333?text=Course+Image" alt="Placeholder image for card 4">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-primary-blue mb-2">Account Officer</h3>
+                        <p class="text-secondary-gray">
+                            With meticulous attention to detail, the Account Officer ensures the financial integrity and accuracy of our operations, serving as a crucial steward of our resources.
+                        </p>
+                        
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-xl shadow-blue-100 overflow-hidden transition duration-300 ease-in-out hover:shadow-2xl">
+                    <img class="w-full h-[300px] object-cover" src="https://via.placeholder.com/400x300/BFDBFE/333333?text=Course+Image" alt="Placeholder image for card 3">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-primary-blue mb-2">Program Officer</h3>
+                        <p class="text-secondary-gray">
+                            The driving force behind our key initiatives, the Program Officer expertly manages projects from concept to completion, ensuring we meet our goals and deliver impact.
+                        </p>
+                       
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
     </main>
 
-      
 <?php include_once('../include/footer.php'); ?>
