@@ -32,7 +32,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['image_ids'])) {
     }
     
     // Bind all integer IDs
-    // Creates a string of types, e.g., "iii"
     $types = str_repeat('i', $count); 
     $stmt_select->bind_param($types, ...$sanitized_ids);
     

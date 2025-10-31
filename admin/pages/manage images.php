@@ -121,7 +121,9 @@ $images = $result->fetch_all(MYSQLI_ASSOC);
                                 <td class="p-4">
                                     <input type="checkbox" name="image_ids[]" class="row-checkbox h-4 w-4 rounded" value="<?php echo $image['id']; ?>">
                                 </td>
-                                <td class="p-4"><?php echo htmlspecialchars($image['image_name']); ?></td>
+                                <td class="p-4">
+                                    <?php echo !empty($image['image_name']) ? htmlspecialchars($image['image_name']) : '<i class="text-gray-500">No name</i>'; ?>
+                                </td>
                                 <td class="p-4 text-gray-400"><?php echo date('F j, Y, g:i a', strtotime($image['created_at'])); ?></td>
                                 <td class="p-4">
                                     <button type="button" class="preview-btn bg-green-500 hover:bg-green-600 text-white text-sm py-1 px-3 rounded"
@@ -141,18 +143,28 @@ $images = $result->fetch_all(MYSQLI_ASSOC);
                 </tbody>
             </table>
         </div>
-    </form> </div>
+    </form> 
+</div>
+
 
 <div id="uploadModal" class="modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 hidden">
     <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
         <div class="flex justify-between items-center mb-4">
             <h3 class="text-xl font-semibold">Upload New Image(s)</h3> 
-            <button id="closeUploadModalBtn" class="text-gray-400 hover:text-white text-3xl">&times;</button>
+            <button id="closeUploadModalBtn" class="text-gray-400 hover:text-gray-600 text-3xl">&times;</button>
         </div>
         <form id="upload-form" action="../lib/upload_image.php" method="POST" enctype="multipart/form-data">
             
+            <div class="mb-4">
+                <label for="image_name" class="block text-sm font-medium mb-2">Image Name (Optional)</label>
+                <input type="text" name="image_name" id="image_name" 
+                       class="w-full p-2 bg-gray-100 border border-gray-300 rounded focus:border-blue-500 focus:ring focus:ring-blue-200" 
+                       placeholder="e.g., 'Vacation Photos'">
+                <p class="text-xs text-gray-500 mt-1">If uploading multiple files, this name will be used as a prefix.</p>
+            </div>
+            
             <div class="mb-4"> 
-                <label for="image_file" class="block text-sm font-medium mb-2">Image File(s)</label>
+                <label for="image_file" class="block text-sm font-medium mb-2">Image File(s) (Required)</label>
                 <input 
                     type="file" 
                     name="image_file[]" id="image_file" 
@@ -173,6 +185,7 @@ $images = $result->fetch_all(MYSQLI_ASSOC);
         </form>
     </div>
 </div>
+
 
 <div id="previewModal" class="modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 hidden">
     <div class="bg-white rounded-lg shadow-xl p-4 max-w-3xl w-auto">
@@ -241,12 +254,15 @@ $images = $result->fetch_all(MYSQLI_ASSOC);
         </div>
     </div>
 </div>
+
 <div id="toast" class="toast fixed bottom-5 right-5 w-full max-w-xs p-4 rounded-lg shadow-lg text-white hidden">
     <p id="toastMessage"></p>
 </div>
 
 
 <script>
+// This is the fully corrected JavaScript from our previous conversation.
+// It will now work because the page isn't being redirected.
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- Toast Logic ---
@@ -287,13 +303,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const openUploadBtn = document.getElementById('openUploadModalBtn');
     const closeUploadBtn = document.getElementById('closeUploadModalBtn');
 
-    // --- MODIFIED: File input logic with size check ---
+    // --- File input logic with size check ---
     const fileInput = document.getElementById('image_file');
     const fileCountInfo = document.getElementById('file-count-info');
     const uploadForm = document.getElementById('upload-form'); // Use form ID
     const uploadSubmitBtn = document.getElementById('upload-submit-btn');
     
-    // Set your max file size (in bytes). 5000000 = 5MB.
     const MAX_FILE_SIZE = 5000000; 
     const MAX_FILE_SIZE_MB = MAX_FILE_SIZE / 1024 / 1024;
 
@@ -348,7 +363,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    // --- END MODIFIED ---
 
     if (openUploadBtn) {
         openUploadBtn.addEventListener('click', () => uploadModal.classList.remove('hidden'));
@@ -378,11 +392,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- ADDED: Bulk Delete Logic ---
+    // --- Bulk Delete Logic ---
     const bulkDeleteForm = document.getElementById('bulk-delete-form');
     const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
     const selectAllCheckbox = document.getElementById('select-all-checkbox');
     const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+    
+    // **FIX:** Define imageTableBody HERE, before it's used.
     const imageTableBody = document.getElementById('image-table-body');
     
     // New Modal Elements
@@ -422,14 +438,6 @@ document.addEventListener('DOMContentLoaded', () => {
             updateBulkDeleteUI();
         });
     }
-
-    if (imageTableBody) {
-        imageTableBody.addEventListener('change', (e) => {
-            if (e.target.classList.contains('row-checkbox')) {
-                updateBulkDeleteUI();
-            }
-        });
-    }
     
     if (bulkDeleteBtn) {
         bulkDeleteBtn.addEventListener('click', (e) => {
@@ -458,11 +466,20 @@ document.addEventListener('DOMContentLoaded', () => {
             bulkDeleteForm.submit();
         });
     }
-    // --- END ADDED: Bulk Delete Logic ---
 
 
     // --- CONSOLIDATED TABLE EVENT LISTENER ---
+    // This now uses the imageTableBody variable defined above
     if (imageTableBody) {
+
+        // This 'change' listener for checkboxes is now attached correctly
+        imageTableBody.addEventListener('change', (e) => {
+            if (e.target.classList.contains('row-checkbox')) {
+                updateBulkDeleteUI();
+            }
+        });
+
+        // This 'click' listener for Preview/Delete is now attached correctly
         imageTableBody.addEventListener('click', (e) => {
             
             // Check if a PREVIEW button was clicked
