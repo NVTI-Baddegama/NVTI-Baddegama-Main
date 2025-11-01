@@ -74,7 +74,8 @@
                     <button
                         type="button"
                         data-id="<?php echo htmlspecialchars($row['id']); ?>"
-                        class="open-modal-btn px-3 py-1.5 bg-gray-800 text-white rounded hover:bg-gray-700 text-sm transition"
+                        class="open-modal-btn px-3 py-1.5 rounded text-white text-sm transition"
+                        style="background-color: #7A1418;"
                         aria-label="View profile of <?php echo htmlspecialchars($row['first_name'] . ' ' . $row['last_name']); ?>">
                         View Profile
                     </button>
