@@ -69,6 +69,8 @@ if (!isset($_SESSION['admin_username']) || !isset($admin_type_from_db) || $admin
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../css/webkit.css">
+       <link rel="icon" href="../../images/favicon.png" type="image/png">
+    
     <script src="../js/Theme.js"></script>
 </head>
 <body class="bg-gray-100 min-h-screen">
