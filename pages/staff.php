@@ -2,16 +2,24 @@
     include_once '../include/header.php';
     require '../include/connection.php'; 
 
-    $sql = "SELECT id, first_name, last_name, position, profile_photo 
+    $sql = "SELECT id,service_id, first_name, last_name, position, profile_photo 
             FROM staff 
             WHERE status = 'active'
             ORDER BY 
               CASE 
-                WHEN position = 'Assistant Director' THEN 1
-                WHEN position = 'Training Officer' THEN 2
-                WHEN position = 'Instructor' THEN 3
-                WHEN position = 'Non-Academy Staff' THEN 4
-                ELSE 5 -- This puts any other positions at the end
+                WHEN position = 'Deputy Director' THEN 1
+                WHEN position = 'Assistant Director' THEN 2
+                WHEN position = 'Training Officer' THEN 3
+                WHEN position = 'Finance Officer' THEN 4
+                WHEN position = 'Testing Officer' THEN 5
+                WHEN position = 'Program Officer' THEN 6
+                WHEN position = 'Senior Instructor' THEN 7
+                WHEN service_id ='1119' THEN 8
+                WHEN position = 'Instructor' THEN 9
+                WHEN position = 'Managemet Assistant' THEN 10
+                WHEN position = 'Driver' THEN 11
+                WHEN position = 'Labor' THEN 12
+                ELSE 13 -- This puts any other positions at the end
               END ASC, 
               first_name ASC, 
               last_name ASC";
