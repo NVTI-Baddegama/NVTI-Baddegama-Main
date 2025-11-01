@@ -43,8 +43,9 @@ if ($result->num_rows == 1) {
     if (!empty($staff['profile_photo']) && file_exists('../../uploads/profile_photos/' . $staff['profile_photo'])) {
         $photo_url = '../../uploads/profile_photos/' . $staff['profile_photo'];
     }
-
-    $is_instructor = ($staff['position'] === 'Instructor');
+    // Enable course assignment for Instructor and Senior Instructor
+    $is_instructor = in_array($staff['position'], ['Instructor', 'Senior Instructor']);
+    
 
 } else {
     echo "<div class='p-6'><p class='text-red-500'>Error: No staff member found with ID: " . htmlspecialchars($staff_id_to_view) . "</p></div>";
@@ -266,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function toggleCourseSection() {
         if (!positionSelect || !courseSelect) return;
-        const isInstructor = positionSelect.value === 'Instructor';
+        const isInstructor = positionSelect.value === 'Instructor' || positionSelect.value === 'Senior Instructor';
         courseSelect.disabled = !isInstructor;
         if (isInstructor) {
             courseSelect.classList.remove('bg-gray-100', 'cursor-not-allowed');
