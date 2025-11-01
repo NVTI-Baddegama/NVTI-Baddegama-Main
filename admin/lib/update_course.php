@@ -29,6 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Get the original course number
     $old_course_no = $_POST['old_course_no']; // The course number *before* editing
 
+    $qualifications = $_POST['qualifications'];
+
     $new_image_filename = $current_image; // Default to old image
 
     // --- Handle File Upload ---
@@ -57,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // --- Step 1: Update the Course Details (name, fee, status, AND new fields) ---
         $query_course = "UPDATE course 
                          SET course_name = ?, course_fee = ?, status = ?, 
-                             course_no = ?, course_duration = ?, course_image = ? 
+                             course_no = ?, course_duration = ?,qualifications = ?, course_image = ? 
                          WHERE id = ?";
         
         $stmt_course = mysqli_prepare($con, $query_course);
@@ -69,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $status, 
             $new_course_no, 
             $course_duration, 
+            $qualifications,
             $new_image_filename, 
             $course_id
         );
