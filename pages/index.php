@@ -280,10 +280,14 @@
             <?php endif; ?>
         </div>
 
-            <button id="openFeedbackModal" 
-                        class="flex justify-center items-center px-6 py-2 text-base font-semibold text-white bg-primary-blue rounded-lg shadow-md hover:bg-blue-800 transition duration-300 ease-in-out transform hover:scale-105 active:scale-95">
-                    Add Yours
-                </button>
+            <div class="w-full flex justify-center">
+
+    <button id="openFeedbackModal" 
+            class="px-6 py-2 text-base font-semibold text-white bg-primary-blue rounded-lg shadow-md hover:bg-blue-800 transition duration-300 ease-in-out transform hover:scale-105 active:scale-95">
+        Add Yours
+    </button>
+    
+</div>
     </main>
 
     <div id="feedbackModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black bg-opacity-60 transition-opacity duration-300">
