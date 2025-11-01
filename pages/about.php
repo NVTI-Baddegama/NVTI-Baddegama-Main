@@ -88,6 +88,11 @@
                     <p class="text-sm text-secondary-gray">
                         We provide spacious, fully-equipped workshops and labs with the latest industrial machinery and technology, giving students hands-on experience that mirrors the current workplace.
                     </p>
+                    <div class="m-1 pt-3 ">
+                        <img 
+                        class="shadow-md oveflow-hidden rounded-lg"
+                        src="../images/image/about_main.png" alt="">
+                    </div>
                 </div>
 
                 <!-- Faculty Point -->
@@ -110,6 +115,11 @@
                     <p class="text-sm text-secondary-gray">
                         Strong ties with regional industries lead to internship opportunities, guest lectures, and high job placement rates for our graduating students.
                     </p>
+                    <div class="m-1 pt-3 ">
+                        <img 
+                        class="shadow-md oveflow-hidden rounded-lg"
+                        src="../images/image/sanmark.jpg" alt="">
+                    </div>
                 </div>
             </div>
         </div>

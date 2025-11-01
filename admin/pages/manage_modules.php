@@ -413,6 +413,7 @@ $modules = mysqli_query($con, $query);
             addModalListeners(deleteModal, closeDeleteModal, cancelDeleteButton);
         });
     </script>
+    <?php include_once('../include/footer.php'); ?>
 
 </body>
 

@@ -25,7 +25,13 @@ if (isset($con)) { // Check if connection exists
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NVTI Baddegama</title>
+    
+    <title>NVTI Baddegama | Vocational Training & Courses</title>
+    <meta name="description" content="Explore accredited vocational training programs at NVTI Baddegama. We offer courses in IT, Engineering, Hospitality, and more. Start your skilled career path today.">
+
+    <link rel="icon" href="../images/favicon.png" type="image/png">
+    
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
@@ -33,6 +39,8 @@ if (isset($con)) { // Check if connection exists
     <link rel="stylesheet" href="../css/style.css"> 
     
     <script src="../js/staff_script.js"></script> 
+    <link rel="icon" href="../images/favicon.png" type="image/png">
+
 </head>
 
 <body>
