@@ -134,14 +134,23 @@ if (isset($_SESSION['staff_error_msg'])) {
                 <input type="hidden" name="staff_id" value="<?php echo htmlspecialchars($staff['staff_id']); ?>">
                 <input type="hidden" name="action" value="update">
                 <input type="hidden" name="old_image_name" value="<?php echo htmlspecialchars($old_image_name ?? ''); ?>">
+                <div class="form-group">
 
-                <div>
-                    <label for="position" class="block text-sm font-medium text-gray-700 mb-1">Position</label>
-                    <input type="text" id="position" name="position" required
-                           value="<?php echo htmlspecialchars($staff['position']); ?>"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                           placeholder="e.g., Instructors, Clerk">
-                </div>
+                <label for="position" class="block text-sm font-medium text-gray-700 mb-1">Position:</label>
+                <select id="position" name="position" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required onchange="toggleCourseSection()">
+                    <option value="">Select Position</option>
+                    <option value="Assistant Director" <?php echo ($staff['position'] == 'Assistant Director') ? 'selected' : ''; ?>>Assistant Director</option>
+                    <option value="Instructor" <?php echo ($staff['position'] == 'Instructor') ? 'selected' : ''; ?>>Instructor</option>
+                    <option value="Senior Instructor" <?php echo ($staff['position'] == 'Senior Instructor') ? 'selected' : ''; ?>>Senior Instructor</option>
+                    <option value="Demonstrator" <?php echo ($staff['position'] == 'Demonstrator') ? 'selected' : ''; ?>>Demonstrator</option>
+                    <option value="Account Officer" <?php echo ($staff['position'] == 'Account Officer') ? 'selected' : ''; ?>>Account Officer</option>
+                    <option value="Managemet Assistant" <?php echo ($staff['position'] == 'Managemet Assistant') ? 'selected' : ''; ?>>Managemet Assistant</option>
+                    <option value="Training Officer" <?php echo ($staff['position'] == 'Training Officer') ? 'selected' : ''; ?>>Training Officer</option>
+                    <option value="Program Officer" <?php echo ($staff['position'] == 'Program Officer') ? 'selected' : ''; ?>>Program Officer</option>
+                    <option value="Driver" <?php echo ($staff['position'] == 'Driver') ? 'selected' : ''; ?>>Driver</option>
+                    <option value="Labor" <?php echo ($staff['position'] == 'Labor') ? 'selected' : ''; ?>>Labor</option>
+                    <option value="Security" <?php echo ($staff['position'] == 'Security') ? 'selected' : ''; ?>>Security</option>
+                </select>
 
                 <div>
                     <label for="contact_no" class="block text-sm font-medium text-gray-700 mb-1">Contact No</label>
@@ -249,6 +258,32 @@ document.addEventListener('DOMContentLoaded', function() {
     const photoError_edit = document.getElementById('photo_error');
     const maxFileSizeMB_edit = 1; // Max size in MB
     const maxFileSizeBytes_edit = maxFileSizeMB_edit * 1024 * 1024;
+
+    // Toggle course select enabled/disabled based on position
+    const positionSelect = document.getElementById('position');
+    const courseSelect = document.getElementById('course_no');
+
+    function toggleCourseSection() {
+        if (!positionSelect || !courseSelect) return;
+        const isInstructor = positionSelect.value === 'Instructor';
+        courseSelect.disabled = !isInstructor;
+        if (isInstructor) {
+            courseSelect.classList.remove('bg-gray-100', 'cursor-not-allowed');
+            courseSelect.classList.add('bg-white');
+        } else {
+            courseSelect.classList.add('bg-gray-100', 'cursor-not-allowed');
+            courseSelect.classList.remove('bg-white');
+            // clear selection when not instructor
+            if (courseSelect.value !== '') courseSelect.value = '';
+        }
+    }
+
+    // Ensure initial state reflects server-side value
+    if (positionSelect) {
+        positionSelect.addEventListener('change', toggleCourseSection);
+        // call once to set initial state (works even if server pre-disabled the control)
+        toggleCourseSection();
+    }
 
     if (profilePhotoInput_edit) {
         profilePhotoInput_edit.addEventListener('change', function(event) {

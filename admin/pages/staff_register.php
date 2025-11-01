@@ -91,11 +91,17 @@ if ($courses_result && $courses_result->num_rows > 0) {
             <label for="position">Position:</label>
             <select id="position" name="position" required onchange="toggleCourseSection()">
                 <option value="">Select Position</option>
-                <option value="Instructor">Instructor</option>
-                <option value="Non-Academic Staff">Non-Academic Staff</option>
-                <option value="Training Officer">Training Officer</option>
-                <option value="Clerk">Clerk</option>
                 <option value="Assistant Director">Assistant Director</option>
+                <option value="Instructor">Instructor</option>
+                <option value="Senior Instructor">Senior Instructor</option>
+                <option value="Demonstrator">Demonstrator</option>
+                <option value="Account Officer">Account Officer</option>
+                <option value="Managemet Assistant">Managemet Assistant</option>
+                <option value="Training Officer">Training Officer</option>
+                <option value="Program Officer">Program Officer</option>
+                <option value="Driver">Driver</option>
+                <option value="Labor">Labor</option>
+                <option value="Security">Security</option>
                 </select>
         </div>
 
