@@ -193,6 +193,6 @@ if ($con && !$con->connect_error) {
         });
     });
     </script>
-
+<?php include_once('../include/footer.php'); ?>
 </body>
 </html>
