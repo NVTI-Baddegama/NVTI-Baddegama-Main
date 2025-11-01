@@ -4,7 +4,7 @@ include '../include/connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
-    $login_identifier = trim($_POST['staff_id']);
+    $login_identifier = trim($_POST['staff_id']); // This can be staff_id, service_id, or username/email
     $password = $_POST['password'];
 
     if (empty($login_identifier) || empty($password)) {
@@ -13,34 +13,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
     
-
-    // --- Staff Check ---
-    $query_staff = "SELECT * FROM staff WHERE (staff_id = ? OR service_id = ?) AND status = 'active'";
+    // --- 1. Staff Check ---
+    // Try to log in as a Staff member first
+    $query_staff = "SELECT * FROM staff WHERE (staff_id = ? OR service_id = ? OR email = ?) AND status = 'active'";
     $stmt_staff = $con->prepare($query_staff);
-    $stmt_staff->bind_param("ss", $login_identifier, $login_identifier);
+    $stmt_staff->bind_param("sss", $login_identifier, $login_identifier, $login_identifier);
     $stmt_staff->execute();
     $result_staff = $stmt_staff->get_result();
 
     if ($result_staff->num_rows == 1) {
-    $staff = $result_staff->fetch_assoc();
-    
-    // NEW Check:
-    if (password_verify($password, $staff['password'])) {
-        $_SESSION['staff_id'] = $staff['staff_id'];
-         $_SESSION['staff_name'] = $staff['first_name'] . ' ' . $staff['last_name'];
-            $_SESSION['position'] = $staff['position'];
-            $_SESSION['course_no'] = $staff['course_no'];
-            $_SESSION['profile_photo'] = $staff['profile_photo'];
-        header("Location: ../office/dashboard.php");
-        exit();
+        $staff = $result_staff->fetch_assoc();
+        
+        // Check Password
+        if (password_verify($password, $staff['password'])) {
+            
+            // Check if this staff member is ALSO an 'admin' type
+            if (isset($staff['type']) && $staff['type'] === 'admin') {
+                 // --- LOGIN AS ADMIN (from staff table) ---
+                $_SESSION['admin_username'] = $staff['first_name']; // Use first_name
+                $_SESSION['admin_type'] = $staff['type'];
+                header("Location: ../admin/pages/Dashboard.php");
+                exit();
+            } else {
+                 // --- LOGIN AS NORMAL STAFF (from staff table) ---
+                $_SESSION['staff_id'] = $staff['staff_id'];
+                $_SESSION['staff_name'] = $staff['first_name'] . ' ' . $staff['last_name'];
+                $_SESSION['position'] = $staff['position'];
+                $_SESSION['course_no'] = $staff['course_no'];
+                $_SESSION['profile_photo'] = $staff['profile_photo'];
+                $_SESSION['staff_type'] = $staff['type'];
+                header("Location: ../office/dashboard.php");
+                exit();
+            }
+        }
     }
-}
 
-
-  
-
-
-    // --- Admin Check ---
+    // --- 2. Admin Table Check (Fallback) ---
+    // If login failed as Staff, check the separate 'admin' table
     $query_admin = "SELECT * FROM admin WHERE (username = ? OR email = ?)";
     $stmt_admin = $con->prepare($query_admin);
     $stmt_admin->bind_param("ss", $login_identifier, $login_identifier);
@@ -48,24 +57,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result_admin = $stmt_admin->get_result();
 
     if ($result_admin->num_rows == 1) {
-    $admin = $result_admin->fetch_assoc();
+        $admin = $result_admin->fetch_assoc();
 
-    // NEW Check:
-    if (password_verify($password, $admin['password'])) {
-        $_SESSION['type']=$admin['type'];
-
-        $_SESSION['admin_username'] = $admin['username'];
-        header("Location: ../admin/pages/Dashboard.php");
-        exit();
+        // Check Password
+        if (password_verify($password, $admin['password'])) {
+            // --- LOGIN AS ADMIN (from admin table) ---
+            $_SESSION['admin_username'] = $admin['username'];
+            $_SESSION['admin_type'] = $admin['type']; // Get type from admin table
+            header("Location: ../admin/pages/Dashboard.php");
+            exit();
+        }
     }
-}
-
-   
-
-   
 
     // --- Login Failed ---
-    $_SESSION['error'] = "Invalid Staff ID, Service ID, or Password.";
+    // If both checks fail, show error
+    $_SESSION['error'] = "Invalid Login ID, Password, or account is inactive.";
     header("Location: login.php");
     exit();
 

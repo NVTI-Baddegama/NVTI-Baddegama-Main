@@ -36,7 +36,7 @@ if ($result_course->num_rows == 1) {
 
     // --- Fetch Instructors for this course ---
     $instructors = [];
-    $query_instructors = "SELECT first_name, last_name, profile_photo FROM staff WHERE course_no = ? AND position = 'Instructors' AND status = 'active'";
+    $query_instructors = "SELECT first_name, last_name, profile_photo FROM staff WHERE course_no = ? AND position = 'Instructor' AND status = 'active'";
     $stmt_instructors = $con->prepare($query_instructors);
     if($stmt_instructors){
         $stmt_instructors->bind_param("s", $course['course_no']);

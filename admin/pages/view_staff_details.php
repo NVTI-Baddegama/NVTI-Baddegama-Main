@@ -44,7 +44,7 @@ if ($result->num_rows == 1) {
         $photo_url = '../../uploads/profile_photos/' . $staff['profile_photo'];
     }
 
-    $is_instructor = ($staff['position'] === 'Instructors');
+    $is_instructor = ($staff['position'] === 'Instructor');
 
 } else {
     echo "<div class='p-6'><p class='text-red-500'>Error: No staff member found with ID: " . htmlspecialchars($staff_id_to_view) . "</p></div>";
@@ -80,6 +80,7 @@ if (isset($_SESSION['staff_error_msg'])) {
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
     <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-lg">
+        
         <div class="flex flex-col sm:flex-row items-center border-b pb-4 mb-6 gap-6">
             <img
                 src="<?php echo $photo_url; ?>?v=<?php echo time(); // Cache buster ?>" 
@@ -92,6 +93,7 @@ if (isset($_SESSION['staff_error_msg'])) {
                 <p class="text-sm text-gray-500 mt-1">Staff ID: <?php echo htmlspecialchars($staff['staff_id']); ?></p>
             </div>
         </div>
+        
         <div class="space-y-4">
             <div>
                 <h4 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Details</h4>
@@ -111,10 +113,17 @@ if (isset($_SESSION['staff_error_msg'])) {
                             <span class="font-semibold text-red-600">INACTIVE</span>
                         <?php endif; ?>
                      </p>
+                     <p><strong>User Type:</strong> 
+                        <?php if (isset($staff['type']) && $staff['type'] == 'admin'): ?>
+                            <span class="font-bold text-red-600">ADMIN</span>
+                        <?php else: ?>
+                            <span class="font-semibold text-gray-600">Staff</span>
+                        <?php endif; ?>
+                     </p>
                 </div>
             </div>
         </div>
-        </div>
+    </div>
 
     <div class="lg:col-span-1">
         <div class="bg-white p-6 rounded-xl shadow-lg sticky top-28">
@@ -125,7 +134,6 @@ if (isset($_SESSION['staff_error_msg'])) {
                 <input type="hidden" name="staff_id" value="<?php echo htmlspecialchars($staff['staff_id']); ?>">
                 <input type="hidden" name="action" value="update">
                 <input type="hidden" name="old_image_name" value="<?php echo htmlspecialchars($old_image_name ?? ''); ?>">
-
 
                 <div>
                     <label for="position" class="block text-sm font-medium text-gray-700 mb-1">Position</label>
@@ -158,7 +166,7 @@ if (isset($_SESSION['staff_error_msg'])) {
                         <?php
                         foreach ($courses as $course) {
                             $selected = ($is_instructor && $staff['course_no'] == $course['course_no']) ? 'selected' : '';
-                            echo '<option value="' . htmlspecialchars($course['course_no']) . '" ' . $selected . '>'
+                            echo '<option value="' . htmlspecialchars($course['course_no']) . '" ' . $selected . '>' 
                                  . htmlspecialchars($course['course_name']) . ' (' . htmlspecialchars($course['course_no']) . ')'
                                  . '</option>';
                         }
@@ -186,6 +194,16 @@ if (isset($_SESSION['staff_error_msg'])) {
                 </div>
 
                 <div class="border-t pt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Admin Privileges</label>
+                    <div class="flex items-center">
+                        <input id="make_admin" name="admin_type" type="checkbox" value="admin"
+                               <?php echo (isset($staff['type']) && $staff['type'] == 'admin') ? 'checked' : ''; ?>
+                               class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                        <label for="make_admin" class="ml-2 text-sm font-medium text-gray-900">Make this user an Admin</label>
+                    </div>
+                    <p class="text-xs text-red-500 mt-1">Warning: This gives the user full access to the Admin Panel.</p>
+                </div>
+                <div class="border-t pt-4">
                     <label for="profile_photo" class="block text-sm font-medium text-gray-700 mb-1">Update Profile Photo (Optional)</label>
                     <?php if (!empty($old_image_name)): ?>
                        <div class="flex items-center my-1">
@@ -197,7 +215,9 @@ if (isset($_SESSION['staff_error_msg'])) {
                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm file:mr-2 file:py-1 file:px-2 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
                            aria-describedby="image_help">
                     <p class="mt-1 text-xs text-gray-500" id="image_help">Max 1MB. Uploading a new photo will replace the old one.</p>
-                    <p id="photo_error" class="text-red-500 text-xs mt-1"></p> </div>
+                    <p id="photo_error" class="text-red-500 text-xs mt-1"></p>
+                </div>
+
                 <div class="pt-4">
                     <button type="submit"
                             class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
@@ -219,10 +239,7 @@ if (isset($_SESSION['staff_error_msg'])) {
 </div>
 
 <?php
-// Close connection
-if (isset($con)) {
-    $con->close();
-}
+if (isset($con)) { $con->close(); }
 include_once('../include/footer.php');
 ?>
 

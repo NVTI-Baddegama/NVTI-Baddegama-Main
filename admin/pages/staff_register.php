@@ -91,7 +91,7 @@ if ($courses_result && $courses_result->num_rows > 0) {
             <label for="position">Position:</label>
             <select id="position" name="position" required onchange="toggleCourseSection()">
                 <option value="">Select Position</option>
-                <option value="Instructors">Instructors</option>
+                <option value="Instructor">Instructor</option>
                 <option value="Non-Academic Staff">Non-Academic Staff</option>
                 <option value="Training Officer">Training Officer</option>
                 <option value="Clerk">Clerk</option>

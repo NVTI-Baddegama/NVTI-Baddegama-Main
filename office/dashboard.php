@@ -188,7 +188,7 @@ $current_staff = $staff_result->fetch_assoc();
         <div class="welcome-section">
             <h2>Welcome, <?php echo htmlspecialchars($staff_name); ?>!</h2>
             <p>Position: <strong><?php echo htmlspecialchars($position); ?></strong></p>
-            <?php if ($position === 'Instructors' && $course_no): ?>
+            <?php if ($position === 'Instructor' && $course_no): ?>
                 <?php
                 $course_query = "SELECT course_name FROM course WHERE course_no = ?";
                 $course_stmt = $con->prepare($course_query);
@@ -280,7 +280,7 @@ $current_staff = $staff_result->fetch_assoc();
                                 <th>Course Option 1</th>
                                 <th>Course Option 2</th>
                                 <th>Status</th>
-                                <?php if ($position === 'Instructors'): ?>
+                                <?php if ($position === 'Instructor'): ?>
                                     <th>Actions</th>
                                 <?php endif; ?>
                             </tr>
@@ -309,7 +309,7 @@ $current_staff = $staff_result->fetch_assoc();
                                             <span class="status-badge status-pending">Pending</span>
                                         <?php endif; ?>
                                     </td>
-                                    <?php if ($position === 'Instructors'): ?>
+                                    <?php if ($position === 'Instructor'): ?>
                                         <td>
                                             <div class="action-buttons">
                                                 <?php if (!$student['is_processed']): ?>
@@ -346,7 +346,7 @@ $current_staff = $staff_result->fetch_assoc();
                                         <p><strong>Course 2:</strong> <?php echo htmlspecialchars($student['course_option_two']); ?></p>
                                     <?php endif; ?>
                                 </div>
-                                <?php if ($position === 'Instructors'): ?>
+                                <?php if ($position === 'Instructor'): ?>
                                     <div class="student-card-actions">
                                         <?php if (!$student['is_processed']): ?>
                                             <button onclick="handleStudentAction(<?php echo $student['id']; ?>, 'accept')" class="btn btn-success">Accept</button>

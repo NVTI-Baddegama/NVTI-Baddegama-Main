@@ -7,7 +7,7 @@ include_once('../../include/connection.php');
 
 // --- 1. Fetch Statistics ---
 $total_courses = $con->query("SELECT COUNT(*) as count FROM course")->fetch_assoc()['count'];
-$total_instructors = $con->query("SELECT COUNT(*) as count FROM staff WHERE position = 'Instructors'")->fetch_assoc()['count'];
+$total_instructors = $con->query("SELECT COUNT(*) as count FROM staff WHERE position = 'Instructor'")->fetch_assoc()['count'];
 $total_non_academic = $con->query("SELECT COUNT(*) as count FROM staff WHERE position = 'Non-Academic Staff'")->fetch_assoc()['count'];
 $total_enrolled = $con->query("SELECT COUNT(*) as count FROM student_enrollments")->fetch_assoc()['count'];
 

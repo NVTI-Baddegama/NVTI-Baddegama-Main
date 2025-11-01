@@ -95,9 +95,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $rand_num = rand(1000, 9999);
     $staff_id = "NVTI-$year-$rand_num";
 
-    // --- 9. Insert data into the database ---
-    $insert_query = "INSERT INTO staff (staff_id, service_id, first_name, last_name, nic, contact_no, email, gender, password, position, course_no, profile_photo, status) 
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active')";
+    $insert_query = "INSERT INTO staff (staff_id, service_id, first_name, last_name, nic, gender, contact_no, email, password, position, course_no, profile_photo, status, type) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active', NULL)"; // Set type to NULL by default
                      
     $stmt_insert = $con->prepare($insert_query);
     
@@ -108,9 +107,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $first_name, 
     $last_name, 
     $nic,
+    $gender,
     $contact_no,
     $email,
-    $gender,
     $hashed_password, 
     $position, 
     $course_no, // $course_id වෙනුවට $course_no

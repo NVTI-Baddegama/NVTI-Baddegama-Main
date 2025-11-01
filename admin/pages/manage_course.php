@@ -34,7 +34,7 @@ if (isset($_GET['status'])) {
 // Updated query with better JOIN and WHERE clause for instructors
 $query = "SELECT c.*, s.first_name, s.last_name, s.staff_id 
           FROM course c 
-          LEFT JOIN staff s ON c.course_no = s.course_no AND s.position = 'Instructors'
+          LEFT JOIN staff s ON c.course_no = s.course_no AND s.position = 'Instructor'
           ORDER BY c.id";
 $courses = mysqli_query($con, $query);
 
@@ -43,7 +43,7 @@ if (!$courses) {
 }
 
 // --- Get all available instructors ---
-$instructor_query = "SELECT staff_id, first_name, last_name, course_no FROM staff WHERE position = 'Instructors' ORDER BY first_name, last_name";
+$instructor_query = "SELECT staff_id, first_name, last_name, course_no FROM staff WHERE position = 'Instructor' ORDER BY first_name, last_name";
 $instructor_result = mysqli_query($con, $instructor_query);
 $instructors_list = [];
 while ($instructor_row = mysqli_fetch_assoc($instructor_result)) {

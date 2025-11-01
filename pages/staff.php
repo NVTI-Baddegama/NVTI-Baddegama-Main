@@ -9,7 +9,7 @@
               CASE 
                 WHEN position = 'Assistant Director' THEN 1
                 WHEN position = 'Training Officer' THEN 2
-                WHEN position = 'Instructors' THEN 3
+                WHEN position = 'Instructor' THEN 3
                 WHEN position = 'Non-Academy Staff' THEN 4
                 ELSE 5 -- This puts any other positions at the end
               END ASC, 
