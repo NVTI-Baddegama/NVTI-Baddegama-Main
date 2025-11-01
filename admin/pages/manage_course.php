@@ -31,10 +31,11 @@ if (isset($_GET['status'])) {
 
 
 // Retrieve all courses from the database, joining with staff to get instructor name
-$query = "SELECT c.*, s.first_name, s.last_name, s.staff_id 
-          FROM course c 
-          LEFT JOIN staff s ON c.course_no = s.course_no AND s.position = 'Instructor'
-          ORDER BY c.id";
+// Retrieve all courses...
+$query = "SELECT c.*, s.first_name, s.last_name, s.staff_id
+        FROM course c 
+        LEFT JOIN staff s ON c.course_no = s.course_no AND s.position = 'Instructor'
+        ORDER BY c.id";
 $courses = mysqli_query($con, $query);
 
 if (!$courses) {
@@ -132,7 +133,8 @@ $instructors_json = json_encode($instructors_list);
                                             data-course-no="<?php echo htmlspecialchars($row['course_no']); ?>"
                                             data-staff-id="<?php echo htmlspecialchars($row['staff_id'] ?? ''); ?>"
                                             data-course-duration="<?php echo htmlspecialchars($row['course_duration']); ?>"
-                                            data-course-image="<?php echo htmlspecialchars($row['course_image'] ?? ''); ?>">
+                                            data-course-image="<?php echo htmlspecialchars($row['course_image'] ?? ''); ?>"
+                                            data-qualifications="<?php echo htmlspecialchars($row['qualifications'] ?? ''); ?>">
                                             Edit
                                         </button>
                                         <button type="button" class="text-red-600 hover:text-red-900 transition duration-150 delete-btn"
@@ -158,8 +160,8 @@ $instructors_json = json_encode($instructors_list);
     </div>
 
    
-         <div id="editModal" class="fixed inset-0 z-50 bg-gray-600 bg-opacity-50 hidden overflow-y-scroll p-20 items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-lg w-full max-w-lg">
+         <div id="editModal" class=" fixed inset-0 z-50 bg-gray-600 bg-opacity-50 hidden overflow-y-scroll p-20 items-center justify-center p-4">
+        <div class="max-h-[600px] overflow-y-scroll bg-white rounded-xl shadow-lg w-full max-w-lg">
             <div class="flex justify-between items-center p-4 border-b">
                 <h3 class="text-xl font-semibold text-gray-800">Edit Course</h3>
                 <button id="closeModal" class="text-gray-400 hover:text-gray-600">&times;</button>
@@ -174,6 +176,12 @@ $instructors_json = json_encode($instructors_list);
                     <label for="edit_course_name" class="block text-sm font-medium text-gray-700">Course Name</label>
                     <input type="text" id="edit_course_name" name="course_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
                 </div>
+
+                <div>
+                    <label for="edit_qualifications" class="block text-sm font-medium text-gray-700">Entry Qualifications</label>
+                    <textarea id="edit_qualifications" name="qualifications" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="e.g., G.C.E. (O/L) Examination, Basic computer literacy"></textarea>
+                </div>
+
 
                 <div>
                     <label for="edit_course_no" class="block text-sm font-medium text-gray-700">Course No</label>
@@ -256,6 +264,7 @@ $instructors_json = json_encode($instructors_list);
             const courseNameInput = document.getElementById('edit_course_name');
             const courseFeeInput = document.getElementById('edit_course_fee');
             const statusInput = document.getElementById('edit_status');
+            const qualificationsInput = document.getElementById('edit_qualifications');
             const oldCourseNoInput = document.getElementById('edit_old_course_no');
             const oldStaffIdInput = document.getElementById('edit_old_staff_id');
             const courseNoInput = document.getElementById('edit_course_no');
@@ -314,6 +323,9 @@ $instructors_json = json_encode($instructors_list);
                     
                     oldStaffIdInput.value = currentStaffId;
                     courseDurationInput.value = button.dataset.courseDuration;
+
+                    qualificationsInput.value = button.dataset.qualifications;
+
                     const currentImage = button.dataset.courseImage;
                     currentImageInput.value = currentImage;
 
