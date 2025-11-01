@@ -40,7 +40,7 @@ if ($position === 'Non-Academic Staff') {
                    LEFT JOIN course c ON se.course_option_one = c.course_name 
                    WHERE 1=1";
 } else {
-    // Instructors can only see students who applied for their course as Course Option 1 ONLY
+    // Instructors can only see students who applied for their course
     $course_query = "SELECT course_name FROM course WHERE course_no = ?";
     $course_stmt = $con->prepare($course_query);
     $course_stmt->bind_param("s", $course_no);
@@ -51,12 +51,12 @@ if ($position === 'Non-Academic Staff') {
         $course_data = $course_result->fetch_assoc();
         $instructor_course_name = $course_data['course_name'];
         
-        // FIXED: Only show students who selected instructor's course as Course Option 1
         $base_query = "SELECT se.*, c.course_name FROM student_enrollments se 
                        LEFT JOIN course c ON se.course_option_one = c.course_name 
-                       WHERE se.course_option_one = ?";
+                       WHERE (se.course_option_one = ? OR se.course_option_two = ?)";
         $params[] = $instructor_course_name;
-        $param_types .= 's';
+        $params[] = $instructor_course_name;
+        $param_types .= 'ss';
     } else {
         $base_query = "SELECT se.*, c.course_name FROM student_enrollments se 
                        LEFT JOIN course c ON se.course_option_one = c.course_name 
@@ -198,7 +198,6 @@ $current_staff = $staff_result->fetch_assoc();
                 if ($course_result->num_rows > 0) {
                     $course = $course_result->fetch_assoc();
                     echo "<p>Assigned Course: <strong>" . htmlspecialchars($course['course_name']) . "</strong></p>";
-                    echo "<p><em>Note: Showing only students who selected your course as their first choice (Course Option 1)</em></p>";
                 }
                 ?>
             <?php endif; ?>
@@ -361,7 +360,7 @@ $current_staff = $staff_result->fetch_assoc();
                 </div>
             <?php else: ?>
                 <div class="no-students">
-                    <p>No student applications found for your course as their first choice.</p>
+                    <p>No student applications found.</p>
                 </div>
             <?php endif; ?>
         </div>
