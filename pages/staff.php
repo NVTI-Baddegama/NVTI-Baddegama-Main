@@ -16,7 +16,7 @@
                 WHEN position = 'Senior Instructor' THEN 7
                 WHEN service_id ='1119' THEN 8
                 WHEN position = 'Instructor' THEN 9
-                WHEN position = 'Managemet Assistant' THEN 10
+                WHEN position = 'Management Assistant' THEN 10
                 WHEN position = 'Driver' THEN 11
                 WHEN position = 'Labor' THEN 12
                 ELSE 13 -- This puts any other positions at the end
@@ -49,37 +49,36 @@
                 while($row = $result->fetch_assoc()) {
             ?>
             
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                
-                <div class="flex justify-center mt-8"> 
+            <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col items-center p-6">
+                <div class="mb-4">
                     <?php if (!empty($row['profile_photo'])): ?>
-                        <img class="w-36 h-36 rounded-full border-4 border-white object-cover" 
-                             src="<?php echo htmlspecialchars($photo_upload_path . $row['profile_photo']); ?>" 
-                             alt="Profile image of <?php echo htmlspecialchars($row['first_name']); ?>">
+                        <img
+                            src="<?php echo htmlspecialchars($photo_upload_path . $row['profile_photo']); ?>"
+                            alt="Profile of <?php echo htmlspecialchars($row['first_name'] . ' ' . $row['last_name']); ?>"
+                            class="w-28 h-28 object-cover border-2 border-blue-400 shadow rounded-md" />
                     <?php else: ?>
-                        <div class="w-36 h-36 rounded-full border-4 border-white bg-gray-300 flex items-center justify-center">
-                            <span class="text-gray-700 text-6xl font-bold"> 
-                                <?php echo htmlspecialchars(strtoupper(substr($row['first_name'], 0, 1))); ?>
-                            </span>
+                        <div class="w-28 h-28 rounded-md bg-gray-200 text-gray-600 flex items-center justify-center text-3xl font-semibold border shadow-inner">
+                            <?php echo htmlspecialchars(strtoupper(substr($row['first_name'], 0, 1))); ?>
                         </div>
                     <?php endif; ?>
                 </div>
-
-                <div class="text-center p-6"> 
-                    <h3 class="text-xl font-bold text-gray-900 mb-1">
+                <div class="text-center mt-2">
+                    <h3 class="text-xl font-semibold text-gray-800">
                         <?php echo htmlspecialchars($row['first_name'] . ' ' . $row['last_name']); ?>
                     </h3>
-                    <p class="text-md text-gray-600 mb-4">
+                    <p class="text-sm text-gray-500 mt-1">
                         <?php echo htmlspecialchars($row['position']); ?>
                     </p>
-                    
-                    <button type="button" 
-                       data-id="<?php echo $row['id']; ?>"
-                       class="open-modal-btn inline-block bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-blue-700 transition duration-300">
-                       View Full Profile
+                </div>
+                <div class="mt-4">
+                    <button
+                        type="button"
+                        data-id="<?php echo htmlspecialchars($row['id']); ?>"
+                        class="open-modal-btn px-3 py-1.5 bg-gray-800 text-white rounded hover:bg-gray-700 text-sm transition"
+                        aria-label="View profile of <?php echo htmlspecialchars($row['first_name'] . ' ' . $row['last_name']); ?>">
+                        View Profile
                     </button>
                 </div>
-
             </div>
             <?php
                 } // While loop ends
