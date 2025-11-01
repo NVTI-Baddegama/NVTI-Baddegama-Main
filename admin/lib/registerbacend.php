@@ -177,6 +177,18 @@ if (isset($_POST['submit'])) {
         $pdf->SetFont('Arial', '', 12);
         $pdf->Cell(140, 8, $olPassStatus, 0, 1);
 
+         // --- ME KOTASA ALUTHIN EKATHU KARANNA (O/L GRADES) ---
+        $gradeString = "Eng: " . (!empty($olEnglish) ? $olEnglish : '-') .
+        " | Maths: " . (!empty($olMaths) ? $olMaths : '-') .
+        " | Science: " . (!empty($olScience) ? $olScience : '');
+
+         $pdf->SetFont('Arial', 'B', 12);
+         $pdf->Cell(50, 8, 'O/L Grades:', 0, 0);
+         $pdf->SetFont('Arial', '', 12);
+         $pdf->Cell(140, 8, $gradeString, 0, 1);
+        // --- END O/L GRADES ---
+        
+
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(50, 8, 'A/L Stream:', 0, 0);
         $pdf->SetFont('Arial', '', 12);
@@ -227,8 +239,38 @@ if (isset($_POST['submit'])) {
 
             //Recipients
             $mail->setFrom($sender_gmail_address, 'NVTI Baddegama Website');
-            $mail->addAddress($admin_recipient_email, 'NVTI Admin');
-            $mail->addCC('infor.chamika@gmail.com', 'CC Name');
+
+            $query_from_mail = "SELECT * FROM mail_settings WHERE id = 1";
+            if ($result_from_mail = $con->query($query_from_mail)) {
+                $mail_settings = $result_from_mail->fetch_assoc();
+                $to_emails = explode(',', $mail_settings['send_mail']);
+                $cc_emails = explode(',', $mail_settings['cc_mail']);
+                $bcc_emails = explode(',', $mail_settings['bcc_mail']);
+
+                // Add To recipients
+                foreach ($to_emails as $email) {
+                    $trimmed_email = trim($email);
+                    if (!empty($trimmed_email)) {
+                        $mail->addAddress($trimmed_email, 'Admin Recipient');
+                    }
+                }
+
+                // Add CC recipients
+                foreach ($cc_emails as $email) {
+                    $trimmed_email = trim($email);
+                    if (!empty($trimmed_email)) {
+                        $mail->addCC($trimmed_email);
+                    }
+                }
+
+                // Add BCC recipients
+                foreach ($bcc_emails as $email) {
+                    $trimmed_email = trim($email);
+                    if (!empty($trimmed_email)) {
+                        $mail->addBCC($trimmed_email);
+                    }
+                }
+            }
 
             // --- NEW: Add the PDF as an attachment ---
             $mail->addAttachment($pdf_file_path, $pdf_filename);
