@@ -32,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                  // --- LOGIN AS ADMIN (from staff table) ---
                 $_SESSION['admin_username'] = $staff['first_name']; // Use first_name
                 $_SESSION['admin_type'] = $staff['type'];
+                $_SESSION['admin_id'] = $staff['staff_id']; // Add admin ID for session tracking
                 header("Location: ../admin/pages/Dashboard.php");
                 exit();
             } else {
@@ -41,8 +42,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['position'] = $staff['position'];
                 $_SESSION['course_no'] = $staff['course_no'];
                 $_SESSION['profile_photo'] = $staff['profile_photo'];
-                $_SESSION['staff_type'] = $staff['type'];
-                header("Location: ../office/dashboard.php");
+                
+                // Determine staff type based on position
+                $staff_type = '';
+                if (in_array($staff['position'], ['Instructor', 'Senior Instructor'])) {
+                    $staff_type = 'Academic Staff';
+                } elseif (in_array($staff['position'], ['Non-Academic Staff', 'Management Assistant', 'Program Officer', 'Finance Officer', 'Training Officer', 'Driver'])) {
+                    $staff_type = 'Non-Academic Staff';
+                }
+                $_SESSION['staff_type'] = $staff_type;
+                
+                // Redirect based on position - ALL staff go to office folder
+                if ($staff['position'] === 'Instructor' || $staff['position'] === 'Senior Instructor') {
+                    // Instructors and Senior Instructors go to the instructor dashboard
+                    header("Location: ../office/dashboard.php");
+                } else {
+                    // Other staff positions also go to office dashboard
+                    header("Location: ../office/dashboard.php");
+                }
                 exit();
             }
         }
@@ -64,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // --- LOGIN AS ADMIN (from admin table) ---
             $_SESSION['admin_username'] = $admin['username'];
             $_SESSION['admin_type'] = $admin['type']; // Get type from admin table
+            $_SESSION['admin_id'] = $admin['id']; // Add admin ID for session tracking
             header("Location: ../admin/pages/Dashboard.php");
             exit();
         }
