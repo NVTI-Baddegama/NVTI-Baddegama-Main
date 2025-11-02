@@ -32,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                  // --- LOGIN AS ADMIN (from staff table) ---
                 $_SESSION['admin_username'] = $staff['first_name']; // Use first_name
                 $_SESSION['admin_type'] = $staff['type'];
+                $_SESSION['admin_id'] = $staff['staff_id']; // Add admin ID for session tracking
                 header("Location: ../admin/pages/Dashboard.php");
                 exit();
             } else {
@@ -51,7 +52,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
                 $_SESSION['staff_type'] = $staff_type;
                 
-                header("Location: ../office/dashboard.php");
+                // Redirect based on position - ALL staff go to office folder
+                if ($staff['position'] === 'Instructor' || $staff['position'] === 'Senior Instructor') {
+                    // Instructors and Senior Instructors go to the instructor dashboard
+                    header("Location: ../office/dashboard.php");
+                } else {
+                    // Other staff positions also go to office dashboard
+                    header("Location: ../office/dashboard.php");
+                }
                 exit();
             }
         }
@@ -73,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // --- LOGIN AS ADMIN (from admin table) ---
             $_SESSION['admin_username'] = $admin['username'];
             $_SESSION['admin_type'] = $admin['type']; // Get type from admin table
+            $_SESSION['admin_id'] = $admin['id']; // Add admin ID for session tracking
             header("Location: ../admin/pages/Dashboard.php");
             exit();
         }

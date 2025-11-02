@@ -26,32 +26,13 @@ $show_password_modal = ($login_data['login_status'] == 0);
 
 // Handle search
 $search_nic = isset($_GET['search_nic']) ? trim($_GET['search_nic']) : '';
-$selected_course_filter = isset($_GET['course_filter']) ? $_GET['course_filter'] : 'all';
 
-// Get students based on position and search criteria
+// Get students based on position and search criteria - ONLY for Instructors and Senior Instructors
 $students = [];
-$where_conditions = [];
-$params = [];
-$param_types = '';
+$instructor_course_name = '';
 
-// Determine staff title type for filtering logic
-$staff_title_query = "SELECT type FROM staff WHERE staff_id = ?";
-$staff_title_stmt = $con->prepare($staff_title_query);
-$staff_title_stmt->bind_param("s", $staff_id);
-$staff_title_stmt->execute();
-$staff_title_result = $staff_title_stmt->get_result();
-$staff_title_data = $staff_title_result->fetch_assoc();
-$staff_title_type = $staff_title_data['type'] ?? '';
-
-// Base query logic based on staff type and position
-if ($position === 'Non-Academic Staff') {
-    // Non-Academic Staff can see all students with course filtering capability
-    $base_query = "SELECT se.*, c.course_name FROM student_enrollments se 
-                   LEFT JOIN course c ON se.course_option_one = c.course_name 
-                   WHERE 1=1";
-} elseif ($position === 'Instructor' || $position === 'Senior Instructor') {
-    // Academic Staff (Instructors and Senior Instructors) can only see students 
-    // who applied for their course as Course Choice 1
+if ($position === 'Instructor' || $position === 'Senior Instructor') {
+    // Get instructor's course name
     $course_query = "SELECT course_name FROM course WHERE course_no = ?";
     $course_stmt = $con->prepare($course_query);
     $course_stmt->bind_param("s", $course_no);
@@ -62,68 +43,31 @@ if ($position === 'Non-Academic Staff') {
         $course_data = $course_result->fetch_assoc();
         $instructor_course_name = $course_data['course_name'];
         
-        // Only show students where this instructor's course is Course Choice 1
+        // Build query to get students who applied for this course as course_option_one
         $base_query = "SELECT se.*, c.course_name FROM student_enrollments se 
                        LEFT JOIN course c ON se.course_option_one = c.course_name 
                        WHERE se.course_option_one = ?";
-        $params[] = $instructor_course_name;
-        $param_types .= 's';
-    } else {
-        $base_query = "SELECT se.*, c.course_name FROM student_enrollments se 
-                       LEFT JOIN course c ON se.course_option_one = c.course_name 
-                       WHERE 1=0"; // No results if course not found
-    }
-} else {
-    // Other staff positions - show no students by default
-    $base_query = "SELECT se.*, c.course_name FROM student_enrollments se 
-                   LEFT JOIN course c ON se.course_option_one = c.course_name 
-                   WHERE 1=0";
-}
-
-// Add search condition
-if (!empty($search_nic)) {
-    if ($position === 'Non-Academic Staff') {
-        $where_conditions[] = "se.nic LIKE ?";
-    } else {
-        $base_query .= " AND se.nic LIKE ?";
-    }
-    $params[] = "%$search_nic%";
-    $param_types .= 's';
-}
-
-// Add course filter for Non-Academic Staff
-if ($position === 'Non-Academic Staff' && $selected_course_filter !== 'all') {
-    $where_conditions[] = "(se.course_option_one = ? OR se.course_option_two = ?)";
-    $params[] = $selected_course_filter;
-    $params[] = $selected_course_filter;
-    $param_types .= 'ss';
-}
-
-// Construct final query
-$final_query = $base_query;
-if (!empty($where_conditions) && $position === 'Non-Academic Staff') {
-    $final_query .= " AND " . implode(" AND ", $where_conditions);
-}
-$final_query .= " ORDER BY se.application_date DESC";
-
-$students_stmt = $con->prepare($final_query);
-if (!empty($params)) {
-    $students_stmt->bind_param($param_types, ...$params);
-}
-$students_stmt->execute();
-$students_result = $students_stmt->get_result();
-
-while ($student = $students_result->fetch_assoc()) {
-    $students[] = $student;
-}
-
-// Get all courses for filter dropdown (Non-Academic Staff only)
-$courses = [];
-if ($position === 'Non-Academic Staff') {
-    $courses_query = "SELECT DISTINCT course_name FROM course WHERE status = 'active' ORDER BY course_name";
-    $courses_result = $con->query($courses_query);
-    while ($course = $courses_result->fetch_assoc()) {
-        $courses[] = $course['course_name'];
+        
+        $params = [$instructor_course_name];
+        $param_types = 's';
+        
+        // Add search condition if provided
+        if (!empty($search_nic)) {
+            $base_query .= " AND se.nic LIKE ?";
+            $params[] = "%$search_nic%";
+            $param_types .= 's';
+        }
+        
+        $base_query .= " ORDER BY se.application_date DESC";
+        
+        $students_stmt = $con->prepare($base_query);
+        $students_stmt->bind_param($param_types, ...$params);
+        $students_stmt->execute();
+        $students_result = $students_stmt->get_result();
+        
+        while ($student = $students_result->fetch_assoc()) {
+            $students[] = $student;
+        }
     }
 }
 
@@ -140,415 +84,574 @@ $current_staff = $staff_result->fetch_assoc();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Staff Dashboard - NVTI Baddegama</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="dashboard.css">
-    <link rel="stylesheet" href="dashboard-mobile.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NVTI Baddegama - Staff Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Fix to ensure all table details are visible via horizontal scrolling */
-        #tableContainer {
-            width: 100%; /* Make sure the container takes full width */
-            overflow-x: auto; /* Enable horizontal scrolling when content overflows */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 2% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 95%;
+            max-width: 600px;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: black;
+        }
+        @media print {
+            .no-print { display: none !important; }
         }
         
-        /* Add styling for staff type indicator */
-        .staff-type-indicator {
-            background: #e3f2fd;
-            color: #1976d2;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-            margin-left: 8px;
+        /* Mobile responsive improvements */
+        @media (max-width: 768px) {
+            .mobile-stack > * {
+                display: block !important;
+                width: 100% !important;
+                margin-bottom: 0.5rem;
+            }
+            
+            .mobile-text-sm {
+                font-size: 0.75rem;
+            }
+            
+            .mobile-p-2 {
+                padding: 0.5rem;
+            }
+            
+            .mobile-hidden {
+                display: none;
+            }
         }
         
-        .staff-type-indicator.academic {
-            background: #e8f5e8;
-            color: #2e7d32;
-        }
-        
-        .staff-type-indicator.non-academic {
-            background: #fff3e0;
-            color: #f57c00;
+        @media (max-width: 640px) {
+            .table-responsive {
+                display: block;
+                width: 100%;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .mobile-card {
+                display: block !important;
+                border: 1px solid #e5e7eb;
+                border-radius: 0.5rem;
+                padding: 1rem;
+                margin-bottom: 1rem;
+                background: white;
+            }
+            
+            .desktop-table {
+                display: none;
+            }
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-50">
     
-    <header class="dashboard-header">
-        <div class="header-content">
-            <div class="header-left">
-                <img src="../images/logo/NVTI_logo.png" alt="NVTI Logo">
-                <div class="header-text">
-                    <h1>Staff Dashboard</h1>
-                    <p>National Vocational Training Institute - Baddegama</p>
-                </div>
-            </div>
-            <div class="header-right">
-                <div class="profile-menu" onclick="toggleProfileDropdown()">
-                    <?php if (!empty($profile_photo) && file_exists("../uploads/profile_photos/" . $profile_photo)): ?>
-                        <img src="../uploads/profile_photos/<?php echo htmlspecialchars($profile_photo); ?>" alt="Profile" class="profile-photo">
-                    <?php else: ?>
-                        <div class="default-avatar">
-                            <?php echo strtoupper(substr($staff_name, 0, 1)); ?>
-                        </div>
-                    <?php endif; ?>
-                    <div class="profile-info">
-                        <strong><?php echo htmlspecialchars($staff_name); ?></strong><br>
-                        <small><?php echo htmlspecialchars($position); ?>
-                            <?php if ($staff_title_type): ?>
-                                <span class="staff-type-indicator <?php echo $staff_title_type === 'Academic Staff' ? 'academic' : 'non-academic'; ?>">
-                                    <?php echo htmlspecialchars($staff_title_type); ?>
-                                </span>
-                            <?php endif; ?>
-                        </small>
-                    </div>
-                    <div class="profile-dropdown" id="profileDropdown">
-                        <a href="#" onclick="openProfileModal()">Profile</a>
-                        <a href="../admin/lib/logout.php">Logout</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <div class="dashboard-container">
+    <!-- Include Navbar -->
+    <?php include 'navbar.php'; ?>
+    
+    <!-- Main Content -->
+    <div class="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
+        
+        <!-- Alert Messages -->
         <?php
         if (isset($_SESSION['success'])) {
-            echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
+            echo '<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">' . $_SESSION['success'] . '</div>';
             unset($_SESSION['success']);
         }
         if (isset($_SESSION['error'])) {
-            echo '<div class="alert alert-error">' . $_SESSION['error'] . '</div>';
+            echo '<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">' . $_SESSION['error'] . '</div>';
             unset($_SESSION['error']);
         }
         ?>
         
-        <div class="welcome-section">
-            <h2>Welcome, <?php echo htmlspecialchars($staff_name); ?>!</h2>
-            <p>Position: <strong><?php echo htmlspecialchars($position); ?></strong>
-                <?php if ($staff_title_type): ?>
-                    <span class="staff-type-indicator <?php echo $staff_title_type === 'Academic Staff' ? 'academic' : 'non-academic'; ?>">
-                        <?php echo htmlspecialchars($staff_title_type); ?>
-                    </span>
-                <?php endif; ?>
-            </p>
+        <!-- Welcome Section -->
+        <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6 sm:mb-8">
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Welcome, <?php echo htmlspecialchars($staff_name); ?>!</h1>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
+                <p class="text-gray-600 text-sm sm:text-base">
+                    <span class="font-semibold">Position:</span> <?php echo htmlspecialchars($position); ?>
+                </p>
+                <p class="text-gray-600 text-sm sm:text-base">
+                    <span class="font-semibold">Staff Type:</span> <?php echo htmlspecialchars($staff_type); ?>
+                </p>
+            </div>
             
-            <?php if (($position === 'Instructor' || $position === 'Senior Instructor') && $course_no): ?>
-                <?php
-                $course_query = "SELECT course_name FROM course WHERE course_no = ?";
-                $course_stmt = $con->prepare($course_query);
-                $course_stmt->bind_param("s", $course_no);
-                $course_stmt->execute();
-                $course_result = $course_stmt->get_result();
-                if ($course_result->num_rows > 0) {
-                    $course = $course_result->fetch_assoc();
-                    echo "<p>Assigned Course: <strong>" . htmlspecialchars($course['course_name']) . "</strong></p>";
-                    echo "<p><em>Note: You can only see students who selected your course as their Course Choice 1.</em></p>";
-                }
-                ?>
-            <?php elseif ($position === 'Non-Academic Staff'): ?>
-                <p><em>Note: You can view all student applications and filter by course.</em></p>
+            <?php if (($position === 'Instructor' || $position === 'Senior Instructor') && !empty($instructor_course_name)): ?>
+                <p class="text-gray-600 mb-2 text-sm sm:text-base">
+                    <span class="font-semibold">Assigned Course:</span> <?php echo htmlspecialchars($instructor_course_name); ?>
+                </p>
+            <?php elseif ($position === 'Instructor' || $position === 'Senior Instructor'): ?>
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                    <p class="text-yellow-800 text-sm sm:text-base">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        No course assigned to your profile. Please contact the administrator.
+                    </p>
+                </div>
+            <?php else: ?>
+                <div class="bg-gray-50 border-l-4 border-gray-400 p-4 mt-4">
+                    <p class="text-gray-800 text-sm sm:text-base">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        Welcome to the NVTI Baddegama Staff Dashboard. Your role: <?php echo htmlspecialchars($position); ?>
+                    </p>
+                </div>
             <?php endif; ?>
         </div>
-
+        
+        <?php if ($position === 'Instructor' || $position === 'Senior Instructor'): ?>
+        
+        <!-- Statistics Cards for Instructors -->
         <?php
-        // Calculate statistics
         $total_students = count($students);
         $pending_applications = count(array_filter($students, function($s) { return $s['is_processed'] == 0; }));
         $processed_applications = count(array_filter($students, function($s) { return $s['is_processed'] == 1; }));
         ?>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number"><?php echo $total_students; ?></div>
-                <div class="stat-label">Total Students</div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+            <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-users text-2xl sm:text-3xl text-blue-500"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-xs sm:text-sm font-medium text-gray-500">Total Students</p>
+                        <p class="text-xl sm:text-2xl font-bold text-gray-900"><?php echo $total_students; ?></p>
+                    </div>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-number"><?php echo $pending_applications; ?></div>
-                <div class="stat-label">Pending Applications</div>
+            
+            <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-clock text-2xl sm:text-3xl text-yellow-500"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-xs sm:text-sm font-medium text-gray-500">Pending Applications</p>
+                        <p class="text-xl sm:text-2xl font-bold text-gray-900"><?php echo $pending_applications; ?></p>
+                    </div>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-number"><?php echo $processed_applications; ?></div>
-                <div class="stat-label">Processed Applications</div>
+            
+            <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 sm:col-span-2 lg:col-span-1">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-check-circle text-2xl sm:text-3xl text-green-500"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-xs sm:text-sm font-medium text-gray-500">Processed Applications</p>
+                        <p class="text-xl sm:text-2xl font-bold text-gray-900"><?php echo $processed_applications; ?></p>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <div class="controls-section">
-            <div class="search-box">
-                <label for="search_nic">Search by NIC:</label>
-                <form method="GET" class="search-form">
-                    <input type="text" id="search_nic" name="search_nic" value="<?php echo htmlspecialchars($search_nic); ?>" placeholder="Enter NIC number">
-                    <?php if ($position === 'Non-Academic Staff'): ?>
-                        <input type="hidden" name="course_filter" value="<?php echo htmlspecialchars($selected_course_filter); ?>">
+        
+        <!-- Search and Export Controls -->
+        <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6 sm:mb-8">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+                <div class="flex-1 max-w-md">
+                    <form method="GET" class="flex">
+                        <input type="text" 
+                               name="search_nic" 
+                               value="<?php echo htmlspecialchars($search_nic); ?>" 
+                               placeholder="Search by NIC number..." 
+                               class="flex-1 px-3 sm:px-4 py-2 text-sm border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button type="submit" class="px-4 sm:px-6 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                    <a href="dashboard.php" class="px-3 sm:px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors text-center text-sm">
+                        <i class="fas fa-refresh mr-2"></i>Clear Search
+                    </a>
+                    <?php if (!empty($students)): ?>
+                    <button onclick="exportToPDF()" class="px-3 sm:px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm">
+                        <i class="fas fa-file-pdf mr-2"></i>Export PDF
+                    </button>
                     <?php endif; ?>
-                    <button type="submit" class="btn btn-primary">Search</button>
-                    <a href="dashboard.php" class="btn btn-secondary">Clear</a>
-                </form>
-            </div>
-            
-            <?php if ($position === 'Non-Academic Staff'): ?>
-            <div class="filter-box">
-                <label for="course_filter">Filter by Course:</label>
-                <form method="GET" class="filter-form">
-                    <select name="course_filter" id="course_filter" onchange="this.form.submit()">
-                        <option value="all" <?php echo $selected_course_filter === 'all' ? 'selected' : ''; ?>>All Courses</option>
-                        <?php foreach ($courses as $course): ?>
-                            <option value="<?php echo htmlspecialchars($course); ?>" <?php echo $selected_course_filter === $course ? 'selected' : ''; ?>>
-                                <?php echo htmlspecialchars($course); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                    <input type="hidden" name="search_nic" value="<?php echo htmlspecialchars($search_nic); ?>">
-                </form>
-            </div>
-            <?php endif; ?>
-            
-            <div class="export-section">
-                <button onclick="exportToPDF()" class="btn btn-success">Export to PDF</button>
+                </div>
             </div>
         </div>
-
-        <div class="students-section">
-            <div class="students-header">
-                <h3>Student Applications</h3>
-                <button class="mobile-table-toggle" onclick="toggleTableView()" id="tableToggleBtn">
-                    Switch to Card View
-                </button>
+        
+        <!-- Students Table -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="px-4 sm:px-6 py-4 border-b border-gray-200">
+                <h2 class="text-lg sm:text-xl font-semibold text-gray-800">Student Applications</h2>
             </div>
-
+            
             <?php if (!empty($students)): ?>
-                <div class="students-table-container" id="tableContainer">
-                    <table class="students-table" id="studentsTable">
-                        <thead>
-                            <tr>
-                                <th>Full Name</th>
-                                <th>NIC</th>
-                                <th>Contact</th>
-                                <th>WhatsApp</th>
-                                <th>Course Option 1</th>
-                                <th>Course Option 2</th>
-                                <th>Status</th>
-                                <?php if ($position === 'Instructor' || $position === 'Senior Instructor'): ?>
-                                    <th>Actions</th>
-                                <?php endif; ?>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($students as $student): ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($student['full_name']); ?></td>
-                                    <td><?php echo htmlspecialchars($student['nic']); ?></td>
-                                    <td><a href="tel:<?php echo htmlspecialchars($student['contact_no']); ?>"><?php echo htmlspecialchars($student['contact_no']); ?></a></td>
-                                    <td>
-                                        <?php if ($student['whatsapp_no']): ?>
-                                            <a href="https://wa.me/<?php echo htmlspecialchars($student['whatsapp_no']); ?>" target="_blank">
-                                                <?php echo htmlspecialchars($student['whatsapp_no']); ?>
-                                            </a>
-                                        <?php else: ?>
-                                            N/A
-                                        <?php endif; ?>
-                                    </td>
-                                    <td><?php echo htmlspecialchars($student['course_option_one']); ?></td>
-                                    <td><?php echo htmlspecialchars($student['course_option_two'] ?: 'N/A'); ?></td>
-                                    <td>
-                                        <?php if ($student['is_processed']): ?>
-                                            <span class="status-badge status-processed">Processed</span>
-                                        <?php else: ?>
-                                            <span class="status-badge status-pending">Pending</span>
-                                        <?php endif; ?>
-                                    </td>
-                                    <?php if ($position === 'Instructor' || $position === 'Senior Instructor'): ?>
-                                        <td>
-                                            <div class="action-buttons">
-                                                <?php if (!$student['is_processed']): ?>
-                                                    <button onclick="handleStudentAction(<?php echo $student['id']; ?>, 'accept')" class="btn btn-success">Accept</button>
-                                                <?php endif; ?>
-                                                <button onclick="handleStudentAction(<?php echo $student['id']; ?>, 'reject')" class="btn btn-danger">Reject</button>
-                                            </div>
-                                        </td>
-                                    <?php endif; ?>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="students-cards" id="cardsContainer" style="display: none;">
-                    <?php foreach ($students as $student): ?>
-                        <div class="student-card">
-                            <div class="student-card-header">
-                                <h4><?php echo htmlspecialchars($student['full_name']); ?></h4>
-                                <span class="status-badge <?php echo $student['is_processed'] ? 'status-processed' : 'status-pending'; ?>">
-                                    <?php echo $student['is_processed'] ? 'Processed' : 'Pending'; ?>
-                                </span>
-                            </div>
-                            <div class="student-card-body">
-                                <div class="student-info">
-                                    <p><strong>NIC:</strong> <?php echo htmlspecialchars($student['nic']); ?></p>
-                                    <p><strong>Contact:</strong> <a href="tel:<?php echo htmlspecialchars($student['contact_no']); ?>"><?php echo htmlspecialchars($student['contact_no']); ?></a></p>
-                                    <?php if ($student['whatsapp_no']): ?>
-                                        <p><strong>WhatsApp:</strong> <a href="https://wa.me/<?php echo htmlspecialchars($student['whatsapp_no']); ?>" target="_blank"><?php echo htmlspecialchars($student['whatsapp_no']); ?></a></p>
-                                    <?php endif; ?>
-                                    <p><strong>Course 1:</strong> <?php echo htmlspecialchars($student['course_option_one']); ?></p>
-                                    <?php if ($student['course_option_two']): ?>
-                                        <p><strong>Course 2:</strong> <?php echo htmlspecialchars($student['course_option_two']); ?></p>
-                                    <?php endif; ?>
+            
+            <!-- Desktop Table -->
+            <div class="hidden sm:block overflow-x-auto desktop-table">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student Info</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIC</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course Options</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <?php foreach ($students as $student): ?>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div>
+                                    <div class="text-sm font-medium text-gray-900"><?php echo htmlspecialchars($student['full_name']); ?></div>
+                                    <div class="text-sm text-gray-500">ID: <?php echo htmlspecialchars($student['Student_id']); ?></div>
                                 </div>
-                                <?php if ($position === 'Instructor' || $position === 'Senior Instructor'): ?>
-                                    <div class="student-card-actions">
-                                        <?php if (!$student['is_processed']): ?>
-                                            <button onclick="handleStudentAction(<?php echo $student['id']; ?>, 'accept')" class="btn btn-success">Accept</button>
-                                        <?php endif; ?>
-                                        <button onclick="handleStudentAction(<?php echo $student['id']; ?>, 'reject')" class="btn btn-danger">Reject</button>
-                                    </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <?php echo htmlspecialchars($student['nic']); ?>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <div>
+                                    <a href="tel:<?php echo htmlspecialchars($student['contact_no']); ?>" class="text-blue-600 hover:text-blue-800">
+                                        <?php echo htmlspecialchars($student['contact_no']); ?>
+                                    </a>
+                                </div>
+                                <?php if ($student['whatsapp_no']): ?>
+                                <div>
+                                    <a href="https://wa.me/<?php echo htmlspecialchars($student['whatsapp_no']); ?>" target="_blank" class="text-green-600 hover:text-green-800">
+                                        <i class="fab fa-whatsapp mr-1"></i><?php echo htmlspecialchars($student['whatsapp_no']); ?>
+                                    </a>
+                                </div>
                                 <?php endif; ?>
-                            </div>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-900">
+                                <div class="max-w-xs truncate">
+                                    <?php echo htmlspecialchars($student['address'] ?? 'Not provided'); ?>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-sm">
+                                <div class="mb-1">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        1st: <?php echo htmlspecialchars($student['course_option_one']); ?>
+                                    </span>
+                                </div>
+                                <?php if ($student['course_option_two']): ?>
+                                <div>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                        2nd: <?php echo htmlspecialchars($student['course_option_two']); ?>
+                                    </span>
+                                </div>
+                                <?php endif; ?>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <?php if ($student['is_processed']): ?>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        <i class="fas fa-check-circle mr-1"></i>Processed
+                                    </span>
+                                <?php else: ?>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        <i class="fas fa-clock mr-1"></i>Pending
+                                    </span>
+                                <?php endif; ?>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <div class="flex space-x-2">
+                                    <button onclick="viewStudentDetails(<?php echo $student['id']; ?>)" 
+                                            class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors">
+                                        <i class="fas fa-eye mr-1"></i>View
+                                    </button>
+                                    <?php if (!$student['is_processed']): ?>
+                                    <button onclick="handleStudentAction(<?php echo $student['id']; ?>, 'accept')" 
+                                            class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm transition-colors">
+                                        <i class="fas fa-check mr-1"></i>Accept
+                                    </button>
+                                    <?php endif; ?>
+                                    <button onclick="handleStudentAction(<?php echo $student['id']; ?>, 'reject')" 
+                                            class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition-colors">
+                                        <i class="fas fa-times mr-1"></i>Reject
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Mobile Cards -->
+            <div class="sm:hidden">
+                <?php foreach ($students as $student): ?>
+                <div class="mobile-card border-b border-gray-200 last:border-b-0 p-4">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="font-medium text-gray-900"><?php echo htmlspecialchars($student['full_name']); ?></h3>
+                            <p class="text-sm text-gray-500">ID: <?php echo htmlspecialchars($student['Student_id']); ?></p>
+                            <p class="text-sm text-gray-500">NIC: <?php echo htmlspecialchars($student['nic']); ?></p>
                         </div>
-                    <?php endforeach; ?>
+                        <div class="text-right">
+                            <?php if ($student['is_processed']): ?>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    <i class="fas fa-check-circle mr-1"></i>Processed
+                                </span>
+                            <?php else: ?>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    <i class="fas fa-clock mr-1"></i>Pending
+                                </span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-2 mb-3">
+                        <div class="flex items-center text-sm">
+                            <i class="fas fa-phone text-blue-500 mr-2"></i>
+                            <a href="tel:<?php echo htmlspecialchars($student['contact_no']); ?>" class="text-blue-600">
+                                <?php echo htmlspecialchars($student['contact_no']); ?>
+                            </a>
+                        </div>
+                        
+                        <?php if ($student['whatsapp_no']): ?>
+                        <div class="flex items-center text-sm">
+                            <i class="fab fa-whatsapp text-green-500 mr-2"></i>
+                            <a href="https://wa.me/<?php echo htmlspecialchars($student['whatsapp_no']); ?>" target="_blank" class="text-green-600">
+                                <?php echo htmlspecialchars($student['whatsapp_no']); ?>
+                            </a>
+                        </div>
+                        <?php endif; ?>
+                        
+                        <div class="flex items-start text-sm">
+                            <i class="fas fa-map-marker-alt text-gray-500 mr-2 mt-1"></i>
+                            <span class="text-gray-600"><?php echo htmlspecialchars($student['address'] ?? 'Not provided'); ?></span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="flex flex-wrap gap-1">
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                1st: <?php echo htmlspecialchars($student['course_option_one']); ?>
+                            </span>
+                            <?php if ($student['course_option_two']): ?>
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                2nd: <?php echo htmlspecialchars($student['course_option_two']); ?>
+                            </span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="viewStudentDetails(<?php echo $student['id']; ?>)" 
+                                class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm transition-colors text-center">
+                            <i class="fas fa-eye mr-1"></i>View
+                        </button>
+                        <?php if (!$student['is_processed']): ?>
+                        <button onclick="handleStudentAction(<?php echo $student['id']; ?>, 'accept')" 
+                                class="flex-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded text-sm transition-colors text-center">
+                            <i class="fas fa-check mr-1"></i>Accept
+                        </button>
+                        <?php endif; ?>
+                        <button onclick="handleStudentAction(<?php echo $student['id']; ?>, 'reject')" 
+                                class="flex-1 bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded text-sm transition-colors text-center">
+                            <i class="fas fa-times mr-1"></i>Reject
+                        </button>
+                    </div>
                 </div>
+                <?php endforeach; ?>
+            </div>
+            
             <?php else: ?>
-                <div class="no-students">
-                    <p>No student applications found.</p>
-                    <?php if ($position === 'Instructor' || $position === 'Senior Instructor'): ?>
-                        <p><em>Students will appear here when they select your course as their Course Choice 1.</em></p>
-                    <?php endif; ?>
-                </div>
+            <div class="px-6 py-12 text-center">
+                <i class="fas fa-users text-4xl text-gray-300 mb-4"></i>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">No Student Applications Found</h3>
+                <?php if (!empty($search_nic)): ?>
+                    <p class="text-gray-500">No students found matching the NIC "<?php echo htmlspecialchars($search_nic); ?>"</p>
+                    <a href="dashboard.php" class="text-blue-600 hover:text-blue-800 mt-2 inline-block">Clear search</a>
+                <?php else: ?>
+                    <p class="text-gray-500">Students will appear here when they apply for your course.</p>
+                <?php endif; ?>
+            </div>
             <?php endif; ?>
         </div>
+        
+        <?php else: ?>
+        
+        <!-- Non-Instructor Staff Dashboard Content -->
+        <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
+            <h2 class="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Staff Dashboard</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                <div class="bg-blue-50 border-l-4 border-blue-400 p-4">
+                    <h3 class="text-base sm:text-lg font-medium text-blue-800 mb-2">Your Role</h3>
+                    <p class="text-blue-700"><?php echo htmlspecialchars($position); ?></p>
+                    <p class="text-sm text-blue-600 mt-2"><?php echo htmlspecialchars($staff_type); ?></p>
+                </div>
+                <div class="bg-green-50 border-l-4 border-green-400 p-4">
+                    <h3 class="text-base sm:text-lg font-medium text-green-800 mb-2">Quick Actions</h3>
+                    <button onclick="openProfileModal()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm transition-colors">
+                        <i class="fas fa-user-edit mr-2"></i>Update Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <?php endif; ?>
     </div>
-
+    
+    <!-- Include Footer -->
+    <?php include 'footer.php'; ?>
+    
     <!-- Profile Modal -->
     <div id="profileModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeProfileModal()">&times;</span>
-            <h2>Update Profile</h2>
-            <form id="profileForm" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="profile_photo">Profile Photo:</label>
-                    <input type="file" id="profile_photo" name="profile_photo" accept="image/*">
+            <h2 class="text-xl sm:text-2xl font-bold mb-4">Update Profile</h2>
+            <form id="profileForm" enctype="multipart/form-data" class="space-y-4">
+                <div>
+                    <label for="profile_photo" class="block text-sm font-medium text-gray-700">Profile Photo:</label>
+                    <input type="file" id="profile_photo" name="profile_photo" accept="image/*" 
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <?php if (!empty($current_staff['profile_photo'])): ?>
-                        <div class="current-photo">
-                            <p>Current photo:</p>
-                            <img src="../uploads/profile_photos/<?php echo htmlspecialchars($current_staff['profile_photo']); ?>" alt="Current Profile" style="max-width: 100px; max-height: 100px;">
+                        <div class="mt-2">
+                            <p class="text-sm text-gray-600">Current photo:</p>
+                            <img src="../uploads/profile_photos/<?php echo htmlspecialchars($current_staff['profile_photo']); ?>" 
+                                 alt="Current Profile" class="w-20 h-20 rounded-full object-cover mt-1">
                         </div>
                     <?php endif; ?>
                 </div>
-                <div class="form-group">
-                    <label for="first_name">First Name:</label>
-                    <input type="text" id="first_name" name="first_name" value="<?php echo htmlspecialchars($current_staff['first_name']); ?>">
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="first_name" class="block text-sm font-medium text-gray-700">First Name:</label>
+                        <input type="text" id="first_name" name="first_name" required
+                               value="<?php echo htmlspecialchars($current_staff['first_name']); ?>"
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="last_name" class="block text-sm font-medium text-gray-700">Last Name:</label>
+                        <input type="text" id="last_name" name="last_name" required
+                               value="<?php echo htmlspecialchars($current_staff['last_name']); ?>"
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="last_name">Last Name:</label>
-                    <input type="text" id="last_name" name="last_name" value="<?php echo htmlspecialchars($current_staff['last_name']); ?>">
+                
+                <div>
+                    <label for="contact_no" class="block text-sm font-medium text-gray-700">Contact Number:</label>
+                    <input type="text" id="contact_no" name="contact_no"
+                           value="<?php echo htmlspecialchars($current_staff['contact_no']); ?>"
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <div class="form-group">
-                    <label for="contact_no">Contact Number:</label>
-                    <input type="text" id="contact_no" name="contact_no" value="<?php echo htmlspecialchars($current_staff['contact_no']); ?>">
+                
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email:</label>
+                    <input type="email" id="email" name="email" required
+                           value="<?php echo htmlspecialchars($current_staff['email']); ?>"
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($current_staff['email']); ?>">
+                
+                <div>
+                    <label for="new_password" class="block text-sm font-medium text-gray-700">New Password (leave blank to keep current):</label>
+                    <input type="password" id="new_password" name="new_password"
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <div class="form-group">
-                    <label for="new_password">New Password (leave blank to keep current):</label>
-                    <input type="password" id="new_password" name="new_password">
-                </div>
-                <button type="submit" class="btn btn-primary">Update Profile</button>
+                
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
+                    Update Profile
+                </button>
             </form>
         </div>
     </div>
-
+    
+    <!-- Student Details Modal -->
+    <div id="studentDetailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeStudentDetailsModal()">&times;</span>
+            <h2 class="text-xl sm:text-2xl font-bold mb-4">Student Details</h2>
+            <div id="studentDetailsContent">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+    
     <!-- First Login Password Modal -->
     <?php if ($show_password_modal): ?>
     <div id="passwordModal" class="modal" style="display: block;">
         <div class="modal-content">
-            <h2>Welcome! First Time Login</h2>
-            <p>Would you like to change your password or keep the current one?</p>
-            <form id="passwordForm">
-                <div class="form-group">
-                    <label for="modal_new_password">New Password:</label>
-                    <input type="password" id="modal_new_password" name="new_password">
+            <h2 class="text-xl sm:text-2xl font-bold mb-4">Welcome! First Time Login</h2>
+            <p class="text-gray-600 mb-6">Would you like to change your password or keep the current one?</p>
+            <form id="passwordForm" class="space-y-4">
+                <div>
+                    <label for="modal_new_password" class="block text-sm font-medium text-gray-700">New Password:</label>
+                    <input type="password" id="modal_new_password" name="new_password"
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <div class="form-group">
-                    <label for="modal_confirm_password">Confirm Password:</label>
-                    <input type="password" id="modal_confirm_password" name="confirm_password">
+                <div>
+                    <label for="modal_confirm_password" class="block text-sm font-medium text-gray-700">Confirm Password:</label>
+                    <input type="password" id="modal_confirm_password" name="confirm_password"
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <div class="password-modal-actions">
-                    <button type="submit" class="btn btn-primary">Change Password</button>
-                    <button type="button" onclick="keepCurrentPassword()" class="btn btn-secondary">Keep Current</button>
+                <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+                    <button type="submit" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
+                        Change Password
+                    </button>
+                    <button type="button" onclick="keepCurrentPassword()" class="flex-1 bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 transition-colors">
+                        Keep Current
+                    </button>
                 </div>
             </form>
         </div>
     </div>
     <?php endif; ?>
-
+    
     <script>
-        // Mobile functionality
-        let isMobileView = window.innerWidth <= 768;
-        let isCardView = false;
-
-        // Check screen size on load and resize
-        function checkScreenSize() {
-            isMobileView = window.innerWidth <= 768;
-            const tableToggleBtn = document.getElementById('tableToggleBtn');
-            if (isMobileView && tableToggleBtn) {
-                tableToggleBtn.style.display = 'block';
-            } else if (tableToggleBtn) {
-                tableToggleBtn.style.display = 'none';
-                // Reset to table view on desktop
-                if (isCardView) {
-                    toggleTableView();
-                }
-            }
-        }
-
-        // Mobile menu toggle
-        function toggleMobileMenu() {
-            const header = document.querySelector('.dashboard-header');
-            const toggle = document.getElementById('mobileMenuToggle');
-            header.classList.toggle('mobile-menu-open');
-            toggle.classList.toggle('active');
-        }
-
-        // Profile dropdown toggle for mobile
-        function toggleProfileDropdown() {
-            if (isMobileView) {
-                const dropdown = document.getElementById('profileDropdown');
-                dropdown.classList.toggle('show');
-            }
-        }
-
-        // Toggle between table and card view
-        function toggleTableView() {
-            const tableContainer = document.getElementById('tableContainer');
-            const cardsContainer = document.getElementById('cardsContainer');
-            const toggleBtn = document.getElementById('tableToggleBtn');
-            
-            isCardView = !isCardView;
-            
-            if (isCardView) {
-                tableContainer.style.display = 'none';
-                cardsContainer.style.display = 'block';
-                toggleBtn.textContent = 'Switch to Table View';
-            } else {
-                tableContainer.style.display = 'block';
-                cardsContainer.style.display = 'none';
-                toggleBtn.textContent = 'Switch to Card View';
-            }
-        }
-
         // Profile Modal Functions
         function openProfileModal() {
             document.getElementById('profileModal').style.display = 'block';
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            document.body.style.overflow = 'hidden';
         }
 
         function closeProfileModal() {
             document.getElementById('profileModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Student Details Modal Functions
+        function viewStudentDetails(studentId) {
+            document.getElementById('studentDetailsModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            // Fetch student details
+            fetch('get_student_details.php?id=' + studentId)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('studentDetailsContent').innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('studentDetailsContent').innerHTML = '<p class="text-red-600">Error loading student details.</p>';
+                });
+        }
+
+        function closeStudentDetailsModal() {
+            document.getElementById('studentDetailsModal').style.display = 'none';
             document.body.style.overflow = 'auto';
         }
 
@@ -578,6 +681,7 @@ $current_staff = $staff_result->fetch_assoc();
             });
         });
 
+        <?php if ($position === 'Instructor' || $position === 'Senior Instructor'): ?>
         // Handle student actions
         function handleStudentAction(studentId, action) {
             let confirmMessage;
@@ -613,6 +717,51 @@ $current_staff = $staff_result->fetch_assoc();
                 });
             }
         }
+
+        function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Add title
+            doc.setFontSize(16);
+            doc.text('NVTI Baddegama - Student Applications Report', 20, 20);
+            
+            // Add generation info
+            doc.setFontSize(10);
+            doc.text('Generated on: ' + new Date().toLocaleString(), 20, 30);
+            doc.text('Generated by: <?php echo addslashes($staff_name); ?> (<?php echo addslashes($position); ?>)', 20, 35);
+            doc.text('Course: <?php echo addslashes($instructor_course_name); ?>', 20, 40);
+            
+            // Prepare table data
+            const tableData = [];
+            <?php foreach ($students as $student): ?>
+                tableData.push([
+                    '<?php echo addslashes($student["full_name"]); ?>',
+                    '<?php echo addslashes($student["Student_id"]); ?>',
+                    '<?php echo addslashes($student["nic"]); ?>',
+                    '<?php echo addslashes($student["contact_no"]); ?>',
+                    '<?php echo addslashes($student["whatsapp_no"] ?: "N/A"); ?>',
+                    '<?php echo addslashes($student["address"] ?? "Not provided"); ?>',
+                    '<?php echo addslashes($student["course_option_one"]); ?>',
+                    '<?php echo addslashes($student["course_option_two"] ?: "N/A"); ?>',
+                    '<?php echo $student["is_processed"] ? "Processed" : "Pending"; ?>'
+                ]);
+            <?php endforeach; ?>
+            
+            // Add table
+            doc.autoTable({
+                head: [['Name', 'Student ID', 'NIC', 'Contact', 'WhatsApp', 'Address', 'Course 1', 'Course 2', 'Status']],
+                body: tableData,
+                startY: 50,
+                styles: { fontSize: 7 },
+                headStyles: { fillColor: [37, 99, 235] }
+            });
+            
+            // Save the PDF
+            const filename = 'NVTI_Students_<?php echo addslashes($instructor_course_name); ?>_' + new Date().toISOString().split('T')[0] + '.pdf';
+            doc.save(filename);
+        }
+        <?php endif; ?>
 
         // First login password modal functions
         <?php if ($show_password_modal): ?>
@@ -678,80 +827,21 @@ $current_staff = $staff_result->fetch_assoc();
         }
         <?php endif; ?>
 
-        function exportToPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            // Add title
-            doc.setFontSize(16);
-            doc.text('NVTI Baddegama - Student Applications Report', 20, 20);
-            
-            // Add generation info
-            doc.setFontSize(10);
-            doc.text('Generated on: ' + new Date().toLocaleString(), 20, 30);
-            doc.text('Generated by: <?php echo $staff_name; ?> (<?php echo $position; ?>)', 20, 35);
-            
-            <?php if ($position === 'Non-Academic Staff' && $selected_course_filter !== 'all'): ?>
-                doc.text('Filtered by Course: <?php echo htmlspecialchars($selected_course_filter); ?>', 20, 40);
-            <?php endif; ?>
-            
-            // Prepare table data
-            const tableData = [];
-            <?php foreach ($students as $student): ?>
-                tableData.push([
-                    '<?php echo htmlspecialchars($student["full_name"]); ?>',
-                    '<?php echo htmlspecialchars($student["nic"]); ?>',
-                    '<?php echo htmlspecialchars($student["contact_no"]); ?>',
-                    '<?php echo htmlspecialchars($student["whatsapp_no"] ?: "N/A"); ?>',
-                    '<?php echo htmlspecialchars($student["course_option_one"]); ?>',
-                    '<?php echo htmlspecialchars($student["course_option_two"] ?: "N/A"); ?>'
-                ]);
-            <?php endforeach; ?>
-            
-            // Add table
-            doc.autoTable({
-                head: [['Name', 'NIC', 'Contact', 'WhatsApp', 'Course 1', 'Course 2']],
-                body: tableData,
-                startY: 50,
-                styles: { fontSize: 8 },
-                headStyles: { fillColor: [0, 123, 255] }
-            });
-            
-            // Save the PDF
-            const filename = 'NVTI_Students_' + new Date().toISOString().split('T')[0] + '.pdf';
-            doc.save(filename);
-        }
-
         // Close modal when clicking outside
         window.onclick = function(event) {
             const profileModal = document.getElementById('profileModal');
-            const profileDropdown = document.getElementById('profileDropdown');
+            const studentModal = document.getElementById('studentDetailsModal');
             
             if (event.target == profileModal) {
                 profileModal.style.display = 'none';
                 document.body.style.overflow = 'auto';
             }
             
-            // Close dropdown when clicking outside
-            if (!event.target.closest('.profile-menu')) {
-                profileDropdown.classList.remove('show');
+            if (event.target == studentModal) {
+                studentModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
             }
         }
-
-        // Initialize on page load
-        window.addEventListener('load', function() {
-            checkScreenSize();
-        });
-
-        // Handle window resize
-        window.addEventListener('resize', function() {
-            checkScreenSize();
-        });
-
-        // Handle orientation change on mobile
-        window.addEventListener('orientationchange', function() {
-            setTimeout(checkScreenSize, 100);
-        });
     </script>
 </body>
 </html>
