@@ -41,7 +41,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['position'] = $staff['position'];
                 $_SESSION['course_no'] = $staff['course_no'];
                 $_SESSION['profile_photo'] = $staff['profile_photo'];
-                $_SESSION['staff_type'] = $staff['type'];
+                
+                // Determine staff type based on position
+                $staff_type = '';
+                if (in_array($staff['position'], ['Instructor', 'Senior Instructor'])) {
+                    $staff_type = 'Academic Staff';
+                } elseif (in_array($staff['position'], ['Non-Academic Staff', 'Management Assistant', 'Program Officer', 'Finance Officer', 'Training Officer', 'Driver'])) {
+                    $staff_type = 'Non-Academic Staff';
+                }
+                $_SESSION['staff_type'] = $staff_type;
+                
                 header("Location: ../office/dashboard.php");
                 exit();
             }

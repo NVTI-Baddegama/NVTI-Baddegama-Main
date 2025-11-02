@@ -13,6 +13,7 @@ $position = $_SESSION['position'];
 $course_no = $_SESSION['course_no'];
 $profile_photo = $_SESSION['profile_photo'] ?? null;
 $staff_id = $_SESSION['staff_id'];
+$staff_type = $_SESSION['staff_type'] ?? '';
 
 // Check if this is the first login
 $first_login_check = "SELECT login_status FROM staff WHERE staff_id = ?";
@@ -33,14 +34,24 @@ $where_conditions = [];
 $params = [];
 $param_types = '';
 
-// Base query
+// Determine staff title type for filtering logic
+$staff_title_query = "SELECT type FROM staff WHERE staff_id = ?";
+$staff_title_stmt = $con->prepare($staff_title_query);
+$staff_title_stmt->bind_param("s", $staff_id);
+$staff_title_stmt->execute();
+$staff_title_result = $staff_title_stmt->get_result();
+$staff_title_data = $staff_title_result->fetch_assoc();
+$staff_title_type = $staff_title_data['type'] ?? '';
+
+// Base query logic based on staff type and position
 if ($position === 'Non-Academic Staff') {
-    // Non-Academic Staff can see all students
+    // Non-Academic Staff can see all students with course filtering capability
     $base_query = "SELECT se.*, c.course_name FROM student_enrollments se 
                    LEFT JOIN course c ON se.course_option_one = c.course_name 
                    WHERE 1=1";
-} else {
-    // Instructors can only see students who applied for their course
+} elseif ($position === 'Instructor' || $position === 'Senior Instructor') {
+    // Academic Staff (Instructors and Senior Instructors) can only see students 
+    // who applied for their course as Course Choice 1
     $course_query = "SELECT course_name FROM course WHERE course_no = ?";
     $course_stmt = $con->prepare($course_query);
     $course_stmt->bind_param("s", $course_no);
@@ -51,17 +62,22 @@ if ($position === 'Non-Academic Staff') {
         $course_data = $course_result->fetch_assoc();
         $instructor_course_name = $course_data['course_name'];
         
+        // Only show students where this instructor's course is Course Choice 1
         $base_query = "SELECT se.*, c.course_name FROM student_enrollments se 
                        LEFT JOIN course c ON se.course_option_one = c.course_name 
-                       WHERE (se.course_option_one = ? OR se.course_option_two = ?)";
+                       WHERE se.course_option_one = ?";
         $params[] = $instructor_course_name;
-        $params[] = $instructor_course_name;
-        $param_types .= 'ss';
+        $param_types .= 's';
     } else {
         $base_query = "SELECT se.*, c.course_name FROM student_enrollments se 
                        LEFT JOIN course c ON se.course_option_one = c.course_name 
                        WHERE 1=0"; // No results if course not found
     }
+} else {
+    // Other staff positions - show no students by default
+    $base_query = "SELECT se.*, c.course_name FROM student_enrollments se 
+                   LEFT JOIN course c ON se.course_option_one = c.course_name 
+                   WHERE 1=0";
 }
 
 // Add search condition
@@ -137,11 +153,31 @@ $current_staff = $staff_result->fetch_assoc();
             width: 100%; /* Make sure the container takes full width */
             overflow-x: auto; /* Enable horizontal scrolling when content overflows */
         }
+        
+        /* Add styling for staff type indicator */
+        .staff-type-indicator {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+        
+        .staff-type-indicator.academic {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+        
+        .staff-type-indicator.non-academic {
+            background: #fff3e0;
+            color: #f57c00;
+        }
     </style>
 </head>
 <body>
     
-
     <header class="dashboard-header">
         <div class="header-content">
             <div class="header-left">
@@ -162,7 +198,13 @@ $current_staff = $staff_result->fetch_assoc();
                     <?php endif; ?>
                     <div class="profile-info">
                         <strong><?php echo htmlspecialchars($staff_name); ?></strong><br>
-                        <small><?php echo htmlspecialchars($position); ?></small>
+                        <small><?php echo htmlspecialchars($position); ?>
+                            <?php if ($staff_title_type): ?>
+                                <span class="staff-type-indicator <?php echo $staff_title_type === 'Academic Staff' ? 'academic' : 'non-academic'; ?>">
+                                    <?php echo htmlspecialchars($staff_title_type); ?>
+                                </span>
+                            <?php endif; ?>
+                        </small>
                     </div>
                     <div class="profile-dropdown" id="profileDropdown">
                         <a href="#" onclick="openProfileModal()">Profile</a>
@@ -187,8 +229,15 @@ $current_staff = $staff_result->fetch_assoc();
         
         <div class="welcome-section">
             <h2>Welcome, <?php echo htmlspecialchars($staff_name); ?>!</h2>
-            <p>Position: <strong><?php echo htmlspecialchars($position); ?></strong></p>
-            <?php if ($position === 'Instructor' && $course_no): ?>
+            <p>Position: <strong><?php echo htmlspecialchars($position); ?></strong>
+                <?php if ($staff_title_type): ?>
+                    <span class="staff-type-indicator <?php echo $staff_title_type === 'Academic Staff' ? 'academic' : 'non-academic'; ?>">
+                        <?php echo htmlspecialchars($staff_title_type); ?>
+                    </span>
+                <?php endif; ?>
+            </p>
+            
+            <?php if (($position === 'Instructor' || $position === 'Senior Instructor') && $course_no): ?>
                 <?php
                 $course_query = "SELECT course_name FROM course WHERE course_no = ?";
                 $course_stmt = $con->prepare($course_query);
@@ -198,8 +247,11 @@ $current_staff = $staff_result->fetch_assoc();
                 if ($course_result->num_rows > 0) {
                     $course = $course_result->fetch_assoc();
                     echo "<p>Assigned Course: <strong>" . htmlspecialchars($course['course_name']) . "</strong></p>";
+                    echo "<p><em>Note: You can only see students who selected your course as their Course Choice 1.</em></p>";
                 }
                 ?>
+            <?php elseif ($position === 'Non-Academic Staff'): ?>
+                <p><em>Note: You can view all student applications and filter by course.</em></p>
             <?php endif; ?>
         </div>
 
@@ -280,7 +332,7 @@ $current_staff = $staff_result->fetch_assoc();
                                 <th>Course Option 1</th>
                                 <th>Course Option 2</th>
                                 <th>Status</th>
-                                <?php if ($position === 'Instructor'): ?>
+                                <?php if ($position === 'Instructor' || $position === 'Senior Instructor'): ?>
                                     <th>Actions</th>
                                 <?php endif; ?>
                             </tr>
@@ -309,7 +361,7 @@ $current_staff = $staff_result->fetch_assoc();
                                             <span class="status-badge status-pending">Pending</span>
                                         <?php endif; ?>
                                     </td>
-                                    <?php if ($position === 'Instructor'): ?>
+                                    <?php if ($position === 'Instructor' || $position === 'Senior Instructor'): ?>
                                         <td>
                                             <div class="action-buttons">
                                                 <?php if (!$student['is_processed']): ?>
@@ -346,7 +398,7 @@ $current_staff = $staff_result->fetch_assoc();
                                         <p><strong>Course 2:</strong> <?php echo htmlspecialchars($student['course_option_two']); ?></p>
                                     <?php endif; ?>
                                 </div>
-                                <?php if ($position === 'Instructor'): ?>
+                                <?php if ($position === 'Instructor' || $position === 'Senior Instructor'): ?>
                                     <div class="student-card-actions">
                                         <?php if (!$student['is_processed']): ?>
                                             <button onclick="handleStudentAction(<?php echo $student['id']; ?>, 'accept')" class="btn btn-success">Accept</button>
@@ -361,11 +413,15 @@ $current_staff = $staff_result->fetch_assoc();
             <?php else: ?>
                 <div class="no-students">
                     <p>No student applications found.</p>
+                    <?php if ($position === 'Instructor' || $position === 'Senior Instructor'): ?>
+                        <p><em>Students will appear here when they select your course as their Course Choice 1.</em></p>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
         </div>
     </div>
 
+    <!-- Profile Modal -->
     <div id="profileModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeProfileModal()">&times;</span>
@@ -406,6 +462,7 @@ $current_staff = $staff_result->fetch_assoc();
         </div>
     </div>
 
+    <!-- First Login Password Modal -->
     <?php if ($show_password_modal): ?>
     <div id="passwordModal" class="modal" style="display: block;">
         <div class="modal-content">
@@ -523,9 +580,14 @@ $current_staff = $staff_result->fetch_assoc();
 
         // Handle student actions
         function handleStudentAction(studentId, action) {
-            const confirmMessage = action === 'accept' ? 
-                'Are you sure you want to accept this student application?' : 
-                'Are you sure you want to reject this student application?';
+            let confirmMessage;
+            if (action === 'accept') {
+                confirmMessage = 'Are you sure you want to accept this student application?';
+            } else {
+                confirmMessage = 'Are you sure you want to reject this student application?\n\n' +
+                               'Note: If this is their Course Choice 1, they will be moved to Course Choice 2 instructor. ' +
+                               'If this is their final choice, they will be removed from the database.';
+            }
             
             if (confirm(confirmMessage)) {
                 const formData = new FormData();
