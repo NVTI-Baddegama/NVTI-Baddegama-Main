@@ -123,7 +123,7 @@
                         <p class="mb-2"><strong>Email:</strong> <a id="modalEmail" href="" class="text-blue-500"></a></p>
                         <p class="mb-2"><strong>Contact No:</strong> <span id="modalContact"></span></p>
                         <p class="mb-2"><strong>Gender:</strong> <span id="modalGender"></span></p>
-                        <p class="mb-2"><strong>Assigned Course:</strong> <span id="modalCourse"></span></p>
+                        <p class="mb-2" id="modalCourseRow" style="display:none;"><strong>Assigned Course:</strong> <span id="modalCourse"></span></p>
                     </div>
                 </div>
             </div>
@@ -178,7 +178,12 @@
                             modalEmail.href = `mailto:${data.email || ''}`;
                             modalContact.textContent = data.contact_no || 'N/A';
                             modalGender.textContent = data.gender || 'N/A';
-                            modalCourse.textContent = data.course_no || 'N/A';
+                            if (data.course_no && data.course_no.trim() !== '') {
+                                modalCourse.textContent = data.course_no;
+                                document.getElementById('modalCourseRow').style.display = '';
+                            } else {
+                                document.getElementById('modalCourseRow').style.display = 'none';
+                            }
 
                             modalLoader.classList.add('hidden');
                             modalDetails.classList.remove('hidden');
