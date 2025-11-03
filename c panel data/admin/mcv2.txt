@@ -134,8 +134,7 @@ $instructors_json = json_encode($instructors_list);
                                             data-staff-id="<?php echo htmlspecialchars($row['staff_id'] ?? ''); ?>"
                                             data-course-duration="<?php echo htmlspecialchars($row['course_duration']); ?>"
                                             data-course-image="<?php echo htmlspecialchars($row['course_image'] ?? ''); ?>"
-                                            data-qualifications="<?php echo htmlspecialchars($row['qualifications'] ?? ''); ?>"
-                                            data-course-video="<?php echo htmlspecialchars($row['course_video'] ?? ''); ?>">
+                                            data-qualifications="<?php echo htmlspecialchars($row['qualifications'] ?? ''); ?>">
                                             Edit
                                         </button>
                                         <button type="button" class="text-red-600 hover:text-red-900 transition duration-150 delete-btn"
@@ -145,7 +144,6 @@ $instructors_json = json_encode($instructors_list);
                                         </button>
                                     </td>
                                 </tr>
-
                             <?php endwhile; ?>
                         <?php else: ?>
                             <tr>
@@ -213,11 +211,6 @@ $instructors_json = json_encode($instructors_list);
                         hover:file:bg-indigo-100">
                 </div>
 
-                 <div>
-                    <label for="edit_course_video" class="block text-sm font-medium text-gray-700">Course Video</label>
-                    <input type="text" id="edit_course_video" name="course_video" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
-                </div>
-
                 <div>
                     <label for="edit_status" class="block text-sm font-medium text-gray-700">Status</label>
                     <select id="edit_status" name="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
@@ -279,7 +272,6 @@ $instructors_json = json_encode($instructors_list);
             const currentImageInput = document.getElementById('edit_current_image');
             const imagePreview = document.getElementById('edit_image_preview');
             const imageFileInput = document.getElementById('edit_course_image');
-            const courseVideoInput = document.getElementById('edit_course_video');
 
             // --- FIX 1: ADDED MISSING VARIABLE DEFINITIONS ---
             // --- Delete Modal Elements ---
@@ -336,11 +328,6 @@ $instructors_json = json_encode($instructors_list);
 
                     const currentImage = button.dataset.courseImage;
                     currentImageInput.value = currentImage;
-
-                    const currentVideo = button.dataset.courseVideo;
-                    courseVideoInput.value = currentVideo;
-
-                    console.log('Button clicked. Video URL found:', currentVideo);
 
                     if (currentImage) {
                         // ADJUST THIS PATH if your uploads folder is different
