@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     $new_type = (isset($_POST['admin_type']) && $_POST['admin_type'] === 'admin') ? 'admin' : NULL;
     // --- END NEW ---
 
-    $is_instructor = ($position === 'Instructor');
+    $is_instructor = ($position === 'Instructor') || ($position === 'Senior Instructor');
     $course_no = ($is_instructor && !empty($_POST['course_no'])) ? trim($_POST['course_no']) : NULL;
     
     $old_image_name = isset($_POST['old_image_name']) ? trim($_POST['old_image_name']) : null;

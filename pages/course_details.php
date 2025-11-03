@@ -36,7 +36,7 @@ if ($result_course->num_rows == 1) {
 
     // --- Fetch Instructors for this course ---
     $instructors = [];
-    $query_instructors = "SELECT first_name, last_name, profile_photo FROM staff WHERE course_no = ? AND position = 'Instructor' AND status = 'active'";
+    $query_instructors = "SELECT first_name, last_name, profile_photo,position FROM staff WHERE course_no = ? AND position IN ('Instructor','Senior Instructor') AND status = 'active'";
     $stmt_instructors = $con->prepare($query_instructors);
     if($stmt_instructors){
         $stmt_instructors->bind_param("s", $course['course_no']);
@@ -196,7 +196,7 @@ if ($course) {
                                 <img src="<?php echo $instructor_photo; ?>" alt="<?php echo $instructor_name; ?>" class="w-16 h-16 rounded-full object-cover shadow-md border-2 border-gray-200">
                                 <div>
                                     <p class="text-lg font-semibold text-gray-800"><?php echo $instructor_name; ?></p>
-                                    <p class="text-sm text-gray-500">Instructor</p>
+                                    <p class="text-sm text-gray-500"><?= $instructor['position']?></p>
                                 </div>
                             </div>
                         <?php endforeach; ?>
