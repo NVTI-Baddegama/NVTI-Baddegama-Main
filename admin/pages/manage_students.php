@@ -121,6 +121,81 @@ if (isset($_SESSION['error_msg'])) {
 
 </div>
 
+<!-- Enhanced Export Section with CSV and PDF options -->
+<div class="bg-white p-4 rounded-xl shadow-lg my-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h3 class="text-lg font-semibold text-gray-800">Export Student Data</h3>
+            <p class="text-sm text-gray-600">Export the current filtered/searched student data in your preferred format</p>
+        </div>
+        <div class="flex gap-3">
+            <?php
+            // Build export URL with current filters
+            $export_params = [];
+            if ($filter_course) $export_params['filter_course'] = $filter_course;
+            if ($search_nic) $export_params['search_nic'] = $search_nic;
+            
+            // CSV Export URL
+            $csv_params = array_merge($export_params, ['export' => 'csv']);
+            $csv_export_url = '../lib/export_students.php?' . http_build_query($csv_params);
+            
+            // PDF Export URL
+            $pdf_params = array_merge($export_params, ['export' => 'pdf']);
+            $pdf_export_url = '../lib/export_students.php?' . http_build_query($pdf_params);
+            ?>
+            
+            <!-- CSV Export Button -->
+            <a href="<?php echo htmlspecialchars($csv_export_url); ?>" 
+               class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 shadow-md transition-colors duration-200">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Export CSV
+            </a>
+            
+            <!-- PDF Export Button -->
+            <a href="<?php echo htmlspecialchars($pdf_export_url); ?>" 
+               class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 shadow-md transition-colors duration-200">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Export PDF
+            </a>
+        </div>
+    </div>
+    <?php if ($filter_course || $search_nic): ?>
+        <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <p class="text-sm text-blue-800">
+                <strong>Export will include:</strong>
+                <?php
+                $export_info = [];
+                if ($filter_course) $export_info[] = "Course: " . htmlspecialchars($filter_course);
+                if ($search_nic) $export_info[] = "NIC search: " . htmlspecialchars($search_nic);
+                echo implode(', ', $export_info);
+                ?>
+            </p>
+        </div>
+    <?php endif; ?>
+    
+    <!-- Export Format Information -->
+    <!-- <div class="mt-3 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
+            <div class="flex items-center">
+                <svg class="w-4 h-4 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <strong>CSV:</strong> Spreadsheet format, includes Course Choice 2 & Address
+            </div>
+            <div class="flex items-center">
+                <svg class="w-4 h-4 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <strong>PDF:</strong> Formatted report with complete student details
+            </div>
+        </div>
+    </div> -->
+</div>
+
 <div class="bg-white p-6 rounded-xl shadow-lg mt-8">
     <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
         <?php
@@ -144,7 +219,9 @@ if (isset($_SESSION['error_msg'])) {
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Full Name</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIC</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact No</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Home Address</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course Choice 1</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course Choice 2</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Applied Date</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
@@ -161,7 +238,9 @@ if (isset($_SESSION['error_msg'])) {
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?php echo htmlspecialchars($student['full_name']); ?></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?php echo htmlspecialchars($student['nic']); ?></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?php echo htmlspecialchars($student['contact_no']); ?></td>
+                    <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate" title="<?php echo htmlspecialchars($student['address'] ?? ''); ?>"><?php echo htmlspecialchars($student['address'] ?? ''); ?></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?php echo htmlspecialchars($student['course_option_one']); ?></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?php echo htmlspecialchars($student['course_option_two'] ?? ''); ?></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?php echo date('Y-m-d', strtotime($student['application_date'])); ?></td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <?php if ($student['is_processed'] == 1): ?>
@@ -184,7 +263,7 @@ if (isset($_SESSION['error_msg'])) {
                     if ($filter_course || $search_nic) {
                          $no_results_message = "No student applications found matching the current criteria.";
                     }
-                    echo '<tr><td colspan="8" class="px-6 py-12 text-center text-gray-500">' . $no_results_message . '</td></tr>';
+                    echo '<tr><td colspan="10" class="px-6 py-12 text-center text-gray-500">' . $no_results_message . '</td></tr>';
                 }
 
                 // Close statement and connection
