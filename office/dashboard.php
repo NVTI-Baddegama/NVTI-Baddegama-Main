@@ -10,7 +10,6 @@ if (!isset($_SESSION['staff_id'])) {
 
 $staff_name = $_SESSION['staff_name'];
 $position = $_SESSION['position'];
-$course_no = $_SESSION['course_no'];
 $profile_photo = $_SESSION['profile_photo'] ?? null;
 $staff_id = $_SESSION['staff_id'];
 $staff_type = $_SESSION['staff_type'] ?? '';
@@ -24,50 +23,65 @@ $login_result = $login_stmt->get_result();
 $login_data = $login_result->fetch_assoc();
 $show_password_modal = ($login_data['login_status'] == 0);
 
-// Handle search
-$search_nic = isset($_GET['search_nic']) ? trim($_GET['search_nic']) : '';
-
-// Get students based on position and search criteria - ONLY for Instructors and Senior Instructors
-$students = [];
-$instructor_course_name = '';
-
+// Get all courses assigned to this instructor from instructor_courses table
+$assigned_courses = [];
 if ($position === 'Instructor' || $position === 'Senior Instructor') {
-    // Get instructor's course name
-    $course_query = "SELECT course_name FROM course WHERE course_no = ?";
+    $course_query = "SELECT ic.course_no, c.course_name, ic.assigned_date, ic.status
+                     FROM instructor_courses ic
+                     JOIN course c ON ic.course_no = c.course_no
+                     WHERE ic.staff_id = ? AND ic.status = 'active'
+                     ORDER BY ic.assigned_date DESC";
     $course_stmt = $con->prepare($course_query);
-    $course_stmt->bind_param("s", $course_no);
+    $course_stmt->bind_param("s", $staff_id);
     $course_stmt->execute();
     $course_result = $course_stmt->get_result();
     
-    if ($course_result->num_rows > 0) {
-        $course_data = $course_result->fetch_assoc();
-        $instructor_course_name = $course_data['course_name'];
-        
-        // Build query to get students who applied for this course as course_option_one
-        $base_query = "SELECT se.*, c.course_name FROM student_enrollments se 
-                       LEFT JOIN course c ON se.course_option_one = c.course_name 
-                       WHERE se.course_option_one = ?";
-        
-        $params = [$instructor_course_name];
-        $param_types = 's';
-        
-        // Add search condition if provided
-        if (!empty($search_nic)) {
-            $base_query .= " AND se.nic LIKE ?";
-            $params[] = "%$search_nic%";
-            $param_types .= 's';
-        }
-        
-        $base_query .= " ORDER BY se.application_date DESC";
-        
-        $students_stmt = $con->prepare($base_query);
-        $students_stmt->bind_param($param_types, ...$params);
-        $students_stmt->execute();
-        $students_result = $students_stmt->get_result();
-        
-        while ($student = $students_result->fetch_assoc()) {
-            $students[] = $student;
-        }
+    while ($course_info = $course_result->fetch_assoc()) {
+        $assigned_courses[] = $course_info;
+    }
+    $course_stmt->close();
+}
+
+// Get current active tab (default to first course)
+$active_course_no = isset($_GET['course']) ? $_GET['course'] : ($assigned_courses[0]['course_no'] ?? '');
+$active_course_name = '';
+
+// Find active course name
+foreach ($assigned_courses as $course) {
+    if ($course['course_no'] === $active_course_no) {
+        $active_course_name = $course['course_name'];
+        break;
+    }
+}
+
+// Handle search
+$search_nic = isset($_GET['search_nic']) ? trim($_GET['search_nic']) : '';
+
+// Get students for the active course
+$students = [];
+if (!empty($active_course_name)) {
+    $base_query = "SELECT se.*, c.course_name FROM student_enrollments se 
+                   LEFT JOIN course c ON se.course_option_one = c.course_name 
+                   WHERE se.course_option_one = ?";
+    
+    $params = [$active_course_name];
+    $param_types = 's';
+    
+    if (!empty($search_nic)) {
+        $base_query .= " AND se.nic LIKE ?";
+        $params[] = "%$search_nic%";
+        $param_types .= 's';
+    }
+    
+    $base_query .= " ORDER BY se.application_date DESC";
+    
+    $students_stmt = $con->prepare($base_query);
+    $students_stmt->bind_param($param_types, ...$params);
+    $students_stmt->execute();
+    $students_result = $students_stmt->get_result();
+    
+    while ($student = $students_result->fetch_assoc()) {
+        $students[] = $student;
     }
 }
 
@@ -121,11 +135,27 @@ $current_staff = $staff_result->fetch_assoc();
         .close:hover {
             color: black;
         }
+        
+        /* Tab Styles */
+        .tab-button {
+            position: relative;
+            padding: 12px 24px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .tab-button:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+        .tab-button.active {
+            border-bottom-color: #2563eb;
+            color: #2563eb;
+            font-weight: 600;
+        }
+        
         @media print {
             .no-print { display: none !important; }
         }
         
-        /* Mobile responsive improvements */
         @media (max-width: 768px) {
             .mobile-stack > * {
                 display: block !important;
@@ -133,16 +163,9 @@ $current_staff = $staff_result->fetch_assoc();
                 margin-bottom: 0.5rem;
             }
             
-            .mobile-text-sm {
-                font-size: 0.75rem;
-            }
-            
-            .mobile-p-2 {
-                padding: 0.5rem;
-            }
-            
-            .mobile-hidden {
-                display: none;
+            .tab-button {
+                padding: 8px 12px;
+                font-size: 0.875rem;
             }
         }
         
@@ -191,40 +214,58 @@ $current_staff = $staff_result->fetch_assoc();
         
         <!-- Welcome Section -->
         <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6 sm:mb-8">
-            <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Welcome, <?php echo htmlspecialchars($staff_name); ?>!</h1>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
-                <p class="text-gray-600 text-sm sm:text-base">
-                    <span class="font-semibold">Position:</span> <?php echo htmlspecialchars($position); ?>
-                </p>
-                <p class="text-gray-600 text-sm sm:text-base">
-                    <span class="font-semibold">Staff Type:</span> <?php echo htmlspecialchars($staff_type); ?>
-                </p>
+            <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                <div class="flex-1">
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Welcome, <?php echo htmlspecialchars($staff_name); ?>!</h1>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
+                        <p class="text-gray-600 text-sm sm:text-base">
+                            <span class="font-semibold">Position:</span> <?php echo htmlspecialchars($position); ?>
+                        </p>
+                        <p class="text-gray-600 text-sm sm:text-base">
+                            <span class="font-semibold">Staff Type:</span> <?php echo htmlspecialchars($staff_type); ?>
+                        </p>
+                    </div>
+                    
+                    <?php if (count($assigned_courses) > 0): ?>
+                        <p class="text-gray-600 mb-2 text-sm sm:text-base mt-2">
+                            <span class="font-semibold">Assigned Courses:</span> <?php echo count($assigned_courses); ?>
+                        </p>
+                    <?php elseif ($position === 'Instructor' || $position === 'Senior Instructor'): ?>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="text-yellow-800 text-sm sm:text-base">
+                                <i class="fas fa-exclamation-triangle mr-2"></i>
+                                No course assigned to your profile. Please contact the administrator.
+                            </p>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                
+                <?php if ($position === 'Instructor' || $position === 'Senior Instructor'): ?>
+                <div class="lg:ml-4">
+                    <a href="instructor_courses.php" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg transition-colors shadow-md text-sm sm:text-base font-medium">
+                        <i class="fas fa-edit mr-2"></i>Update Course Details
+                    </a>
+                </div>
+                <?php endif; ?>
             </div>
-            
-            <?php if (($position === 'Instructor' || $position === 'Senior Instructor') && !empty($instructor_course_name)): ?>
-                <p class="text-gray-600 mb-2 text-sm sm:text-base">
-                    <span class="font-semibold">Assigned Course:</span> <?php echo htmlspecialchars($instructor_course_name); ?>
-                </p>
-            <?php elseif ($position === 'Instructor' || $position === 'Senior Instructor'): ?>
-                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
-                    <p class="text-yellow-800 text-sm sm:text-base">
-                        <i class="fas fa-exclamation-triangle mr-2"></i>
-                        No course assigned to your profile. Please contact the administrator.
-                    </p>
-                </div>
-            <?php else: ?>
-                <div class="bg-gray-50 border-l-4 border-gray-400 p-4 mt-4">
-                    <p class="text-gray-800 text-sm sm:text-base">
-                        <i class="fas fa-info-circle mr-2"></i>
-                        Welcome to the NVTI Baddegama Staff Dashboard. Your role: <?php echo htmlspecialchars($position); ?>
-                    </p>
-                </div>
-            <?php endif; ?>
         </div>
         
-        <?php if ($position === 'Instructor' || $position === 'Senior Instructor'): ?>
+        <?php if (($position === 'Instructor' || $position === 'Senior Instructor') && count($assigned_courses) > 0): ?>
         
-        <!-- Statistics Cards for Instructors -->
+        <!-- Course Tabs -->
+        <div class="bg-white rounded-lg shadow-md mb-6 overflow-x-auto">
+            <div class="flex border-b border-gray-200">
+                <?php foreach ($assigned_courses as $course): ?>
+                    <a href="?course=<?php echo urlencode($course['course_no']); ?>" 
+                       class="tab-button <?php echo ($course['course_no'] === $active_course_no) ? 'active' : 'text-gray-600'; ?>">
+                        <i class="fas fa-book mr-2"></i>
+                        <?php echo htmlspecialchars($course['course_name']); ?>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        
+        <!-- Statistics Cards -->
         <?php
         $total_students = count($students);
         $pending_applications = count(array_filter($students, function($s) { return $s['is_processed'] == 0; }));
@@ -269,39 +310,56 @@ $current_staff = $staff_result->fetch_assoc();
             </div>
         </div>
         
-        <!-- Search and Export Controls -->
-        <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6 sm:mb-8">
-            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
-                <div class="flex-1 max-w-md">
-                    <form method="GET" class="flex">
+        <!-- Student Management Tools -->
+        <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                <i class="fas fa-tools mr-2"></i>Student Management Options
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <form method="GET" class="col-span-1 sm:col-span-2">
+                    <input type="hidden" name="course" value="<?php echo htmlspecialchars($active_course_no); ?>">
+                    <div class="flex">
                         <input type="text" 
                                name="search_nic" 
                                value="<?php echo htmlspecialchars($search_nic); ?>" 
-                               placeholder="Search by NIC number..." 
+                               placeholder="Search by NIC..." 
                                class="flex-1 px-3 sm:px-4 py-2 text-sm border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <button type="submit" class="px-4 sm:px-6 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700 transition-colors">
                             <i class="fas fa-search"></i>
                         </button>
-                    </form>
-                </div>
+                    </div>
+                </form>
                 
-                <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-                    <a href="dashboard.php" class="px-3 sm:px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors text-center text-sm">
-                        <i class="fas fa-refresh mr-2"></i>Clear Search
-                    </a>
-                    <?php if (!empty($students)): ?>
-                    <button onclick="exportToPDF()" class="px-3 sm:px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm">
-                        <i class="fas fa-file-pdf mr-2"></i>Export PDF
-                    </button>
-                    <?php endif; ?>
-                </div>
+                <a href="?course=<?php echo urlencode($active_course_no); ?>" 
+                   class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors text-center text-sm flex items-center justify-center">
+                    <i class="fas fa-refresh mr-2"></i>Clear Search
+                </a>
+                
+                <?php if (!empty($students)): ?>
+                <button onclick="exportToPDF()" 
+                        class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm flex items-center justify-center">
+                    <i class="fas fa-file-pdf mr-2"></i>Export PDF
+                </button>
+                
+                <button onclick="bulkAcceptPending()" 
+                        class="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition-colors text-sm flex items-center justify-center">
+                    <i class="fas fa-check-double mr-2"></i>Accept All Pending
+                </button>
+                
+                <!-- <button onclick="sendBulkNotifications()" 
+                        class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors text-sm flex items-center justify-center">
+                    <i class="fas fa-bell mr-2"></i>Notify Students
+                </button> -->
+                <?php endif; ?>
             </div>
         </div>
         
         <!-- Students Table -->
         <div class="bg-white rounded-lg shadow-md overflow-hidden">
             <div class="px-4 sm:px-6 py-4 border-b border-gray-200">
-                <h2 class="text-lg sm:text-xl font-semibold text-gray-800">Student Applications</h2>
+                <h2 class="text-lg sm:text-xl font-semibold text-gray-800">
+                    Student Applications - <?php echo htmlspecialchars($active_course_name); ?>
+                </h2>
             </div>
             
             <?php if (!empty($students)): ?>
@@ -311,7 +369,10 @@ $current_staff = $staff_result->fetch_assoc();
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student Info</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <input type="checkbox" id="selectAll" onclick="toggleSelectAll()" class="mr-2">
+                                Student Info
+                            </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIC</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
@@ -324,9 +385,12 @@ $current_staff = $staff_result->fetch_assoc();
                         <?php foreach ($students as $student): ?>
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div>
-                                    <div class="text-sm font-medium text-gray-900"><?php echo htmlspecialchars($student['full_name']); ?></div>
-                                    <div class="text-sm text-gray-500">ID: <?php echo htmlspecialchars($student['Student_id']); ?></div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" class="student-checkbox mr-3" value="<?php echo $student['id']; ?>">
+                                    <div>
+                                        <div class="text-sm font-medium text-gray-900"><?php echo htmlspecialchars($student['full_name']); ?></div>
+                                        <div class="text-sm text-gray-500">ID: <?php echo htmlspecialchars($student['Student_id']); ?></div>
+                                    </div>
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -485,9 +549,9 @@ $current_staff = $staff_result->fetch_assoc();
                 <h3 class="text-lg font-medium text-gray-900 mb-2">No Student Applications Found</h3>
                 <?php if (!empty($search_nic)): ?>
                     <p class="text-gray-500">No students found matching the NIC "<?php echo htmlspecialchars($search_nic); ?>"</p>
-                    <a href="dashboard.php" class="text-blue-600 hover:text-blue-800 mt-2 inline-block">Clear search</a>
+                    <a href="?course=<?php echo urlencode($active_course_no); ?>" class="text-blue-600 hover:text-blue-800 mt-2 inline-block">Clear search</a>
                 <?php else: ?>
-                    <p class="text-gray-500">Students will appear here when they apply for your course.</p>
+                    <p class="text-gray-500">Students will appear here when they apply for this course.</p>
                 <?php endif; ?>
             </div>
             <?php endif; ?>
@@ -495,7 +559,7 @@ $current_staff = $staff_result->fetch_assoc();
         
         <?php else: ?>
         
-        <!-- Non-Instructor Staff Dashboard Content -->
+        <!-- Non-Instructor or No Courses Assigned -->
         <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
             <h2 class="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Staff Dashboard</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
@@ -638,7 +702,6 @@ $current_staff = $staff_result->fetch_assoc();
             document.getElementById('studentDetailsModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
             
-            // Fetch student details
             fetch('get_student_details.php?id=' + studentId)
                 .then(response => response.text())
                 .then(data => {
@@ -681,7 +744,7 @@ $current_staff = $staff_result->fetch_assoc();
             });
         });
 
-        <?php if ($position === 'Instructor' || $position === 'Senior Instructor'): ?>
+        <?php if (($position === 'Instructor' || $position === 'Senior Instructor') && count($assigned_courses) > 0): ?>
         // Handle student actions
         function handleStudentAction(studentId, action) {
             let confirmMessage;
@@ -718,21 +781,65 @@ $current_staff = $staff_result->fetch_assoc();
             }
         }
 
+        // Bulk operations
+        function toggleSelectAll() {
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.student-checkbox');
+            checkboxes.forEach(cb => cb.checked = selectAll.checked);
+        }
+
+        function bulkAcceptPending() {
+            const checkboxes = document.querySelectorAll('.student-checkbox:checked');
+            if (checkboxes.length === 0) {
+                alert('Please select at least one student.');
+                return;
+            }
+            
+            if (confirm(`Accept ${checkboxes.length} pending student(s)?`)) {
+                const studentIds = Array.from(checkboxes).map(cb => cb.value);
+                
+                const formData = new FormData();
+                formData.append('student_ids', JSON.stringify(studentIds));
+                formData.append('action', 'bulk_accept');
+                
+                fetch('student_action.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.success) location.reload();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred.');
+                });
+            }
+        }
+
+        function sendBulkNotifications() {
+            const checkboxes = document.querySelectorAll('.student-checkbox:checked');
+            if (checkboxes.length === 0) {
+                alert('Please select at least one student.');
+                return;
+            }
+            
+            alert(`Notification feature coming soon! Selected ${checkboxes.length} student(s).`);
+        }
+
         function exportToPDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             
-            // Add title
             doc.setFontSize(16);
             doc.text('NVTI Baddegama - Student Applications Report', 20, 20);
             
-            // Add generation info
             doc.setFontSize(10);
             doc.text('Generated on: ' + new Date().toLocaleString(), 20, 30);
             doc.text('Generated by: <?php echo addslashes($staff_name); ?> (<?php echo addslashes($position); ?>)', 20, 35);
-            doc.text('Course: <?php echo addslashes($instructor_course_name); ?>', 20, 40);
+            doc.text('Course: <?php echo addslashes($active_course_name); ?>', 20, 40);
             
-            // Prepare table data
             const tableData = [];
             <?php foreach ($students as $student): ?>
                 tableData.push([
@@ -748,7 +855,6 @@ $current_staff = $staff_result->fetch_assoc();
                 ]);
             <?php endforeach; ?>
             
-            // Add table
             doc.autoTable({
                 head: [['Name', 'Student ID', 'NIC', 'Contact', 'WhatsApp', 'Address', 'Course 1', 'Course 2', 'Status']],
                 body: tableData,
@@ -757,8 +863,7 @@ $current_staff = $staff_result->fetch_assoc();
                 headStyles: { fillColor: [37, 99, 235] }
             });
             
-            // Save the PDF
-            const filename = 'NVTI_Students_<?php echo addslashes($instructor_course_name); ?>_' + new Date().toISOString().split('T')[0] + '.pdf';
+            const filename = 'NVTI_Students_<?php echo addslashes($active_course_name); ?>_' + new Date().toISOString().split('T')[0] + '.pdf';
             doc.save(filename);
         }
         <?php endif; ?>
