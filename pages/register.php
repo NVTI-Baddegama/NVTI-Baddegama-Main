@@ -189,20 +189,21 @@ if ($courses_result && $courses_result->num_rows > 0) {
 
  <?php
 
+  $error_message = '';
+  $alert_type = '';
 
   if (isset($_GET['error'])) {
-    switch ($_GET['error']) {
-      case 'Please_fill_all_required_fields':
-        $error_message = 'Please fill in all required fields!';
-        break;
-      case 'Invalid_NIC_format':
-        $error_message = 'Invalid NIC format!';
-        break;
-    }
+    $error_message = match ($_GET['error']) {
+      'Please_fill_all_required_fields' => 'Please fill in all required fields!',
+      'Invalid_NIC_format' => 'Invalid NIC format!',
+      default => 'An unknown error occurred.',
+    };
     $alert_type = 'error';
   } elseif (isset($_GET['success'])) {
     $error_message = 'Registration successful!';
     $alert_type = 'success';
+    // Use a client-side redirect since headers have likely already been sent
+    echo '<script>window.location.href="https://whatsapp.com/channel/0029Vb6qtaVCXC3CjW8z4O1y";</script>';
   }
   ?>
   <div id="alert-container"></div>
