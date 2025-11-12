@@ -19,7 +19,7 @@ $sql = "SELECT id,service_id, first_name, last_name, position, profile_photo
                 WHEN position = 'Management Assistant' THEN 10
                 WHEN position = 'Driver' THEN 11
                 WHEN position = 'Labor' THEN 12
-                ELSE 13 -- This puts any other positions at the end
+                ELSE 13
               END ASC, 
               first_name ASC, 
               last_name ASC";
@@ -83,7 +83,7 @@ $photo_upload_path = '../uploads/profile_photos/';
                         </div>
                     </div>
                     <?php
-                } // While loop ends
+                }
             } else {
                 echo "<p class='text-center col-span-full'>No staff members found.</p>";
             }
@@ -111,10 +111,10 @@ $photo_upload_path = '../uploads/profile_photos/';
                 <div id="modalDetails" class="md:flex hidden">
 
                     <div class="md:w-1/3 p-4 flex-shrink-0 flex items-center justify-center">
-                        <img id="modalImage" class="**w-48 h-48** rounded-lg object-cover shadow-md hidden" src=""
+                        <img id="modalImage" class="w-48 h-48 rounded-lg object-cover shadow-md hidden" src=""
                             alt="Profile Photo">
                         <div id="modalAvatar"
-                            class="**w-48 h-48** rounded-lg bg-gray-300 flex items-center justify-center shadow-md hidden">
+                            class="w-48 h-48 rounded-lg bg-gray-300 flex items-center justify-center shadow-md hidden">
                             <span id="modalAvatarLetter" class="text-gray-700 text-7xl font-bold"></span>
                         </div>
                     </div>
@@ -129,6 +129,15 @@ $photo_upload_path = '../uploads/profile_photos/';
                         <p class="mb-2"><strong>Contact No:</strong> <span id="modalContact"></span></p>
                         <p class="mb-2"><strong>Gender:</strong> <span id="modalGender"></span></p>
                         <p class="mb-2" id="modalCourseRow" style="display:none;"><strong>Assigned Course:</strong> <span id="modalCourse"></span></p>
+                        
+                        <!-- Assigned Courses Section for Instructors -->
+                        <div id="modalAssignedCoursesSection" style="display:none;">
+                            <hr class="my-4">
+                            <h3 class="text-lg font-semibold mb-3">Assigned Courses</h3>
+                            <div id="modalAssignedCourses" class="space-y-2">
+                                <!-- Courses will be populated here -->
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -183,11 +192,51 @@ $photo_upload_path = '../uploads/profile_photos/';
                             modalEmail.href = `mailto:${data.email || ''}`;
                             modalContact.textContent = data.contact_no || 'N/A';
                             modalGender.textContent = data.gender || 'N/A';
+                            
+                            // Handle old single course display
                             if (data.course_no && data.course_no.trim() !== '') {
                                 modalCourse.textContent = data.course_no;
                                 document.getElementById('modalCourseRow').style.display = '';
                             } else {
                                 document.getElementById('modalCourseRow').style.display = 'none';
+                            }
+
+                            // Handle assigned courses for Instructors and Senior Instructors
+                            const assignedCoursesSection = document.getElementById('modalAssignedCoursesSection');
+                            const assignedCoursesContainer = document.getElementById('modalAssignedCourses');
+                            
+                            if (data.assigned_courses && data.assigned_courses.length > 0) {
+                                assignedCoursesSection.style.display = 'block';
+                                assignedCoursesContainer.innerHTML = '';
+                                
+                                data.assigned_courses.forEach(course => {
+                                    const courseDiv = document.createElement('div');
+                                    courseDiv.className = 'bg-blue-50 border-l-4 border-blue-500 p-3 rounded';
+                                    
+                                    const statusBadge = course.status === 'active' 
+                                        ? '<span class="inline-block px-2 py-1 text-xs font-semibold text-green-800 bg-green-200 rounded-full ml-2">Active</span>'
+                                        : '<span class="inline-block px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-200 rounded-full ml-2">Inactive</span>';
+                                    
+                                    courseDiv.innerHTML = `
+                                        <div class="flex justify-between items-start">
+                                            <div>
+                                                <p class="font-semibold text-gray-800">${course.course_name}</p>
+                                                <p class="text-sm text-gray-600">Course No: ${course.course_no}</p>
+                                                <p class="text-xs text-gray-500 mt-1">Assigned: ${new Date(course.assigned_date).toLocaleDateString()}</p>
+                                            </div>
+                                            <div>
+                                                ${statusBadge}
+                                            </div>
+                                        </div>
+                                    `;
+                                    
+                                    assignedCoursesContainer.appendChild(courseDiv);
+                                });
+                            } else if ((data.position === 'Instructor' || data.position === 'Senior Instructor')) {
+                                assignedCoursesSection.style.display = 'block';
+                                assignedCoursesContainer.innerHTML = '<p class="text-gray-500 text-sm italic">No courses assigned yet.</p>';
+                            } else {
+                                assignedCoursesSection.style.display = 'none';
                             }
 
                             modalLoader.classList.add('hidden');

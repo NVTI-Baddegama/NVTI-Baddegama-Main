@@ -3,7 +3,7 @@ session_start();
 include_once('../include/header.php');
 include_once('../../include/connection.php');
 
-// --- Fetch courses for the dropdown ---
+// Fetch courses for the dropdown
 $courses = [];
 $courses_query = "SELECT course_no, course_name FROM course WHERE status = 'active' ORDER BY course_name";
 $courses_result = $con->query($courses_query);
@@ -13,14 +13,13 @@ if ($courses_result && $courses_result->num_rows > 0) {
     }
 }
 
-// 1. Check if Staff ID is provided
+// Check if Staff ID is provided
 if (!isset($_GET['staff_id']) || empty($_GET['staff_id'])) {
     echo "<div class='p-6'><p class='text-red-500'>Error: No staff ID provided.</p></div>";
     include_once('../include/footer.php');
     exit();
 }
 
-// 2. Get the Staff ID and fetch data
 $staff_id_to_view = trim($_GET['staff_id']);
 
 $query = "SELECT * FROM staff WHERE staff_id = ?";
@@ -33,19 +32,34 @@ $stmt->bind_param("s", $staff_id_to_view);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// 3. Check if a staff member was found
 if ($result->num_rows == 1) {
     $staff = $result->fetch_assoc();
-    $old_image_name = $staff['profile_photo']; // Store old image name
+    $old_image_name = $staff['profile_photo'];
 
-    // --- Handle Profile Photo ---
     $photo_url = "https://placehold.co/150x150/a0aec0/ffffff?text=" . substr($staff['first_name'], 0, 1);
     if (!empty($staff['profile_photo']) && file_exists('../../uploads/profile_photos/' . $staff['profile_photo'])) {
         $photo_url = '../../uploads/profile_photos/' . $staff['profile_photo'];
     }
-    // Enable course assignment for Instructor and Senior Instructor
+    
     $is_instructor = in_array($staff['position'], ['Instructor', 'Senior Instructor']);
     
+    // Get assigned courses for this instructor
+    $assigned_courses = [];
+    if ($is_instructor) {
+        $assigned_query = "SELECT ic.id, ic.course_no, c.course_name, ic.assigned_date, ic.status 
+                          FROM instructor_courses ic
+                          JOIN course c ON ic.course_no = c.course_no
+                          WHERE ic.staff_id = ?
+                          ORDER BY ic.assigned_date DESC";
+        $assigned_stmt = $con->prepare($assigned_query);
+        $assigned_stmt->bind_param("s", $staff_id_to_view);
+        $assigned_stmt->execute();
+        $assigned_result = $assigned_stmt->get_result();
+        while ($row = $assigned_result->fetch_assoc()) {
+            $assigned_courses[] = $row;
+        }
+        $assigned_stmt->close();
+    }
 
 } else {
     echo "<div class='p-6'><p class='text-red-500'>Error: No staff member found with ID: " . htmlspecialchars($staff_id_to_view) . "</p></div>";
@@ -84,7 +98,7 @@ if (isset($_SESSION['staff_error_msg'])) {
         
         <div class="flex flex-col sm:flex-row items-center border-b pb-4 mb-6 gap-6">
             <img
-                src="<?php echo $photo_url; ?>?v=<?php echo time(); // Cache buster ?>" 
+                src="<?php echo $photo_url; ?>?v=<?php echo time(); ?>" 
                 alt="<?php echo htmlspecialchars($staff['first_name'] . ' ' . $staff['last_name']); ?>"
                 class="w-32 h-32 rounded-full object-cover shadow-md flex-shrink-0 border-4 border-gray-200"
             >
@@ -104,10 +118,7 @@ if (isset($_SESSION['staff_error_msg'])) {
                     <p><strong>Gender:</strong> <?php echo htmlspecialchars($staff['gender']); ?></p>
                     <p><strong>Contact No:</strong> <?php echo htmlspecialchars($staff['contact_no'] ?? 'N/A'); ?></p>
                     <p><strong>Email:</strong> <?php echo htmlspecialchars($staff['email'] ?? 'N/A'); ?></p>
-                     <?php if(!empty($staff['course_no'])): ?>
-                     <p><strong>Assigned Course No:</strong> <?php echo htmlspecialchars($staff['course_no']); ?></p>
-                     <?php endif; ?>
-                     <p><strong>Current Status:</strong>
+                    <p><strong>Current Status:</strong>
                         <?php if ($staff['status'] == 'active'): ?>
                             <span class="font-semibold text-green-600">ACTIVE</span>
                         <?php else: ?>
@@ -123,6 +134,36 @@ if (isset($_SESSION['staff_error_msg'])) {
                      </p>
                 </div>
             </div>
+
+            <?php if ($is_instructor): ?>
+            <div class="border-t pt-4">
+                <h4 class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">Assigned Courses</h4>
+                <?php if (count($assigned_courses) > 0): ?>
+                    <div class="space-y-2">
+                        <?php foreach ($assigned_courses as $assigned): ?>
+                            <div class="flex items-center justify-between bg-blue-50 p-3 rounded-lg">
+                                <div>
+                                    <p class="font-medium text-gray-900"><?php echo htmlspecialchars($assigned['course_name']); ?></p>
+                                    <p class="text-sm text-gray-600">Course No: <?php echo htmlspecialchars($assigned['course_no']); ?></p>
+                                    <p class="text-xs text-gray-500">Assigned: <?php echo date('Y-m-d', strtotime($assigned['assigned_date'])); ?></p>
+                                </div>
+                                <form method="POST" action="../lib/course_assignment_handler.php" class="inline">
+                                    <input type="hidden" name="action" value="remove">
+                                    <input type="hidden" name="assignment_id" value="<?php echo $assigned['id']; ?>">
+                                    <input type="hidden" name="staff_id" value="<?php echo htmlspecialchars($staff_id_to_view); ?>">
+                                    <button type="submit" onclick="return confirm('Remove this course assignment?');" 
+                                            class="text-red-600 hover:text-red-800 text-sm font-medium">
+                                        Remove
+                                    </button>
+                                </form>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <p class="text-gray-500 italic">No courses assigned yet.</p>
+                <?php endif; ?>
+            </div>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -135,24 +176,25 @@ if (isset($_SESSION['staff_error_msg'])) {
                 <input type="hidden" name="staff_id" value="<?php echo htmlspecialchars($staff['staff_id']); ?>">
                 <input type="hidden" name="action" value="update">
                 <input type="hidden" name="old_image_name" value="<?php echo htmlspecialchars($old_image_name ?? ''); ?>">
-                <div class="form-group">
 
-                <label for="position" class="block text-sm font-medium text-gray-700 mb-1">Position:</label>
-                <select id="position" name="position" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required onchange="toggleCourseSection()">
-                    <option value="">Select Position</option>
-                    <option value="Assistant Director" <?php echo ($staff['position'] == 'Assistant Director') ? 'selected' : ''; ?>>Assistant Director</option>
-                    <option value="Instructor" <?php echo ($staff['position'] == 'Instructor') ? 'selected' : ''; ?>>Instructor</option>
-                    <option value="Senior Instructor" <?php echo ($staff['position'] == 'Senior Instructor') ? 'selected' : ''; ?>>Senior Instructor</option>
-                    <option value="Demonstrator" <?php echo ($staff['position'] == 'Demonstrator') ? 'selected' : ''; ?>>Demonstrator</option>
-                    <option value="Account Officer" <?php echo ($staff['position'] == 'Finance Officer') ? 'selected' : ''; ?>>Finance officer</option>
-                    <option value="Testing Officer" <?php echo ($staff['position'] == 'Testing Officer') ? 'selected' : ''; ?>>Testing Officer</option>
-                    <option value="Managemet Assistant" <?php echo ($staff['position'] == 'Managemet Assistant') ? 'selected' : ''; ?>>Managemet Assistant</option>
-                    <option value="Training Officer" <?php echo ($staff['position'] == 'Training Officer') ? 'selected' : ''; ?>>Training Officer</option>
-                    <option value="Program Officer" <?php echo ($staff['position'] == 'Program Officer') ? 'selected' : ''; ?>>Program Officer</option>
-                    <option value="Driver" <?php echo ($staff['position'] == 'Driver') ? 'selected' : ''; ?>>Driver</option>
-                    <option value="Labor" <?php echo ($staff['position'] == 'Labor') ? 'selected' : ''; ?>>Labor</option>
-                    <option value="Security" <?php echo ($staff['position'] == 'Security') ? 'selected' : ''; ?>>Security</option>
-                </select>
+                <div class="form-group">
+                    <label for="position" class="block text-sm font-medium text-gray-700 mb-1">Position:</label>
+                    <select id="position" name="position" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required onchange="toggleCourseSection()">
+                        <option value="">Select Position</option>
+                        <option value="Assistant Director" <?php echo ($staff['position'] == 'Assistant Director') ? 'selected' : ''; ?>>Assistant Director</option>
+                        <option value="Instructor" <?php echo ($staff['position'] == 'Instructor') ? 'selected' : ''; ?>>Instructor</option>
+                        <option value="Senior Instructor" <?php echo ($staff['position'] == 'Senior Instructor') ? 'selected' : ''; ?>>Senior Instructor</option>
+                        <option value="Demonstrator" <?php echo ($staff['position'] == 'Demonstrator') ? 'selected' : ''; ?>>Demonstrator</option>
+                        <option value="Finance Officer" <?php echo ($staff['position'] == 'Finance Officer') ? 'selected' : ''; ?>>Finance officer</option>
+                        <option value="Testing Officer" <?php echo ($staff['position'] == 'Testing Officer') ? 'selected' : ''; ?>>Testing Officer</option>
+                        <option value="Management Assistant" <?php echo ($staff['position'] == 'Management Assistant') ? 'selected' : ''; ?>>Management Assistant</option>
+                        <option value="Training Officer" <?php echo ($staff['position'] == 'Training Officer') ? 'selected' : ''; ?>>Training Officer</option>
+                        <option value="Program Officer" <?php echo ($staff['position'] == 'Program Officer') ? 'selected' : ''; ?>>Program Officer</option>
+                        <option value="Driver" <?php echo ($staff['position'] == 'Driver') ? 'selected' : ''; ?>>Driver</option>
+                        <option value="Labor" <?php echo ($staff['position'] == 'Labor') ? 'selected' : ''; ?>>Labor</option>
+                        <option value="Security" <?php echo ($staff['position'] == 'Security') ? 'selected' : ''; ?>>Security</option>
+                    </select>
+                </div>
 
                 <div>
                     <label for="contact_no" class="block text-sm font-medium text-gray-700 mb-1">Contact No</label>
@@ -160,36 +202,50 @@ if (isset($_SESSION['staff_error_msg'])) {
                            value="<?php echo htmlspecialchars($staff['contact_no'] ?? ''); ?>"
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
-                 <div>
+
+                <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
                     <input type="email" id="email" name="email" placeholder="example@gmail.com" required
                            value="<?php echo htmlspecialchars($staff['email'] ?? ''); ?>"
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
 
-                <div>
-                    <label for="course_no" class="block text-sm font-medium text-gray-700 mb-1">Assigned Course</label>
-                    <select id="course_no" name="course_no"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none
-                            <?php if (!$is_instructor) echo 'bg-gray-100 cursor-not-allowed'; ?>"
-                            <?php if (!$is_instructor) echo 'disabled'; ?> >
-                        <option value="">-- No Course Assigned --</option>
-                        <?php
-                        foreach ($courses as $course) {
-                            $selected = ($is_instructor && $staff['course_no'] == $course['course_no']) ? 'selected' : '';
-                            echo '<option value="' . htmlspecialchars($course['course_no']) . '" ' . $selected . '>' 
-                                 . htmlspecialchars($course['course_name']) . ' (' . htmlspecialchars($course['course_no']) . ')'
-                                 . '</option>';
-                        }
-                        ?>
-                    </select>
-                    <?php if (!$is_instructor): ?>
-                    <p class="text-xs text-red-500 mt-1">Courses can only be assigned to 'Instructors'.</p>
-                    <?php endif; ?>
+                <?php if ($is_instructor): ?>
+                <div class="border-t pt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Assign New Course</label>
+                    <form method="POST" action="../lib/course_assignment_handler.php" class="space-y-3">
+                        <input type="hidden" name="action" value="add">
+                        <input type="hidden" name="staff_id" value="<?php echo htmlspecialchars($staff_id_to_view); ?>">
+                        <select name="course_no" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="">-- Select a Course --</option>
+                            <?php
+                            foreach ($courses as $course) {
+                                // Check if already assigned
+                                $already_assigned = false;
+                                foreach ($assigned_courses as $assigned) {
+                                    if ($assigned['course_no'] == $course['course_no']) {
+                                        $already_assigned = true;
+                                        break;
+                                    }
+                                }
+                                if (!$already_assigned) {
+                                    echo '<option value="' . htmlspecialchars($course['course_no']) . '">' 
+                                         . htmlspecialchars($course['course_name']) . ' (' . htmlspecialchars($course['course_no']) . ')'
+                                         . '</option>';
+                                }
+                            }
+                            ?>
+                        </select>
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                            Add Course Assignment
+                        </button>
+                    </form>
+                    <p class="text-xs text-gray-500 mt-2">Assign courses one at a time. You can assign multiple courses to this instructor.</p>
                 </div>
+                <?php endif; ?>
 
                 <div>
-                     <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
                     <div class="flex items-center space-x-4">
                         <div class="flex items-center">
                             <input id="status_active" name="status" type="radio" value="active" <?php echo ($staff['status'] == 'active') ? 'checked' : ''; ?>
@@ -214,6 +270,7 @@ if (isset($_SESSION['staff_error_msg'])) {
                     </div>
                     <p class="text-xs text-red-500 mt-1">Warning: This gives the user full access to the Admin Panel.</p>
                 </div>
+
                 <div class="border-t pt-4">
                     <label for="profile_photo" class="block text-sm font-medium text-gray-700 mb-1">Update Profile Photo (Optional)</label>
                     <?php if (!empty($old_image_name)): ?>
@@ -258,34 +315,8 @@ include_once('../include/footer.php');
 document.addEventListener('DOMContentLoaded', function() {
     const profilePhotoInput_edit = document.getElementById('profile_photo');
     const photoError_edit = document.getElementById('photo_error');
-    const maxFileSizeMB_edit = 1; // Max size in MB
+    const maxFileSizeMB_edit = 1;
     const maxFileSizeBytes_edit = maxFileSizeMB_edit * 1024 * 1024;
-
-    // Toggle course select enabled/disabled based on position
-    const positionSelect = document.getElementById('position');
-    const courseSelect = document.getElementById('course_no');
-
-    function toggleCourseSection() {
-        if (!positionSelect || !courseSelect) return;
-        const isInstructor = positionSelect.value === 'Instructor' || positionSelect.value === 'Senior Instructor';
-        courseSelect.disabled = !isInstructor;
-        if (isInstructor) {
-            courseSelect.classList.remove('bg-gray-100', 'cursor-not-allowed');
-            courseSelect.classList.add('bg-white');
-        } else {
-            courseSelect.classList.add('bg-gray-100', 'cursor-not-allowed');
-            courseSelect.classList.remove('bg-white');
-            // clear selection when not instructor
-            if (courseSelect.value !== '') courseSelect.value = '';
-        }
-    }
-
-    // Ensure initial state reflects server-side value
-    if (positionSelect) {
-        positionSelect.addEventListener('change', toggleCourseSection);
-        // call once to set initial state (works even if server pre-disabled the control)
-        toggleCourseSection();
-    }
 
     if (profilePhotoInput_edit) {
         profilePhotoInput_edit.addEventListener('change', function(event) {
@@ -295,7 +326,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (file) {
                 if (file.size > maxFileSizeBytes_edit) {
                     if (photoError_edit) photoError_edit.textContent = `Error: File size exceeds ${maxFileSizeMB_edit}MB limit.`;
-                    event.target.value = null; // Clear selection
+                    event.target.value = null;
                 }
             }
         });
@@ -306,7 +337,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const file = profilePhotoInput_edit.files[0];
                 if (file && file.size > maxFileSizeBytes_edit) {
                     if (photoError_edit) photoError_edit.textContent = `Error: File size exceeds ${maxFileSizeMB_edit}MB limit. Cannot submit.`;
-                    event.preventDefault(); // Stop submission
+                    event.preventDefault();
                 }
             });
         }

@@ -1,134 +1,149 @@
 <?php
 session_start();
-include_once('../../include/connection.php'); // Database connection
+include_once '../../include/connection.php';
 
-// --- 1. Define Common Password ---
-// ඔබට අවශ්‍ය පොදු මුරපදය මෙතන දාන්න.
-define('DEFAULT_PASSWORD', 'NVTI@staff123'); 
-
-// 2. Check if the form was submitted
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-    // 3. Retrieve data from the form
-    $first_name = trim($_POST['first_name']);
-    $last_name = trim($_POST['last_name']);
-    $nic = trim($_POST['nic']);
-    $service_id = trim($_POST['service_id']);
-    $gender = $_POST['gender'];
-    $position = $_POST['position'];
-    $contact_no = trim($_POST['contact_no']); // <-- ADD THIS
-    $email = trim($_POST['email']); // <-- ADD THIS
-    
-    // Handle course_id (it might be empty if Non-Academic)
-    $course_no = !empty($_POST['course_no']) ? trim($_POST['course_no']) : NULL;
-
-    // --- 4. Password Logic (NEW) ---
-    $password = trim($_POST['password']);
-    $confirm_password = trim($_POST['confirm_password']);
-    
-    $password_to_hash = ''; // Initialize
-
-    if (empty($password) && empty($confirm_password)) {
-        // If both fields are empty, use the common (default) password
-        $password_to_hash = DEFAULT_PASSWORD;
-    } else {
-        // If user is typing a password, they must match
-        if ($password !== $confirm_password) {
-            $_SESSION['error'] = "Passwords do not match.";
-            header("Location: ../pages/staff_register.php");
-            exit();
-        }
-        // Check min length if password is not empty
-        if (strlen($password) < 6) {
-             $_SESSION['error'] = "Password must be at least 6 characters long.";
-             header("Location: ../pages/staff_register.php");
-             exit();
-        }
-        // Use the user-provided password
-        $password_to_hash = $password;
-    }
-
-
-    // --- 5. Validation (Check for Duplicates) ---
-    $check_query = "SELECT * FROM staff WHERE nic = ? OR service_id = ?";
-    $stmt_check = $con->prepare($check_query);
-    $stmt_check->bind_param("ss", $nic, $service_id);
-    $stmt_check->execute();
-    $result_check = $stmt_check->get_result();
-
-    if ($result_check->num_rows > 0) {
-        $_SESSION['error'] = "A user with this NIC or Service ID already exists.";
-        header("Location:../pages/staff_register.php");
-        exit();
-    }
-
-    // --- 6. Secure Password Hashing ---
-    // Hash the password (either default or user-provided)
-    $hashed_password = password_hash($password_to_hash, PASSWORD_DEFAULT);
-
-    
-    // --- 7. Handle Profile Photo Upload ---
-    $profile_photo_name = NULL; // Default is NULL (no photo)
-
-    if (isset($_FILES['profile_photo']) && $_FILES['profile_photo']['error'] == 0) {
-        $upload_dir = '../../uploads/profile_photos/';
-        
-        if (!is_dir($upload_dir)) {
-            mkdir($upload_dir, 0755, true);
-        }
-
-        $file_ext = strtolower(pathinfo($_FILES['profile_photo']['name'], PATHINFO_EXTENSION));
-        $allowed_exts = ['jpg', 'jpeg', 'png', 'webp'];
-
-        if (in_array($file_ext, $allowed_exts)) {
-            $profile_photo_name = 'NVTI-STAFF-' . time() . '.' . $file_ext;
-            $upload_path = $upload_dir . $profile_photo_name;
-
-            if (!move_uploaded_file($_FILES['profile_photo']['tmp_name'], $upload_path)) {
-                 $profile_photo_name = NULL; // Reset to NULL if upload fails
-            }
-        }
-    }
-    
-    // --- 8. Generate Staff ID ---
-    $year = date("Y");
-    $rand_num = rand(1000, 9999);
-    $staff_id = "NVTI-$year-$rand_num";
-
-    $insert_query = "INSERT INTO staff (staff_id, service_id, first_name, last_name, nic, gender, contact_no, email, password, position, course_no, profile_photo, status, type) 
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active', NULL)"; // Set type to NULL by default
-                     
-    $stmt_insert = $con->prepare($insert_query);
-    
-    $stmt_insert->bind_param(
-    "ssssssssssss", // 'i' එක 's' (string) කළා
-    $staff_id, 
-    $service_id, 
-    $first_name, 
-    $last_name, 
-    $nic,
-    $gender,
-    $contact_no,
-    $email,
-    $hashed_password, 
-    $position, 
-    $course_no, // $course_id වෙනුවට $course_no
-    $profile_photo_name
-);
-
-    if ($stmt_insert->execute()) {
-        $_SESSION['success'] = "Registration successful! You can now log in.";
-        header("Location: ../pages/staff_register.php");
-        exit();
-    } else {
-        $_SESSION['error'] = "Database error. Registration failed. " . $stmt_insert->error;
-        header("Location: ../pages/staff_register.php");
-        exit();
-    }
-
-} else {
-    // If accessed directly
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    $_SESSION['error'] = "Invalid request method";
     header("Location: ../pages/staff_register.php");
     exit();
 }
+
+// Get form data
+$first_name = trim($_POST['first_name']);
+$last_name = trim($_POST['last_name']);
+$nic = trim($_POST['nic']);
+$service_id = trim($_POST['service_id']);
+$gender = trim($_POST['gender']);
+$contact_no = trim($_POST['contact_no']);
+$email = trim($_POST['email']);
+$position = trim($_POST['position']);
+$password = !empty(trim($_POST['password'])) ? trim($_POST['password']) : 'NVTI@staff123';
+
+// Validate required fields
+if (empty($first_name) || empty($last_name) || empty($nic) || empty($service_id) || 
+    empty($gender) || empty($contact_no) || empty($email) || empty($position)) {
+    $_SESSION['error'] = "All required fields must be filled";
+    header("Location: ../pages/staff_register.php");
+    exit();
+}
+
+// Validate NIC format
+if (!preg_match('/^([0-9]{9}[vVxX]|[0-9]{12})$/', $nic)) {
+    $_SESSION['error'] = "Invalid NIC format";
+    header("Location: ../pages/staff_register.php");
+    exit();
+}
+
+// Validate contact number
+if (!preg_match('/^[0-9]{10}$/', $contact_no)) {
+    $_SESSION['error'] = "Invalid contact number format";
+    header("Location: ../pages/staff_register.php");
+    exit();
+}
+
+// Check for duplicate NIC, Service ID, or Email
+$check_query = "SELECT * FROM staff WHERE nic = ? OR service_id = ? OR email = ?";
+$check_stmt = $con->prepare($check_query);
+$check_stmt->bind_param("sss", $nic, $service_id, $email);
+$check_stmt->execute();
+$check_result = $check_stmt->get_result();
+
+if ($check_result->num_rows > 0) {
+    $_SESSION['error'] = "Staff member with this NIC, Service ID, or Email already exists";
+    $check_stmt->close();
+    header("Location: ../pages/staff_register.php");
+    exit();
+}
+$check_stmt->close();
+
+// Generate unique staff_id
+do {
+    $staff_id = 'NVTI-' . date('Y') . '-' . rand(1000, 9999);
+    $id_check = $con->prepare("SELECT staff_id FROM staff WHERE staff_id = ?");
+    $id_check->bind_param("s", $staff_id);
+    $id_check->execute();
+    $id_result = $id_check->get_result();
+    $id_check->close();
+} while ($id_result->num_rows > 0);
+
+// Hash password
+$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+// Handle profile photo upload
+$profile_photo = null;
+if (isset($_FILES['profile_photo']) && $_FILES['profile_photo']['error'] == 0) {
+    $file_tmp = $_FILES['profile_photo']['tmp_name'];
+    $file_size = $_FILES['profile_photo']['size'];
+    $file_ext = strtolower(pathinfo($_FILES['profile_photo']['name'], PATHINFO_EXTENSION));
+    $allowed_exts = ['jpg', 'jpeg', 'png', 'webp'];
+
+    if ($file_size > 1 * 1024 * 1024) {
+        $_SESSION['error'] = "Profile photo size exceeds 1MB limit";
+        header("Location: ../pages/staff_register.php");
+        exit();
+    }
+
+    if (in_array($file_ext, $allowed_exts)) {
+        $profile_photo = 'NVTI-STAFF-' . time() . '.' . $file_ext;
+        $upload_path = '../../uploads/profile_photos/' . $profile_photo;
+        
+        if (!move_uploaded_file($file_tmp, $upload_path)) {
+            $_SESSION['error'] = "Failed to upload profile photo";
+            header("Location: ../pages/staff_register.php");
+            exit();
+        }
+    } else {
+        $_SESSION['error'] = "Invalid file type for profile photo";
+        header("Location: ../pages/staff_register.php");
+        exit();
+    }
+}
+
+// Insert staff member
+$insert_query = "INSERT INTO staff (staff_id, service_id, first_name, last_name, nic, contact_no, email, gender, password, position, profile_photo, status) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active')";
+$insert_stmt = $con->prepare($insert_query);
+$insert_stmt->bind_param("sssssssssss", $staff_id, $service_id, $first_name, $last_name, $nic, $contact_no, $email, $gender, $hashed_password, $position, $profile_photo);
+
+if (!$insert_stmt->execute()) {
+    $_SESSION['error'] = "Failed to register staff member: " . $insert_stmt->error;
+    $insert_stmt->close();
+    header("Location: ../pages/staff_register.php");
+    exit();
+}
+$insert_stmt->close();
+
+// Handle course assignments for Instructors/Senior Instructors
+$is_instructor = in_array($position, ['Instructor', 'Senior Instructor']);
+if ($is_instructor && isset($_POST['course_nos']) && is_array($_POST['course_nos'])) {
+    $course_nos = array_filter($_POST['course_nos']); // Remove empty values
+    
+    if (!empty($course_nos)) {
+        $course_insert_query = "INSERT INTO instructor_courses (staff_id, course_no, assigned_date, status) VALUES (?, ?, NOW(), 'active')";
+        $course_stmt = $con->prepare($course_insert_query);
+        
+        foreach ($course_nos as $course_no) {
+            $course_no = trim($course_no);
+            if (!empty($course_no)) {
+                // Check if already assigned (shouldn't happen, but safety check)
+                $check_course = $con->prepare("SELECT id FROM instructor_courses WHERE staff_id = ? AND course_no = ?");
+                $check_course->bind_param("ss", $staff_id, $course_no);
+                $check_course->execute();
+                $check_result = $check_course->get_result();
+                $check_course->close();
+                
+                if ($check_result->num_rows == 0) {
+                    $course_stmt->bind_param("ss", $staff_id, $course_no);
+                    $course_stmt->execute();
+                }
+            }
+        }
+        $course_stmt->close();
+    }
+}
+
+$_SESSION['success'] = "Staff member registered successfully! Staff ID: " . $staff_id;
+$con->close();
+header("Location: ../pages/staff_register.php");
+exit();
 ?>
