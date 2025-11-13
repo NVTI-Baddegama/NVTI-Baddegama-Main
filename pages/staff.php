@@ -51,37 +51,40 @@ $photo_upload_path = '../uploads/profile_photos/';
                 while ($row = $result->fetch_assoc()) {
                     ?>
 
-                    <div
-                        class="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col items-center p-6">
-                        <div class="mb-4">
-                            <?php if (!empty($row['profile_photo'])): ?>
+                    <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden w-full max-w-xs mx-auto">
+                        <?php if (!empty($row['profile_photo'])): ?>
+                            <div class="h-[280px] w-full overflow-hidden">
                                 <img src="<?php echo htmlspecialchars($photo_upload_path . $row['profile_photo']); ?>"
-                                    alt="Profile of <?php echo htmlspecialchars($row['first_name'] . ' ' . $row['last_name']); ?>"
-                                    class="w-28 h-28 object-cover border-2 border-blue-400 shadow rounded-md" />
-                            <?php else: ?>
-                                <div
-                                    class="w-28 h-28 rounded-md bg-gray-200 text-gray-600 flex items-center justify-center text-3xl font-semibold border shadow-inner">
-                                    <?php echo htmlspecialchars(strtoupper(substr($row['first_name'], 0, 1))); ?>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                        <div class="text-center mt-2">
-                            <h3 class="text-xl font-semibold text-gray-800">
+                                     alt="Profile of <?php echo htmlspecialchars($row['first_name'] . ' ' . $row['last_name']); ?>"
+                                     class="w-full h-full object-cover" />
+                            </div>
+                        <?php else: ?>
+                            <div
+                                class="w-full h-[280px] bg-gray-100 text-gray-600 flex items-center justify-center text-4xl font-semibold">
+                                <?php echo htmlspecialchars(strtoupper(substr($row['first_name'], 0, 1))); ?>
+                            </div>
+                        <?php endif; ?>
+                    
+                        <div class="p-5 text-center">
+                            <h3 class="text-lg font-semibold text-gray-800">
                                 <?php echo htmlspecialchars($row['first_name'] . ' ' . $row['last_name']); ?>
                             </h3>
                             <p class="text-sm text-gray-500 mt-1">
                                 <?php echo htmlspecialchars($row['position']); ?>
                             </p>
-                        </div>
-                        <div class="mt-4">
-                            <button type="button" data-id="<?php echo htmlspecialchars($row['id']); ?>"
-                                class="open-modal-btn px-3 py-1.5 rounded text-white text-sm transition"
-                                style="background-color: #7A1418;"
-                                aria-label="View profile of <?php echo htmlspecialchars($row['first_name'] . ' ' . $row['last_name']); ?>">
-                                View Profile
-                            </button>
+                    
+                            <div class="mt-4">
+                                <button type="button"
+                                        data-id="<?php echo htmlspecialchars($row['id']); ?>"
+                                        class="open-modal-btn px-4 py-2 rounded-md text-white text-sm font-medium transition"
+                                        style="background-color: #7A1418;"
+                                        aria-label="View profile of <?php echo htmlspecialchars($row['first_name'] . ' ' . $row['last_name']); ?>">
+                                    View Profile
+                                </button>
+                            </div>
                         </div>
                     </div>
+
                     <?php
                 }
             } else {
@@ -92,17 +95,18 @@ $photo_upload_path = '../uploads/profile_photos/';
         </div>
     </div>
 
-    <div id="staffModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 hidden">
+    <!-- Fixed Modal with proper mobile scroll -->
+    <div id="staffModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 hidden overflow-y-auto p-4">
 
-        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full m-4 overflow-hidden" id="modalContent">
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full my-8 overflow-hidden" id="modalContent">
 
-            <div class="flex justify-between items-center border-b p-4">
+            <div class="flex justify-between items-center border-b p-4 sticky top-0 bg-white z-10">
                 <h2 class="text-2xl font-bold text-gray-800">Staff Member Profile</h2>
                 <button type="button" id="modalCloseBtn"
                     class="text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
             </div>
 
-            <div id="modalBody" class="p-6">
+            <div id="modalBody" class="p-6 overflow-y-auto" style="max-height: calc(90vh - 120px);">
 
                 <div id="modalLoader" class="text-center w-full py-20">
                     <p>Loading details...</p>
@@ -110,7 +114,7 @@ $photo_upload_path = '../uploads/profile_photos/';
 
                 <div id="modalDetails" class="md:flex hidden">
 
-                    <div class="md:w-1/3 p-4 flex-shrink-0 flex items-center justify-center">
+                    <div class="md:w-1/3 p-4 flex-shrink-0 flex justify-center md:justify-start">
                         <img id="modalImage" class="w-48 h-48 rounded-lg object-cover shadow-md hidden" src=""
                             alt="Profile Photo">
                         <div id="modalAvatar"
@@ -169,6 +173,9 @@ $photo_upload_path = '../uploads/profile_photos/';
                     modal.classList.remove('hidden');
                     modalDetails.classList.add('hidden');
                     modalLoader.classList.remove('hidden');
+                    
+                    // Prevent body scroll when modal is open
+                    document.body.style.overflow = 'hidden';
 
                     fetch(`get_staff_details.php?id=${staffId}`)
                         .then(response => response.json())
@@ -254,6 +261,9 @@ $photo_upload_path = '../uploads/profile_photos/';
                 modalLoader.innerHTML = '<p>Loading details...</p>';
                 modalImage.classList.add('hidden');
                 modalAvatar.classList.add('hidden');
+                
+                // Re-enable body scroll when modal is closed
+                document.body.style.overflow = '';
             }
 
             closeBtn.addEventListener('click', closeModal);
