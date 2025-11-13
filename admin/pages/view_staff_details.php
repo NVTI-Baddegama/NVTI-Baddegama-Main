@@ -210,40 +210,6 @@ if (isset($_SESSION['staff_error_msg'])) {
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
 
-                <?php if ($is_instructor): ?>
-                <div class="border-t pt-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Assign New Course</label>
-                    <form method="POST" action="../lib/course_assignment_handler.php" class="space-y-3">
-                        <input type="hidden" name="action" value="add">
-                        <input type="hidden" name="staff_id" value="<?php echo htmlspecialchars($staff_id_to_view); ?>">
-                        <select name="course_no" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <option value="">-- Select a Course --</option>
-                            <?php
-                            foreach ($courses as $course) {
-                                // Check if already assigned
-                                $already_assigned = false;
-                                foreach ($assigned_courses as $assigned) {
-                                    if ($assigned['course_no'] == $course['course_no']) {
-                                        $already_assigned = true;
-                                        break;
-                                    }
-                                }
-                                if (!$already_assigned) {
-                                    echo '<option value="' . htmlspecialchars($course['course_no']) . '">' 
-                                         . htmlspecialchars($course['course_name']) . ' (' . htmlspecialchars($course['course_no']) . ')'
-                                         . '</option>';
-                                }
-                            }
-                            ?>
-                        </select>
-                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
-                            Add Course Assignment
-                        </button>
-                    </form>
-                    <p class="text-xs text-gray-500 mt-2">Assign courses one at a time. You can assign multiple courses to this instructor.</p>
-                </div>
-                <?php endif; ?>
-
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
                     <div class="flex items-center space-x-4">
@@ -293,6 +259,46 @@ if (isset($_SESSION['staff_error_msg'])) {
                     </button>
                 </div>
             </form>
+
+            <?php if ($is_instructor): ?>
+            <div class="border-t pt-4 mt-4">
+                <h4 class="text-lg font-semibold text-gray-800 mb-3">Assign New Course</h4>
+                <form method="POST" action="../lib/course_assignment_handler.php" class="space-y-3">
+                    <input type="hidden" name="action" value="add">
+                    <input type="hidden" name="staff_id" value="<?php echo htmlspecialchars($staff_id_to_view); ?>">
+                    <div>
+                        <label for="course_no" class="block text-sm font-medium text-gray-700 mb-2">Select Course</label>
+                        <select name="course_no" id="course_no" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="">-- Select a Course --</option>
+                            <?php
+                            foreach ($courses as $course) {
+                                // Check if already assigned
+                                $already_assigned = false;
+                                foreach ($assigned_courses as $assigned) {
+                                    if ($assigned['course_no'] == $course['course_no']) {
+                                        $already_assigned = true;
+                                        break;
+                                    }
+                                }
+                                if (!$already_assigned) {
+                                    echo '<option value="' . htmlspecialchars($course['course_no']) . '">' 
+                                         . htmlspecialchars($course['course_name']) . ' (' . htmlspecialchars($course['course_no']) . ')'
+                                         . '</option>';
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-plus mr-2"></i>Add Course Assignment
+                    </button>
+                </form>
+                <p class="text-xs text-gray-500 mt-2">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    Assign courses one at a time. You can assign multiple courses to this instructor.
+                </p>
+            </div>
+            <?php endif; ?>
 
             <div class="mt-6 border-t pt-4">
                  <a href="../lib/staff_action_handler.php?action=delete&staff_id=<?php echo htmlspecialchars($staff['staff_id']); ?>"
