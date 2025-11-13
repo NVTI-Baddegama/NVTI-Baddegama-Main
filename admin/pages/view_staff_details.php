@@ -177,6 +177,19 @@ if (isset($_SESSION['staff_error_msg'])) {
                 <input type="hidden" name="action" value="update">
                 <input type="hidden" name="old_image_name" value="<?php echo htmlspecialchars($old_image_name ?? ''); ?>">
 
+                <div>
+                    <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                    <input type="text" id="first_name" name="first_name" required
+                           value="<?php echo htmlspecialchars($staff['first_name']); ?>"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+
+                <div>
+                    <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" required
+                           value="<?php echo htmlspecialchars($staff['last_name']); ?>"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
                 <div class="form-group">
                     <label for="position" class="block text-sm font-medium text-gray-700 mb-1">Position:</label>
                     <select id="position" name="position" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required onchange="toggleCourseSection()">

@@ -10,13 +10,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
 
     // 1. Get data from the form
     $staff_id = trim($_POST['staff_id']);
+    
+    // **** START: ADDED FIELDS ****
+    $first_name = mysqli_real_escape_string($con, trim($_POST['first_name']));
+    $last_name = mysqli_real_escape_string($con, trim($_POST['last_name']));
+    // **** END: ADDED FIELDS ****
+    
     $position = trim($_POST['position']);
     $contact_no = trim($_POST['contact_no']);
     $email = trim($_POST['email']);
     $status = trim($_POST['status']);
     
     // --- NEW: Check for admin type ---
-    // If checkbox is ticked, value is 'admin'. If unticked, it's not set.
     $new_type = (isset($_POST['admin_type']) && $_POST['admin_type'] === 'admin') ? 'admin' : NULL;
     // --- END NEW ---
 
@@ -31,8 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     $redirect_page_edit = "../pages/view_staff_details.php?staff_id=" . urlencode($staff_id);
 
     // Validation
-    if (empty($staff_id) || empty($position) || empty($status) || empty($contact_no) || empty($email)) {
-        $_SESSION['staff_error_msg'] = "Required fields (Position, Contact, Email, Status) cannot be empty.";
+    // **** ADDED first_name and last_name to validation ****
+    if (empty($staff_id) || empty($first_name) || empty($last_name) || empty($position) || empty($status) || empty($contact_no) || empty($email)) {
+        $_SESSION['staff_error_msg'] = "Required fields (First Name, Last Name, Position, Contact, Email, Status) cannot be empty.";
         header("Location: $redirect_page_edit");
         exit();
     }
@@ -87,14 +93,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
 
 
     // --- 4. Prepare Update Query ---
-    // ADDED `type = ?` to the query
+    // **** ADDED `first_name = ?` and `last_name = ?` to the query ****
     $update_query = "UPDATE staff SET 
+                        first_name = ?,
+                        last_name = ?,
                         position = ?, 
                         course_no = ?, 
                         status = ?,
                         contact_no = ?,
                         email = ?,
-                        type = ?        -- ADDED
+                        type = ?
                         $image_update_sql_part
                      WHERE staff_id = ?";
 
@@ -106,31 +114,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
 
     // --- 5. Build Parameters and Types for Binding ---
     // Base parameters (without image)
-    $types_for_update = "sssssss"; // s=position, s=course_no, s=status, s=contact, s=email, s=type, s=staff_id
+    // **** ADDED "ss" to types and variables for names ****
+    $types_for_update = "sssssssss"; // ss=names, s=position, s=course_no, s=status, s=contact, s=email, s=type, s=staff_id
     $params_for_update = [
+        $first_name, 
+        $last_name,
         $position, $course_no, $status,
         $contact_no, $email, 
-        $new_type, // ADDED
+        $new_type,
         $staff_id
     ];
 
     // If image was updated (or removed), adjust query and params
     if (!empty($image_update_sql_part)) {
+        // **** ADDED `first_name = ?` and `last_name = ?` to the query ****
         $update_query = "UPDATE staff SET 
+                        first_name = ?,
+                        last_name = ?,
                         position = ?, 
                         course_no = ?, 
                         status = ?,
                         contact_no = ?,
                         email = ?,
-                        type = ?,            -- ADDED
+                        type = ?,
                         profile_photo = ?    -- Image param
                      WHERE staff_id = ?";
         
-        $types_for_update = "ssssssss"; // Added 's' for type
+        // **** ADDED "ss" to types and variables for names ****
+        $types_for_update = "ssssssssss"; // Added 'ss' for names
         $params_for_update = [
+            $first_name,
+            $last_name,
             $position, $course_no, $status,
             $contact_no, $email, 
-            $new_type, // ADDED
+            $new_type,
             $new_image_name, // Image name parameter
             $staff_id
         ];
