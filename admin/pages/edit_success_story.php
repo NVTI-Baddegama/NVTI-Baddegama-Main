@@ -67,7 +67,8 @@ $stmt->close();
         <div>
             <label for="story_image" class="block text-sm font-medium text-gray-700">Update Student Image (Optional)</label>
             
-            <?php if (!empty($story['image_path'])): ?>
+            <?php 
+            if (!empty($story['image_path']) && file_exists(__DIR__ . '/../../' . $story['image_path'])): ?>
                 <img src="../../<?php echo htmlspecialchars($story['image_path']); ?>" alt="Current Image" class="w-32 h-32 object-cover rounded-md my-2">
             <?php endif; ?>
             
