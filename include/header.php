@@ -12,7 +12,7 @@ if (isset($con)) { // Check if connection exists
     $category_nav_query = "SELECT * FROM course_categories ORDER BY category_name ASC";
     $category_nav_result = $con->query($category_nav_query);
     if ($category_nav_result && $category_nav_result->num_rows > 0) {
-        while($row = $category_nav_result->fetch_assoc()) {
+        while ($row = $category_nav_result->fetch_assoc()) {
             $categories_nav[] = $row;
         }
     }
@@ -25,20 +25,21 @@ if (isset($con)) { // Check if connection exists
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <title>NVTI Baddegama | Vocational Training & Courses</title>
-    <meta name="description" content="Explore accredited vocational training programs at NVTI Baddegama. We offer courses in IT, Engineering, Hospitality, and more. Start your skilled career path today.">
+    <meta name="description"
+        content="Explore accredited vocational training programs at NVTI Baddegama. We offer courses in IT, Engineering, Hospitality, and more. Start your skilled career path today.">
 
     <link rel="icon" href="../images/favicon.png" type="image/png">
-    
+
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
-    
-    <link rel="stylesheet" href="../css/style.css"> 
-    
-    <script src="../js/staff_script.js"></script> 
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <script src="../js/staff_script.js"></script>
     <link rel="icon" href="../images/favicon.png" type="image/png">
 
 </head>
@@ -77,42 +78,48 @@ if (isset($con)) { // Check if connection exists
                         <a href="../pages/staff.php"
                             class="block py-2 px-3 text-white rounded nav-hover-border nav-link-with-border md:p-0 transition duration-300">Staff</a>
                     </li>
-                    
+
                     <li>
                         <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar"
                             class="flex items-center justify-between w-full py-2 px-3 text-white rounded nav-hover-border nav-link-with-border md:p-0 md:w-auto transition duration-300">
                             Courses
-                            <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 10 6">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="2" d="m1 1 4 4 4-4" />
                             </svg>
                         </button>
                         <div id="dropdownNavbar"
                             class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-56">
-                            <ul class="py-2 text-sm text-gray-700"
-                                aria-labelledby="dropdownNavbarLink">
-                                
+                            <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownNavbarLink">
+
                                 <?php if (!empty($categories_nav)): ?>
                                     <?php foreach ($categories_nav as $category): ?>
                                         <li>
-                                            <a href="../pages/all_course.php?category_id=<?php echo $category['id']; ?>" class="block px-4 py-2 hover:bg-gray-100">
+                                            <a href="../pages/all_course.php?category_id=<?php echo $category['id']; ?>"
+                                                class="block px-4 py-2 hover:bg-gray-100">
                                                 <?php echo htmlspecialchars($category['category_name']); ?>
                                             </a>
                                         </li>
                                     <?php endforeach; ?>
                                 <?php else: ?>
-                                     <li><a href="#" class="block px-4 py-2 text-gray-400">No categories found</a></li>
+                                    <li><a href="#" class="block px-4 py-2 text-gray-400">No categories found</a></li>
                                 <?php endif; ?>
-                                
+
                                 <li class="border-t border-gray-100 my-1"></li>
                                 <li>
-                                    <a href="../pages/all_course.php" class="block px-4 py-2 font-semibold text-indigo-600 hover:bg-gray-100">
+                                    <a href="../pages/all_course.php"
+                                        class="block px-4 py-2 font-semibold text-indigo-600 hover:bg-gray-100">
                                         View All Courses
                                     </a>
                                 </li>
                             </ul>
                         </div>
+                    </li>
+                    <li>
+                        <a href="../pages/success_stories.php"
+                            class="block py-2 px-3 text-white rounded nav-hover-border nav-link-with-border md:p-0 transition duration-300">Success
+                            Stories</a>
                     </li>
                     <li>
                         <a href="../pages/gallery.php"
@@ -132,6 +139,6 @@ if (isset($con)) { // Check if connection exists
             </div>
         </div>
     </nav>
-<!-- 
+    <!-- 
     
 -->
