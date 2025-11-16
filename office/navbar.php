@@ -32,7 +32,17 @@ if (isset($_SESSION['position'])) {
         </a>
         
         <!-- User Profile Section -->
-        <div class="flex items-center space-x-2 sm:space-x-3">
+        <div class="flex items-center space-x-2 sm:space-x-4">
+            <!-- Desktop User Info (Visible on all screens) -->
+            <div class="flex flex-col items-end">
+                <span class="text-sm font-medium text-white truncate max-w-[150px] sm:max-w-[200px]">
+                    <?php echo htmlspecialchars($current_staff['first_name'] . ' ' . $current_staff['last_name']); ?>
+                </span>
+                <span class="text-xs text-gray-300 truncate max-w-[150px] sm:max-w-[200px]">
+                    <?php echo htmlspecialchars($current_staff['position']); ?>
+                </span>
+            </div>
+            
             <!-- Profile Dropdown -->
             <div class="relative">
                 <button type="button" 
@@ -288,8 +298,16 @@ document.addEventListener('DOMContentLoaded', function() {
     #user-dropdown {
         width: calc(100vw - 2rem);
         right: 1rem;
-        left: 1rem;
+        left: auto;
         margin-right: 0;
+    }
+    
+    /* Mobile user info styling */
+    .mobile-user-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        margin-right: 0.5rem;
     }
 }
 
@@ -317,5 +335,33 @@ img[src*="profile_photos"] {
 /* Enhanced shadow for profile images */
 .shadow-md {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* User info text truncation */
+.max-w-\[150px\] {
+    max-width: 150px;
+}
+.max-w-\[200px\] {
+    max-width: 200px;
+}
+
+/* Fix for mobile dropdown positioning */
+@media (max-width: 640px) {
+    #user-dropdown {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 1rem;
+        right: 1rem;
+        width: auto;
+        margin: 0;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+    }
+    
+    #user-dropdown:not(.hidden) {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 </style>
