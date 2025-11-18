@@ -24,17 +24,6 @@ if (isset($_POST['submit'])) {
 
     // --- 1. දත්ත ලබා ගැනීම ---
 
-    // Generate Student ID
-    do {
-        $StudentID = "VTA_BAD" . rand(100000, 999999);
-        $check_id_query = "SELECT Student_id FROM student_enrollments WHERE Student_id = ?";
-        $stmt_check_id = $con->prepare($check_id_query);
-        $stmt_check_id->bind_param("s", $StudentID);
-        $stmt_check_id->execute();
-        $check_id_result = $stmt_check_id->get_result();
-        $stmt_check_id->close();
-    } while ($check_id_result->num_rows > 0);
-
     $fullName = trim($_POST['fullName']);
     $nic = trim($_POST['nic']);
     $address = trim($_POST['address']);
@@ -73,10 +62,39 @@ if (isset($_POST['submit'])) {
         exit();
     }
 
-    // --- 3. Duplicate NIC Check (Removed as per your request) ---
-    // (NIC check block is removed)
+    // --- 3. NEW: Check for duplicate NIC + Course combination ---
+    $check_duplicate_query = "SELECT Student_id FROM student_enrollments WHERE nic = ? AND course_option_one = ?";
+    $stmt_check_dup = $con->prepare($check_duplicate_query);
+    if (!$stmt_check_dup) {
+        header("location:../pages/register.php?error=Database_prepare_error");
+        exit();
+    }
+    
+    $stmt_check_dup->bind_param("ss", $nic, $courseOptionOne);
+    $stmt_check_dup->execute();
+    $duplicate_result = $stmt_check_dup->get_result();
+    
+    if ($duplicate_result->num_rows > 0) {
+        $stmt_check_dup->close();
+        $con->close();
+        header("location:../pages/register.php?error=Duplicate_Application_You_have_already_applied_for_this_course");
+        exit();
+    }
+    $stmt_check_dup->close();
+    // --- END Duplicate Check ---
 
-    // --- 4. දත්ත සමුදායට දත්ත ඇතුළු කිරීම ---
+    // --- 4. Generate Student ID ---
+    do {
+        $StudentID = "VTA_BAD" . rand(100000, 999999);
+        $check_id_query = "SELECT Student_id FROM student_enrollments WHERE Student_id = ?";
+        $stmt_check_id = $con->prepare($check_id_query);
+        $stmt_check_id->bind_param("s", $StudentID);
+        $stmt_check_id->execute();
+        $check_id_result = $stmt_check_id->get_result();
+        $stmt_check_id->close();
+    } while ($check_id_result->num_rows > 0);
+
+    // --- 5. දත්ත සමුදායට දත්ත ඇතුළු කිරීම ---
     $insert_query = "INSERT INTO student_enrollments (
         Student_id, full_name, nic, address, dob, contact_no, whatsapp_no, 
         ol_pass_status, ol_english_grade, ol_maths_grade, ol_science_grade, 
@@ -111,7 +129,7 @@ if (isset($_POST['submit'])) {
     if ($stmt_insert->execute()) {
         $stmt_insert->close();
 
-        // --- 5. NEW: GENERATE PDF ---
+        // --- 6. NEW: GENERATE PDF ---
 
         // Define a temporary path to save the PDF
         $pdf_filename = "Student_App_" . $nic . "_" . time() . ".pdf";
@@ -211,7 +229,7 @@ if (isset($_POST['submit'])) {
         // --- END GENERATE PDF ---
 
 
-        // --- 6. SEND EMAIL NOTIFICATION (with PDF) ---
+        // --- 7. SEND EMAIL NOTIFICATION (with PDF) ---
         $mail = new PHPMailer(true);
         
         
@@ -296,7 +314,7 @@ if (isset($_POST['submit'])) {
             error_log("PHPMailer Error (lib/registerbacend.php): {$mail->ErrorInfo}");
         }
 
-        // --- 7. NEW: Delete the teporary PDF file ---
+        // --- 8. NEW: Delete the temporary PDF file ---
         if (file_exists($pdf_file_path)) {
             unlink($pdf_file_path);
         }
@@ -306,7 +324,10 @@ if (isset($_POST['submit'])) {
         header("location:../pages/register.php?success=Application_Submitted_Successfully");
         exit();
     } else {
-        // ... (Error handling - unchanged) ...
+        $stmt_insert->close();
+        $con->close();
+        header("location:../pages/register.php?error=Database_insert_failed");
+        exit();
     }
 } else {
     header("location:../pages/register.php?error=Invalid_Access_Method");

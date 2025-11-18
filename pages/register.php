@@ -191,19 +191,25 @@ if ($courses_result && $courses_result->num_rows > 0) {
 
   $error_message = '';
   $alert_type = '';
+  $should_redirect_whatsapp = false;
 
   if (isset($_GET['error'])) {
     $error_message = match ($_GET['error']) {
       'Please_fill_all_required_fields' => 'Please fill in all required fields!',
       'Invalid_NIC_format' => 'Invalid NIC format!',
+      'Duplicate_Application_You_have_already_applied_for_this_course' => 'You have already applied for this course with this NIC. You can apply for other courses, but cannot apply for the same course multiple times.',
+      'Invalid_Contact_Number_format' => 'Invalid contact number format!',
+      'Invalid_WhatsApp_Number_format' => 'Invalid WhatsApp number format!',
+      'Please_fill_all_O_L_grades' => 'Please fill in all O/L grades!',
+      'Database_prepare_error' => 'Database error occurred. Please try again.',
+      'Database_insert_failed' => 'Failed to submit application. Please try again.',
       default => 'An unknown error occurred.',
     };
     $alert_type = 'error';
   } elseif (isset($_GET['success'])) {
-    $error_message = 'Registration successful!';
+    $error_message = 'Registration successful! Redirecting to WhatsApp channel...';
     $alert_type = 'success';
-    // Use a client-side redirect since headers have likely already been sent
-    echo '<script>window.location.href="https://whatsapp.com/channel/0029Vb6qtaVCXC3CjW8z4O1y";</script>';
+    $should_redirect_whatsapp = true;
   }
   ?>
   <div id="alert-container"></div>
@@ -252,6 +258,13 @@ if ($courses_result && $courses_result->num_rows > 0) {
 
     <?php if ($error_message): ?>
       showAlert('<?php echo $alert_type; ?>', '<?php echo ucfirst($alert_type); ?>', '<?php echo $error_message; ?>');
+      
+      <?php if ($should_redirect_whatsapp): ?>
+      // Only redirect to WhatsApp on successful registration
+      setTimeout(function() {
+        window.location.href = "https://whatsapp.com/channel/0029Vb6qtaVCXC3CjW8z4O1y";
+      }, 2000);
+      <?php endif; ?>
     <?php endif; ?>
   </script>
   <script>
