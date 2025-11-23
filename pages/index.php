@@ -28,7 +28,7 @@
                 
                 // --- ADDED FOR SCROLLING FEEDBACK ---
                 animation: {
-                    'scroll': 'scroll 1s linear infinite',
+                    'scroll': 'scroll 36s linear infinite',
                 },
                 keyframes: {
                     'scroll': {
@@ -147,7 +147,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
                 <div class="bg-white rounded-2xl shadow-xl shadow-blue-100 overflow-hidden transition duration-300 ease-in-out hover:shadow-2xl">
-                    <img class="w-full h-[300px] object-cover" src="../images/leaders/ad.jpeg" alt="Placeholder image for card 1">
+                    <img class="w-full h-[300px] object-cover" src="../images/leaders/ad.png" alt="Placeholder image for card 1">
                     <div class="p-6">
                         <h3 class="text-2xl font-bold text-primary-blue mb-2">Assistent Director</h3>
                         <p class="text-secondary-gray">
@@ -170,22 +170,22 @@
 
 
                 <div class="bg-white rounded-2xl shadow-xl shadow-blue-100 overflow-hidden transition duration-300 ease-in-out hover:shadow-2xl">
-                    <img class="w-full h-[300px] object-cover" src="https://via.placeholder.com/400x300/FBCFE8/333333?text=Course+Image" alt="Placeholder image for card 4">
+                    <img class="w-full h-[300px] object-cover" src="../images/leaders/ac.jpg" alt="Placeholder image for card 4">
                     <div class="p-6">
-                        <h3 class="text-2xl font-bold text-primary-blue mb-2">Account Officer</h3>
+                        <h3 class="text-2xl font-bold text-primary-blue mb-2">Finance  Officer</h3>
                         <p class="text-secondary-gray">
-                            With meticulous attention to detail, the Account Officer ensures the financial integrity and accuracy of our operations, serving as a crucial steward of our resources.
+                            With meticulous attention to detail, the Finance Officer ensures the financial integrity and accuracy of our operations, serving as a crucial steward of our resources.
                         </p>
                         
                     </div>
                 </div>
 
                 <div class="bg-white rounded-2xl shadow-xl shadow-blue-100 overflow-hidden transition duration-300 ease-in-out hover:shadow-2xl">
-                    <img class="w-full h-[300px] object-cover" src="https://via.placeholder.com/400x300/BFDBFE/333333?text=Course+Image" alt="Placeholder image for card 3">
+                    <img class="w-full h-[300px] object-cover" src="../images/leaders/tao.jpg" alt="Placeholder image for card 3">
                     <div class="p-6">
-                        <h3 class="text-2xl font-bold text-primary-blue mb-2">Program Officer</h3>
+                        <h3 class="text-2xl font-bold text-primary-blue mb-2">Testing Officer</h3>
                         <p class="text-secondary-gray">
-                            The driving force behind our key initiatives, the Program Officer expertly manages projects from concept to completion, ensuring we meet our goals and deliver impact.
+                           Testing Office conducts National Vocational Qualification (NVQ) assessments to certify the skills and competencies of trainees.
                         </p>
                        
                     </div>
@@ -194,7 +194,7 @@
             </div>
         </section>
 
-        <div>
+        <div >
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-12">
                 <h2 class="text-4xl md:text-5xl font-extrabold text-primary-blue leading-tight text-center">
                     What our students say
@@ -246,7 +246,8 @@
             if (!function_exists('create_feedback_card')) {
                 function create_feedback_card($item) {
                     return '
-                    <div class="flex-shrink-0 w-[380px] h-full bg-white rounded-2xl shadow-xl shadow-blue-100 p-6 flex flex-col">
+                    <div class="mb-15">
+                    <div class="flex-shrink-0 w-[380px] h-full bg-white rounded-2xl shadow-md mb-10 shadow-blue-100 p-6 flex flex-col transition duration-300 ease-in-out hover:shadow-lg">
                         <div class="flex items-center justify-between mb-4">
                             <h4 class="text-xl font-bold text-primary-blue">' . htmlspecialchars($item['name']) . '</h4>
                             ' . render_stars($item['rating']) . '
@@ -254,14 +255,16 @@
                         <blockquote class="flex-grow text-secondary-gray italic border-l-4 border-blue-100 pl-4">
                             <p>"' . htmlspecialchars($item['feedback']) . '"</p>
                         </blockquote>
-                    </div>';
+                    </div>
+                    </div>
+                    ';
                 }
             }
 
             // --- 3. Display Scroller or a "No Feedback" Message ---
             if (!empty($feedbacks)) :
             ?>
-                <div class="w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+                <div class="w-full my-5 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
                     <div class="flex w-max animate-scroll hover:[animation-play-state:paused]">
                         <div class="flex space-x-6 px-3 py-4">
                             <?php foreach ($feedbacks as $item) { echo create_feedback_card($item); } ?>
@@ -269,7 +272,8 @@
                     </div>
                 </div>
             <?php else: ?>
-                <div class="text-center p-8 bg-white rounded-2xl shadow-lg shadow-blue-100">
+            <div clas="flex ">
+                <div class="m-5 text-center p-8 bg-white rounded-2xl shadow-lg shadow-blue-100">
                     <p class="text-lg text-secondary-gray">
                         No student feedback is available at the moment.
                     </p>
@@ -282,12 +286,13 @@
 
             <div class="w-full flex justify-center">
 
-    <button id="openFeedbackModal" 
-            class="px-6 py-2 text-base font-semibold text-white bg-primary-blue rounded-lg shadow-md hover:bg-blue-800 transition duration-300 ease-in-out transform hover:scale-105 active:scale-95">
-        Add Yours
-    </button>
+                <button id="openFeedbackModal" 
+                        class="px-6 py-2 text-base font-semibold text-white bg-primary-blue rounded-lg shadow-md hover:bg-blue-800 transition duration-300 ease-in-out transform hover:scale-105 active:scale-95">
+                    Add Yours
+                </button>
     
-</div>
+            </div>
+                
     </main>
 
     <div id="feedbackModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black bg-opacity-60 transition-opacity duration-300">

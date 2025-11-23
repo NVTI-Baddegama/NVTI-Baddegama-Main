@@ -1,0 +1,274 @@
+[01-Nov-2025 07:58:18 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'nvtibadde'@'atlas.webserverlive.com' to database 'nvtibadde_vta_baddegam' in /home/nvtibadde/public_html/include/connection.php:20
+Stack trace:
+#0 /home/nvtibadde/public_html/include/connection.php(20): mysqli->__construct()
+#1 /home/nvtibadde/public_html/include/header.php(7): include_once('/home/nvtibadde...')
+#2 /home/nvtibadde/public_html/pages/index.php(1): include_once('/home/nvtibadde...')
+#3 {main}
+  thrown in /home/nvtibadde/public_html/include/connection.php on line 20
+[01-Nov-2025 07:58:21 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'nvtibadde'@'atlas.webserverlive.com' to database 'nvtibadde_vta_baddegam' in /home/nvtibadde/public_html/include/connection.php:20
+Stack trace:
+#0 /home/nvtibadde/public_html/include/connection.php(20): mysqli->__construct()
+#1 /home/nvtibadde/public_html/include/header.php(7): include_once('/home/nvtibadde...')
+#2 /home/nvtibadde/public_html/pages/index.php(1): include_once('/home/nvtibadde...')
+#3 {main}
+  thrown in /home/nvtibadde/public_html/include/connection.php on line 20
+[01-Nov-2025 07:58:38 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'nvtibadde'@'atlas.webserverlive.com' to database 'nvtibadde_vta_baddegam' in /home/nvtibadde/public_html/include/connection.php:20
+Stack trace:
+#0 /home/nvtibadde/public_html/include/connection.php(20): mysqli->__construct()
+#1 /home/nvtibadde/public_html/include/header.php(7): include_once('/home/nvtibadde...')
+#2 /home/nvtibadde/public_html/pages/index.php(1): include_once('/home/nvtibadde...')
+#3 {main}
+  thrown in /home/nvtibadde/public_html/include/connection.php on line 20
+[01-Nov-2025 07:58:43 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'nvtibadde'@'atlas.webserverlive.com' to database 'nvtibadde_vta_baddegam' in /home/nvtibadde/public_html/include/connection.php:20
+Stack trace:
+#0 /home/nvtibadde/public_html/include/connection.php(20): mysqli->__construct()
+#1 /home/nvtibadde/public_html/include/header.php(7): include_once('/home/nvtibadde...')
+#2 /home/nvtibadde/public_html/pages/index.php(1): include_once('/home/nvtibadde...')
+#3 {main}
+  thrown in /home/nvtibadde/public_html/include/connection.php on line 20
+[01-Nov-2025 07:58:47 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'nvtibadde'@'atlas.webserverlive.com' to database 'nvtibadde_vta_baddegam' in /home/nvtibadde/public_html/include/connection.php:20
+Stack trace:
+#0 /home/nvtibadde/public_html/include/connection.php(20): mysqli->__construct()
+#1 /home/nvtibadde/public_html/include/header.php(7): include_once('/home/nvtibadde...')
+#2 /home/nvtibadde/public_html/pages/index.php(1): include_once('/home/nvtibadde...')
+#3 {main}
+  thrown in /home/nvtibadde/public_html/include/connection.php on line 20
+[01-Nov-2025 11:31:06 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[01-Nov-2025 11:36:45 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[01-Nov-2025 11:52:09 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.feedback' doesn't exist in /home/nvtibadde/public_html/pages/index.php:217
+Stack trace:
+#0 /home/nvtibadde/public_html/pages/index.php(217): mysqli->query()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/pages/index.php on line 217
+[01-Nov-2025 11:53:21 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.feedback' doesn't exist in /home/nvtibadde/public_html/pages/index.php:217
+Stack trace:
+#0 /home/nvtibadde/public_html/pages/index.php(217): mysqli->query()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/pages/index.php on line 217
+[01-Nov-2025 11:54:00 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.feedback' doesn't exist in /home/nvtibadde/public_html/pages/index.php:217
+Stack trace:
+#0 /home/nvtibadde/public_html/pages/index.php(217): mysqli->query()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/pages/index.php on line 217
+[01-Nov-2025 11:54:15 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.feedback' doesn't exist in /home/nvtibadde/public_html/pages/index.php:217
+Stack trace:
+#0 /home/nvtibadde/public_html/pages/index.php(217): mysqli->query()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/pages/index.php on line 217
+[01-Nov-2025 11:54:47 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.feedback' doesn't exist in /home/nvtibadde/public_html/pages/index.php:217
+Stack trace:
+#0 /home/nvtibadde/public_html/pages/index.php(217): mysqli->query()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/pages/index.php on line 217
+[01-Nov-2025 13:20:43 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[01-Nov-2025 13:25:57 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[01-Nov-2025 14:30:34 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[01-Nov-2025 16:26:28 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[01-Nov-2025 17:07:14 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[01-Nov-2025 17:07:20 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[02-Nov-2025 06:38:23 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[02-Nov-2025 08:30:05 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[02-Nov-2025 08:33:46 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[02-Nov-2025 09:08:41 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[02-Nov-2025 13:26:54 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[02-Nov-2025 13:28:19 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[02-Nov-2025 13:28:20 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[02-Nov-2025 13:28:32 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[02-Nov-2025 14:15:09 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[02-Nov-2025 14:28:09 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[02-Nov-2025 17:50:52 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 03:18:45 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 03:21:31 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 03:29:33 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 04:23:03 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 04:36:26 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 04:39:56 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 04:48:02 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 04:52:32 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 04:52:40 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 05:01:42 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 05:16:00 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 05:25:47 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 05:37:09 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 05:55:45 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 05:58:38 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 05:59:58 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 06:17:40 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 06:34:28 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 06:37:43 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 06:38:38 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 06:49:40 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 06:58:38 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 06:58:38 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 06:58:39 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 07:01:51 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 07:19:55 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 13:13:58 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 13:15:50 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 15:23:56 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 15:24:31 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 15:26:32 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 15:26:32 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 15:29:27 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 15:30:38 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 16:07:39 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[03-Nov-2025 16:50:20 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 03:45:25 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 03:45:55 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 04:20:19 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 04:30:49 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 04:55:47 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 05:16:24 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 05:28:32 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 05:45:28 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 05:49:45 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 06:18:21 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 06:18:22 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 06:18:23 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 06:32:17 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 06:35:54 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 06:49:13 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 07:16:49 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 09:45:43 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 10:12:50 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 10:18:02 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 10:18:40 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 17:25:26 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[04-Nov-2025 18:38:09 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[05-Nov-2025 00:48:00 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[05-Nov-2025 00:48:35 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[05-Nov-2025 01:11:44 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[05-Nov-2025 05:52:35 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[05-Nov-2025 06:19:00 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[05-Nov-2025 06:19:05 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[05-Nov-2025 06:20:40 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[05-Nov-2025 08:19:12 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[05-Nov-2025 15:02:26 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[05-Nov-2025 15:03:20 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[05-Nov-2025 17:02:04 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[05-Nov-2025 17:02:13 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[06-Nov-2025 07:52:49 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[06-Nov-2025 09:23:50 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[06-Nov-2025 10:11:43 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[06-Nov-2025 10:11:52 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[06-Nov-2025 13:45:20 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[06-Nov-2025 13:47:08 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[06-Nov-2025 15:06:38 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[06-Nov-2025 15:07:25 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[06-Nov-2025 17:42:58 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[06-Nov-2025 18:14:44 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[06-Nov-2025 18:20:06 UTC] PHP Parse error:  syntax error, unexpected token ">" in /home/nvtibadde/public_html/pages/all_course.php on line 99
+[06-Nov-2025 18:20:11 UTC] PHP Parse error:  syntax error, unexpected token ">" in /home/nvtibadde/public_html/pages/all_course.php on line 99
+[06-Nov-2025 18:20:25 UTC] PHP Parse error:  syntax error, unexpected token ">" in /home/nvtibadde/public_html/pages/all_course.php on line 99
+[06-Nov-2025 18:22:32 UTC] PHP Parse error:  syntax error, unexpected token ">" in /home/nvtibadde/public_html/pages/all_course.php on line 99
+[06-Nov-2025 18:22:40 UTC] PHP Parse error:  syntax error, unexpected token ">" in /home/nvtibadde/public_html/pages/all_course.php on line 99
+[06-Nov-2025 18:26:23 UTC] PHP Parse error:  syntax error, unexpected token "echo" in /home/nvtibadde/public_html/pages/all_course.php on line 100
+[06-Nov-2025 18:28:03 UTC] PHP Parse error:  syntax error, unexpected token "echo" in /home/nvtibadde/public_html/pages/all_course.php on line 100
+[06-Nov-2025 18:29:14 UTC] PHP Parse error:  syntax error, unexpected token "echo" in /home/nvtibadde/public_html/pages/all_course.php on line 100
+[06-Nov-2025 18:29:47 UTC] PHP Parse error:  syntax error, unexpected token "echo" in /home/nvtibadde/public_html/pages/all_course.php on line 100
+[07-Nov-2025 00:02:58 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[07-Nov-2025 00:02:58 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[07-Nov-2025 07:51:39 UTC] PHP Parse error:  Unmatched '}' in /home/nvtibadde/public_html/pages/course_details.php on line 254
+[07-Nov-2025 12:15:05 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[07-Nov-2025 15:50:05 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[08-Nov-2025 03:08:35 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[08-Nov-2025 06:17:47 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/nvtibadde/public_html/include/header.php:22) in /home/nvtibadde/public_html/pages/course_details.php on line 8
+[08-Nov-2025 07:43:48 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[08-Nov-2025 08:54:45 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[08-Nov-2025 15:44:21 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[08-Nov-2025 16:58:58 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[09-Nov-2025 10:47:20 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[09-Nov-2025 10:53:35 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[09-Nov-2025 10:54:43 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[09-Nov-2025 13:09:07 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[10-Nov-2025 18:48:29 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[11-Nov-2025 10:31:09 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/nvtibadde/public_html/include/header.php:22) in /home/nvtibadde/public_html/pages/course_details.php on line 8
+[11-Nov-2025 12:04:26 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[11-Nov-2025 12:07:30 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[11-Nov-2025 12:11:36 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[11-Nov-2025 20:19:59 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[12-Nov-2025 06:14:38 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[12-Nov-2025 07:09:33 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[12-Nov-2025 08:58:41 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 252
+[12-Nov-2025 09:04:24 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 253
+[12-Nov-2025 09:04:53 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/nvtibadde/public_html/include/header.php:22) in /home/nvtibadde/public_html/pages/register.php on line 206
+[12-Nov-2025 09:05:00 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 253
+[12-Nov-2025 09:10:09 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/nvtibadde/public_html/include/header.php:22) in /home/nvtibadde/public_html/pages/register.php on line 204
+[12-Nov-2025 09:10:33 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/pages/register.php on line 254
+[13-Nov-2025 06:54:55 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 's.course_no' in 'ON' in /home/nvtibadde/public_html/pages/get_staff_details.php:35
+Stack trace:
+#0 /home/nvtibadde/public_html/pages/get_staff_details.php(35): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/pages/get_staff_details.php on line 35
+[13-Nov-2025 06:55:00 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 's.course_no' in 'ON' in /home/nvtibadde/public_html/pages/get_staff_details.php:35
+Stack trace:
+#0 /home/nvtibadde/public_html/pages/get_staff_details.php(35): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/pages/get_staff_details.php on line 35
+[13-Nov-2025 06:55:07 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Connection refused in /home/nvtibadde/public_html/include/connection.php:20
+Stack trace:
+#0 /home/nvtibadde/public_html/include/connection.php(20): mysqli->__construct()
+#1 /home/nvtibadde/public_html/pages/get_staff_details.php(3): require('/home/nvtibadde...')
+#2 {main}
+  thrown in /home/nvtibadde/public_html/include/connection.php on line 20
+[13-Nov-2025 06:55:54 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 's.course_no' in 'ON' in /home/nvtibadde/public_html/pages/get_staff_details.php:35
+Stack trace:
+#0 /home/nvtibadde/public_html/pages/get_staff_details.php(35): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/pages/get_staff_details.php on line 35
+[13-Nov-2025 06:55:57 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 's.course_no' in 'ON' in /home/nvtibadde/public_html/pages/get_staff_details.php:35
+Stack trace:
+#0 /home/nvtibadde/public_html/pages/get_staff_details.php(35): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/pages/get_staff_details.php on line 35
+[13-Nov-2025 06:56:05 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 's.course_no' in 'ON' in /home/nvtibadde/public_html/pages/get_staff_details.php:35
+Stack trace:
+#0 /home/nvtibadde/public_html/pages/get_staff_details.php(35): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/pages/get_staff_details.php on line 35
+[13-Nov-2025 06:56:21 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 's.course_no' in 'ON' in /home/nvtibadde/public_html/pages/get_staff_details.php:35
+Stack trace:
+#0 /home/nvtibadde/public_html/pages/get_staff_details.php(35): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/pages/get_staff_details.php on line 35
+[13-Nov-2025 06:56:57 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 's.course_no' in 'ON' in /home/nvtibadde/public_html/pages/get_staff_details.php:35
+Stack trace:
+#0 /home/nvtibadde/public_html/pages/get_staff_details.php(35): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/pages/get_staff_details.php on line 35
+[13-Nov-2025 06:57:07 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 's.course_no' in 'ON' in /home/nvtibadde/public_html/pages/get_staff_details.php:35
+Stack trace:
+#0 /home/nvtibadde/public_html/pages/get_staff_details.php(35): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/pages/get_staff_details.php on line 35
+[13-Nov-2025 06:57:18 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 's.course_no' in 'ON' in /home/nvtibadde/public_html/pages/get_staff_details.php:35
+Stack trace:
+#0 /home/nvtibadde/public_html/pages/get_staff_details.php(35): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/pages/get_staff_details.php on line 35
+[13-Nov-2025 06:59:57 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 's.course_no' in 'ON' in /home/nvtibadde/public_html/pages/get_staff_details.php:35
+Stack trace:
+#0 /home/nvtibadde/public_html/pages/get_staff_details.php(35): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/pages/get_staff_details.php on line 35
+[13-Nov-2025 07:01:51 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 's.course_no' in 'ON' in /home/nvtibadde/public_html/pages/get_staff_details.php:35
+Stack trace:
+#0 /home/nvtibadde/public_html/pages/get_staff_details.php(35): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/pages/get_staff_details.php on line 35
+[13-Nov-2025 12:52:26 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.courses' doesn't exist in /home/nvtibadde/public_html/pages/submit_story.php:10
+Stack trace:
+#0 /home/nvtibadde/public_html/pages/submit_story.php(10): mysqli->query()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/pages/submit_story.php on line 10
+[13-Nov-2025 12:52:30 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.courses' doesn't exist in /home/nvtibadde/public_html/pages/submit_story.php:10
+Stack trace:
+#0 /home/nvtibadde/public_html/pages/submit_story.php(10): mysqli->query()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/pages/submit_story.php on line 10
+[13-Nov-2025 15:11:36 UTC] PHP Parse error:  syntax error, unexpected identifier "en" in /home/nvtibadde/public_html/pages/staff.php on line 33
+[14-Nov-2025 16:27:25 UTC] PHP Warning:  Trying to access array offset on null in /home/nvtibadde/public_html/pages/course_details.php on line 131
+[14-Nov-2025 16:27:27 UTC] PHP Warning:  Trying to access array offset on null in /home/nvtibadde/public_html/pages/course_details.php on line 131
+[14-Nov-2025 16:27:28 UTC] PHP Warning:  Trying to access array offset on null in /home/nvtibadde/public_html/pages/course_details.php on line 131
+[17-Nov-2025 09:16:14 UTC] PHP Warning:  Trying to access array offset on null in /home/nvtibadde/public_html/pages/course_details.php on line 131
+[17-Nov-2025 15:28:30 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/nvtibadde/public_html/include/header.php:22) in /home/nvtibadde/public_html/pages/course_details.php on line 8

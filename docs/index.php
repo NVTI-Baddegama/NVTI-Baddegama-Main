@@ -8,7 +8,7 @@ include_once('../include/header.php');
 $directory = __DIR__; // Gets the full server path of the current (docs) folder
 $all_files = scandir($directory);
 
-$allowed_extensions = ['pdf', 'doc', 'docx']; // ඔබට පෙන්වීමට අවශ්‍ය file types
+$allowed_extensions = ['pdf', 'doc', 'docx','xlsx']; // ඔබට පෙන්වීමට අවශ්‍ය file types
 $download_files = []; // Array to store valid files
 
 foreach ($all_files as $file) {

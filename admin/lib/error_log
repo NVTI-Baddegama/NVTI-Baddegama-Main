@@ -1,0 +1,107 @@
+[02-Nov-2025 16:24:51 UTC] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in /home/nvtibadde/public_html/admin/lib/update_course.php:68
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/lib/update_course.php(68): mysqli_stmt_bind_param()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/lib/update_course.php on line 68
+[02-Nov-2025 16:24:57 UTC] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in /home/nvtibadde/public_html/admin/lib/update_course.php:68
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/lib/update_course.php(68): mysqli_stmt_bind_param()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/lib/update_course.php on line 68
+[02-Nov-2025 16:25:34 UTC] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in /home/nvtibadde/public_html/admin/lib/update_course.php:68
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/lib/update_course.php(68): mysqli_stmt_bind_param()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/lib/update_course.php on line 68
+[02-Nov-2025 16:25:44 UTC] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in /home/nvtibadde/public_html/admin/lib/update_course.php:68
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/lib/update_course.php(68): mysqli_stmt_bind_param()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/lib/update_course.php on line 68
+[02-Nov-2025 16:27:14 UTC] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in /home/nvtibadde/public_html/admin/lib/update_course.php:68
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/lib/update_course.php(68): mysqli_stmt_bind_param()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/lib/update_course.php on line 68
+[02-Nov-2025 16:28:15 UTC] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in /home/nvtibadde/public_html/admin/lib/update_course.php:68
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/lib/update_course.php(68): mysqli_stmt_bind_param()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/lib/update_course.php on line 68
+[02-Nov-2025 16:28:16 UTC] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in /home/nvtibadde/public_html/admin/lib/update_course.php:68
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/lib/update_course.php(68): mysqli_stmt_bind_param()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/lib/update_course.php on line 68
+[02-Nov-2025 16:28:20 UTC] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in /home/nvtibadde/public_html/admin/lib/update_course.php:68
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/lib/update_course.php(68): mysqli_stmt_bind_param()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/lib/update_course.php on line 68
+[02-Nov-2025 16:30:19 UTC] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in /home/nvtibadde/public_html/admin/lib/update_course.php:68
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/lib/update_course.php(68): mysqli_stmt_bind_param()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/lib/update_course.php on line 68
+[02-Nov-2025 16:33:41 UTC] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in /home/nvtibadde/public_html/admin/lib/update_course.php:68
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/lib/update_course.php(68): mysqli_stmt_bind_param()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/lib/update_course.php on line 68
+[02-Nov-2025 16:39:44 UTC] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in /home/nvtibadde/public_html/admin/lib/update_course.php:68
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/lib/update_course.php(68): mysqli_stmt_bind_param()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/lib/update_course.php on line 68
+[13-Nov-2025 06:02:48 UTC] PHP Warning:  Undefined array key "first_name" in /home/nvtibadde/public_html/admin/lib/staff_action_handler.php on line 13
+[13-Nov-2025 06:02:48 UTC] PHP Warning:  Undefined array key "last_name" in /home/nvtibadde/public_html/admin/lib/staff_action_handler.php on line 14
+[13-Nov-2025 06:02:48 UTC] PHP Warning:  Undefined array key "nic" in /home/nvtibadde/public_html/admin/lib/staff_action_handler.php on line 15
+[13-Nov-2025 06:03:17 UTC] PHP Warning:  Undefined array key "first_name" in /home/nvtibadde/public_html/admin/lib/staff_action_handler.php on line 13
+[13-Nov-2025 06:03:17 UTC] PHP Warning:  Undefined array key "last_name" in /home/nvtibadde/public_html/admin/lib/staff_action_handler.php on line 14
+[13-Nov-2025 06:03:17 UTC] PHP Warning:  Undefined array key "nic" in /home/nvtibadde/public_html/admin/lib/staff_action_handler.php on line 15
+[13-Nov-2025 07:22:03 UTC] PHP Warning:  Undefined array key "first_name" in /home/nvtibadde/public_html/admin/lib/staff_action_handler.php on line 13
+[13-Nov-2025 07:22:03 UTC] PHP Warning:  Undefined array key "last_name" in /home/nvtibadde/public_html/admin/lib/staff_action_handler.php on line 14
+[13-Nov-2025 07:22:03 UTC] PHP Warning:  Undefined array key "nic" in /home/nvtibadde/public_html/admin/lib/staff_action_handler.php on line 15
+[13-Nov-2025 07:22:31 UTC] PHP Warning:  Undefined array key "first_name" in /home/nvtibadde/public_html/admin/lib/staff_action_handler.php on line 13
+[13-Nov-2025 07:22:31 UTC] PHP Warning:  Undefined array key "last_name" in /home/nvtibadde/public_html/admin/lib/staff_action_handler.php on line 14
+[13-Nov-2025 07:22:31 UTC] PHP Warning:  Undefined array key "nic" in /home/nvtibadde/public_html/admin/lib/staff_action_handler.php on line 15
+[13-Nov-2025 07:26:35 UTC] PHP Warning:  Undefined array key "first_name" in /home/nvtibadde/public_html/admin/lib/staff_action_handler.php on line 13
+[13-Nov-2025 07:26:35 UTC] PHP Warning:  Undefined array key "last_name" in /home/nvtibadde/public_html/admin/lib/staff_action_handler.php on line 14
+[13-Nov-2025 07:26:35 UTC] PHP Warning:  Undefined array key "nic" in /home/nvtibadde/public_html/admin/lib/staff_action_handler.php on line 15
+[13-Nov-2025 09:09:27 UTC] PHP Warning:  Undefined array key "first_name" in /home/nvtibadde/public_html/admin/lib/staff_action_handler.php on line 13
+[13-Nov-2025 09:09:27 UTC] PHP Warning:  Undefined array key "last_name" in /home/nvtibadde/public_html/admin/lib/staff_action_handler.php on line 14
+[13-Nov-2025 09:09:27 UTC] PHP Warning:  Undefined array key "nic" in /home/nvtibadde/public_html/admin/lib/staff_action_handler.php on line 15
+[13-Nov-2025 14:34:47 UTC] PHP Warning:  Undefined array key "course_id" in /home/nvtibadde/public_html/admin/lib/update_success_story_handler.php on line 20
+[13-Nov-2025 14:35:57 UTC] PHP Warning:  Undefined array key "course_id" in /home/nvtibadde/public_html/admin/lib/update_success_story_handler.php on line 20
+[13-Nov-2025 14:43:24 UTC] PHP Warning:  Undefined array key "course_id" in /home/nvtibadde/public_html/admin/lib/update_success_story_handler.php on line 20
+[14-Nov-2025 05:28:04 UTC] PHP Warning:  Undefined array key "course_id" in /home/nvtibadde/public_html/admin/lib/update_success_story_handler.php on line 20
+[17-Nov-2025 03:04:14 UTC] PHP Warning:  Undefined array key "bcc_mail" in /home/nvtibadde/public_html/admin/lib/mail_handler.php on line 19
+[21-Nov-2025 10:49:52 UTC] PHP Warning:  Undefined array key "course_id" in /home/nvtibadde/public_html/admin/lib/update_success_story_handler.php on line 20
+[21-Nov-2025 10:50:34 UTC] PHP Warning:  Undefined array key "course_id" in /home/nvtibadde/public_html/admin/lib/update_success_story_handler.php on line 20
+[21-Nov-2025 10:51:16 UTC] PHP Warning:  Undefined array key "course_id" in /home/nvtibadde/public_html/admin/lib/update_success_story_handler.php on line 20
+[21-Nov-2025 10:51:56 UTC] PHP Warning:  Undefined array key "course_id" in /home/nvtibadde/public_html/admin/lib/update_success_story_handler.php on line 20
+[23-Nov-2025 07:44:04 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'phone' in 'SELECT' in /home/nvtibadde/public_html/admin/lib/export_staff_pdf.php:10
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/lib/export_staff_pdf.php(10): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/lib/export_staff_pdf.php on line 10
+[23-Nov-2025 07:44:46 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'phone' in 'SELECT' in /home/nvtibadde/public_html/admin/lib/export_staff_pdf.php:10
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/lib/export_staff_pdf.php(10): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/lib/export_staff_pdf.php on line 10
+[23-Nov-2025 07:45:53 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'phone' in 'SELECT' in /home/nvtibadde/public_html/admin/lib/export_staff_csv.php:10
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/lib/export_staff_csv.php(10): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/lib/export_staff_csv.php on line 10
+[23-Nov-2025 07:49:02 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'phone' in 'SELECT' in /home/nvtibadde/public_html/admin/lib/export_staff_pdf.php:10
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/lib/export_staff_pdf.php(10): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/lib/export_staff_pdf.php on line 10
+[23-Nov-2025 07:58:04 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'phone' in 'SELECT' in /home/nvtibadde/public_html/admin/lib/export_staff_pdf.php:10
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/lib/export_staff_pdf.php(10): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/lib/export_staff_pdf.php on line 10

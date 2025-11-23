@@ -33,15 +33,14 @@ if (isset($con)) {
             <span class="block sm:inline"><?php echo htmlspecialchars($message); ?></span>
         </div>
     </div>
-
 <?php endif; ?>
+
 <div class="mb-4 flex justify-end">
-    <a href="../pages/submit_story.php"
+    <a href="../../pages/submit_story.php"
         class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded shadow transition duration-150">
         + Add New Success Story
     </a>
 </div>
-
 
 <div class="container mx-auto max-w-6xl p-6 bg-white shadow-md rounded-lg mt-10">
     <h1 class="text-3xl font-bold text-gray-800 mb-6">Manage Success Stories</h1>

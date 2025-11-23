@@ -104,6 +104,11 @@
                     <p class="text-sm text-secondary-gray">
                         Our instructors are industry veterans, bringing years of practical experience and specialized knowledge directly into the classroom, ensuring relevant and high-quality teaching.
                     </p>
+                    <div class="m-1 pt-3 ">
+                        <img 
+                        class="shadow-md oveflow-hidden rounded-lg"
+                        src="../images/image/Expert Faculty5.jpg" alt="">
+                    </div>
                 </div>
                 
                 <!-- Partnership Point -->

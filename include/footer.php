@@ -41,7 +41,7 @@
                         </svg>
                     </a>
 
-                    <a href="https://wa.me/94718249323?text=test from footer wa." 
+                    <a href="#" 
                         target="_blank" 
                         rel="noopener noreferrer"
                         class="text-gray-300 hover:text-green-500 transition duration-300">
@@ -82,7 +82,7 @@
                         </svg>
                     </a>
 
-                    <a href="https://web.whatsapp.com/" class="text-gray-300 hover:text-white transition duration-300">
+                    <a href="https://wa.me/94718249323?text=test from footer wa." class="text-gray-300 hover:text-white transition duration-300">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path fill-rule="evenodd"
                             d="M12 2a10 10 0 0 0-8.42 15.38L2 22l4.62-1.58A9.96 9.96 0 0 0 12 22a10 10 0 1 0 0-20zm4.3 11.9c-.2-.1-1.1-.5-1.3-.6-.2-.1-.3-.1-.4.1-.1.2-.5.6-.6.7-.1.1-.2.1-.4 0-.2-.1-.8-.3-1.5-.9-.6-.5-1-1.1-1.1-1.2-.1-.2 0-.3.1-.4l.3-.3c.1-.1.1-.2.2-.3.1-.1 0-.3-.1-.4-.1-.1-.4-.9-.6-1.3-.2-.3-.3-.3-.4-.3h-.4c-.1 0-.3.1-.4.2s-.5.5-.5.1-.5 1.1 0 2.2c.5 1.1 1.1 2.1 1.2 2.3.1.2 2.1 3.2 5.1 4.5.7.3 1.2.5 1.6.6.7.2 1.3.1 1.8-.1.5-.2 1.1-.5 1.3-.9.2-.4.2-.8.1-1-.1-.1-.2-.2-.4-.3z"
@@ -143,7 +143,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
-                        <span class="text-gray-300 text-sm">NVTI Baddegama,<br>Main Road, Baddegama,<br>Sri Lanka</span>
+                        <span class="text-gray-300 text-sm">NVTI Baddegama,<br>highway entrance road,<br>Baddegama,<br>Sri Lanka.</span>
                     </div>
                     
                     <div class="flex items-center">
@@ -160,7 +160,17 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
-                        <span class="text-gray-300 text-sm">infor@nvtibaddegama.site</span>
+                        <span class="text-gray-300 text-sm">nvtibaddegama@vtasl.gov.lk</span><br>
+                        
+                    </div>
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 text-primary mr-3 flex-shrink-0" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        <span class="text-gray-300 text-sm">infor@nvtibaddegama.site</span><br>
+                        
                     </div>
                 </div>
             </div>

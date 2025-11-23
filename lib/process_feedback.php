@@ -10,7 +10,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $rating = (int)$_POST['rating']; // Cast to integer
 
     // 2. Validate data
-    
     if (!empty($user_name) && !empty($feedback) && $rating >= 1 && $rating <= 5) {
         
         // 3. Prepare SQL statement (to prevent SQL injection)

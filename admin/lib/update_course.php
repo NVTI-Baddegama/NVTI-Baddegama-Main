@@ -58,28 +58,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     try {
         // --- Step 1: Update the Course Details (name, fee, status, AND new fields) ---
-        $query_course = "UPDATE course 
-                         SET course_name = ?, course_fee = ?, status = ?, 
-                             course_no = ?, course_duration = ?,qualifications = ?,course_video=?, course_image = ? 
-                         WHERE id = ?";
-        
-        $stmt_course = mysqli_prepare($con, $query_course);
-        if (!$stmt_course) throw new Exception("MySQLi Prepare Error (Course): " . mysqli_error($con));
-        
-       mysqli_stmt_bind_param($stmt_course, "ssssisssi", 
-            $course_name, 
-            $course_fee, 
-            $status, 
-            $new_course_no, 
-            $course_duration, 
-            $qualifications,
-            $video,             // <-- Correct: $video matches video=?
-            $new_image_filename, // <-- Correct: $new_image_filename matches course_image=?
-            $course_id  // <-- Correct: $course_id matches id=?
-        );
-        
-        if (!mysqli_stmt_execute($stmt_course)) throw new Exception("MySQLi Execute Error (Course): " . mysqli_stmt_error($stmt_course));
-        mysqli_stmt_close($stmt_course);
+       // Replace the Step 1 section in update_course.php with this:
+
+// --- Step 1: Update the Course Details ---
+            $query_course = "UPDATE course 
+                             SET course_name = ?, 
+                                 course_fee = ?, 
+                                 status = ?, 
+                                 course_no = ?, 
+                                 course_duration = ?,
+                                 qualifications = ?,
+                                 course_video = ?,
+                                 course_image = ? 
+                             WHERE id = ?";
+            
+            $stmt_course = mysqli_prepare($con, $query_course);
+            if (!$stmt_course) throw new Exception("MySQLi Prepare Error (Course): " . mysqli_error($con));
+            
+            // FIX: Correct binding - 8 strings (s) and 1 integer (i)
+            mysqli_stmt_bind_param($stmt_course, "ssssisssi", 
+                $course_name,        // s - string
+                $course_fee,         // s - string
+                $status,             // s - string
+                $new_course_no,      // s - string
+                $course_duration,    // i - integer
+                $qualifications,     // s - string
+                $video,              // s - string (THIS WAS THE ISSUE)
+                $new_image_filename, // s - string
+                $course_id           // i - integer
+            );
+            
+            if (!mysqli_stmt_execute($stmt_course)) throw new Exception("MySQLi Execute Error (Course): " . mysqli_stmt_error($stmt_course));
+            mysqli_stmt_close($stmt_course);
 
 
         // --- Step 2: Migrate existing staff if course_no changed ---

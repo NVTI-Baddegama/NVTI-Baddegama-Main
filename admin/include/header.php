@@ -2,6 +2,7 @@
 // Start session at the very beginning
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
+  
 }
 // Include connection using absolute path relative to this file's directory
 // Do this only if needed directly in header, otherwise connection happens in pages
@@ -9,14 +10,14 @@ if (session_status() == PHP_SESSION_NONE) {
 
 // --- Get Admin Details from Session ---
 $admin_username = isset($_SESSION['admin_username']) ? $_SESSION['admin_username'] : null;
-$admin_display_name = 'User'; // Default display name
-$admin_display_type = 'Guest'; // Default display type
+$admin_display_name = 'Supper Admin'; // Default display name
+$admin_display_type = 'Admin'; // Default display type
 
 // Fetch details ONLY IF username is set (Avoid DB call if not logged in)
 if ($admin_username) {
     include_once __DIR__ . '/../../include/connection.php'; // Need connection here
     if (isset($con)) {
-        $query_admin = "SELECT username, type FROM admin WHERE username = ?";
+        $query_admin = "SELECT first_name, last_name,profile_photo, type FROM staff WHERE last_name = ?";
         $stmt_admin = $con->prepare($query_admin);
         if ($stmt_admin) {
             $stmt_admin->bind_param("s", $admin_username);
@@ -24,7 +25,7 @@ if ($admin_username) {
             $result_admin = $stmt_admin->get_result();
             if ($result_admin->num_rows == 1) {
                 $admin_data = $result_admin->fetch_assoc();
-                $admin_display_name = htmlspecialchars($admin_data['username']);
+                $admin_display_name =htmlspecialchars($admin_data['first_name'] . ' ' .$admin_data['last_name']);
                 // Use the 'type' from DB, capitalize first letter for display
                 $admin_display_type = htmlspecialchars(ucfirst($admin_data['type']));
             }
@@ -107,9 +108,20 @@ if (!isset($_SESSION['admin_username']) || !isset($admin_type_from_db) || $admin
 
             <button id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
                 data-dropdown-placement="bottom-start" class="flex items-center space-x-3 cursor-pointer group">
-                <img class="h-10 w-10 rounded-full object-cover border-2 border-green-500"
-                    src="https://placehold.co/100x100/10b981/ffffff?text=<?php echo strtoupper(substr($admin_display_name, 0, 1)); ?>"
-                    alt="Admin Profile">
+               <?php if($admin_display_name !== 'Supper Admin'){ ?>
+    <img class="h-10 w-10 rounded-full object-cover border-2 border-green-500"
+         src="/../uploads/profile_photos/<?php echo htmlspecialchars($admin_data['profile_photo']); ?>"
+         alt="Admin Profile">
+<?php } else { ?>
+
+    <img class="h-10 w-10 rounded-full object-cover border-2 border-green-500"
+         src="https://placehold.co/100x100/10b981/ffffff?text=<?php echo urlencode(strtoupper(substr($admin_display_name, 0, 1))); ?>"
+         alt="Admin Profile">
+
+<?php } ?>
+                   
+                    <!--src="https://placehold.co/100x100/10b981/ffffff?text=<?php echo strtoupper(substr($admin_display_name, 0, 1)); ?>"-->
+                    
                 <div class="hidden sm:block text-sm text-left">
                     <p class="font-semibold text-gray-800"><?php echo $admin_display_name; ?></p>
                     <p class="text-xs text-gray-500"><?php echo $admin_display_type; ?></p>

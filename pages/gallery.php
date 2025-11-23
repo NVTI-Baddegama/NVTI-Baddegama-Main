@@ -146,9 +146,9 @@ function render_column($column) {
 
 <body class="text-gray-900 antialiased m-0 flex flex-col min-h-screen">
 
-    <div class="py-8">
-        <h1 class="text-center text-4xl font-bold">NVTI Baddegama Gallery</h1>
-    </div>
+    <!--<div class="py-2">-->
+    <!--    <h1 class="text-center text-4xl font-bold text-blue-800">NVTI Baddegama Gallery</h1>-->
+    <!--</div>-->
     
     <div class="flex-1 h-0 w-full">
         
