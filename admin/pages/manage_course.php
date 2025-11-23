@@ -32,10 +32,24 @@ if (isset($_GET['status'])) {
 
 // Retrieve all courses from the database, joining with staff to get instructor name
 // Retrieve all courses...
-$query = "SELECT c.*, s.first_name, s.last_name, s.staff_id
-        FROM course c 
-        LEFT JOIN staff s ON c.course_no = s.course_no AND s.position = 'Instructor'
-        ORDER BY c.id";
+// In manage_course.php, update your SELECT query to include course_video:
+
+$query = "SELECT c.id, 
+                 c.course_no, 
+                 c.course_name, 
+                 c.course_fee, 
+                 c.course_duration, 
+                 c.course_image, 
+                 c.course_video,  -- MAKE SURE THIS IS INCLUDED
+                 c.qualifications, 
+                 c.status,
+                 s.first_name, 
+                 s.last_name, 
+                 s.staff_id
+          FROM course c 
+          LEFT JOIN staff s ON c.course_no = s.course_no AND s.position = 'Instructor'
+          ORDER BY c.id";
+          
 $courses = mysqli_query($con, $query);
 
 if (!$courses) {
@@ -89,7 +103,7 @@ $instructors_json = json_encode($instructors_list);
                         <tr>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tl-lg">Course No</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tl-lg">Course Name</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Instructor</th>
+                            <!--<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Instructor</th>-->
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tr-lg">Actions</th>
@@ -105,15 +119,8 @@ $instructors_json = json_encode($instructors_list);
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         <?php echo htmlspecialchars($row['course_name']); ?>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        <?php 
-                                        if (!empty($row['first_name']) && !empty($row['last_name'])) {
-                                            echo htmlspecialchars($row['first_name'] . ' ' . $row['last_name']);
-                                        } else {
-                                            echo '<span class="text-gray-400 italic">No Instructor</span>';
-                                        }
-                                        ?>
-                                    </td>
+                                    
+                                    
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         LKR <?php echo htmlspecialchars($row['course_fee']); ?>
                                     </td>
@@ -125,19 +132,23 @@ $instructors_json = json_encode($instructors_list);
                                         <?php endif; ?>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                        <button type="button" class="text-indigo-600 hover:text-indigo-900 transition duration-150 edit-btn" 
-                                            data-id="<?php echo $row['id']; ?>" 
-                                            data-name="<?php echo htmlspecialchars($row['course_name']); ?>" 
-                                            data-fee="<?php echo htmlspecialchars($row['course_fee']); ?>" 
-                                            data-status="<?php echo $row['status']; ?>"
-                                            data-course-no="<?php echo htmlspecialchars($row['course_no']); ?>"
-                                            data-staff-id="<?php echo htmlspecialchars($row['staff_id'] ?? ''); ?>"
-                                            data-course-duration="<?php echo htmlspecialchars($row['course_duration']); ?>"
-                                            data-course-image="<?php echo htmlspecialchars($row['course_image'] ?? ''); ?>"
-                                            data-qualifications="<?php echo htmlspecialchars($row['qualifications'] ?? ''); ?>"
-                                            data-course-video="<?php echo htmlspecialchars($row['course_video'] ?? ''); ?>">
-                                            Edit
-                                        </button>
+                                        <!-- In your manage_course.php table, verify the edit button has ALL these attributes: -->
+
+                                    <button type="button" class="text-indigo-600 hover:text-indigo-900 transition duration-150 edit-btn" 
+                                        data-id="<?php echo $row['id']; ?>" 
+                                        data-name="<?php echo htmlspecialchars($row['course_name']); ?>" 
+                                        data-fee="<?php echo htmlspecialchars($row['course_fee']); ?>" 
+                                        data-status="<?php echo $row['status']; ?>"
+                                        data-course-no="<?php echo htmlspecialchars($row['course_no']); ?>"
+                                        data-staff-id="<?php echo htmlspecialchars($row['staff_id'] ?? ''); ?>"
+                                        data-course-duration="<?php echo htmlspecialchars($row['course_duration']); ?>"
+                                        data-course-image="<?php echo htmlspecialchars($row['course_image'] ?? ''); ?>"
+                                        data-qualifications="<?php echo htmlspecialchars($row['qualifications'] ?? ''); ?>"
+                                        data-course-video="<?php echo htmlspecialchars($row['course_video'] ?? ''); ?>">
+                                        Edit
+                                    </button>
+
+<!-- IMPORTANT: Make sure the last line has 'course_video' not just 'video' -->
                                         <button type="button" class="text-red-600 hover:text-red-900 transition duration-150 delete-btn"
                                             data-id="<?php echo $row['id']; ?>"
                                             data-name="<?php echo htmlspecialchars($row['course_name']); ?>">
@@ -145,7 +156,6 @@ $instructors_json = json_encode($instructors_list);
                                         </button>
                                     </td>
                                 </tr>
-
                             <?php endwhile; ?>
                         <?php else: ?>
                             <tr>
@@ -215,7 +225,7 @@ $instructors_json = json_encode($instructors_list);
 
                  <div>
                     <label for="edit_course_video" class="block text-sm font-medium text-gray-700">Course Video</label>
-                    <input type="text" id="edit_course_video" name="course_video" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                    <input type="text" id="edit_course_video" name="course_video" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" >
                 </div>
 
                 <div>
@@ -316,34 +326,41 @@ $instructors_json = json_encode($instructors_list);
             };
 
             // --- Attach EDIT Button Logic ---
+            // Replace the existing edit button click handler with this fixed version:
+
+            // COMPLETE FIXED VERSION - Replace your entire edit button handler
+
             editButtons.forEach(button => {
                 button.addEventListener('click', () => {
+                    // Set all basic fields
                     courseIdInput.value = button.dataset.id;
                     courseNameInput.value = button.dataset.name;
                     courseFeeInput.value = button.dataset.fee;
                     statusInput.value = button.dataset.status;
-
-                    const currentStaffId = button.dataset.staffId;
+            
+                    // Set course number fields
                     const currentCourseNo = button.dataset.courseNo;
-                    
                     oldCourseNoInput.value = currentCourseNo;
                     courseNoInput.value = currentCourseNo;
                     
+                    // Set staff and duration
+                    const currentStaffId = button.dataset.staffId;
                     oldStaffIdInput.value = currentStaffId;
                     courseDurationInput.value = button.dataset.courseDuration;
-
-                    qualificationsInput.value = button.dataset.qualifications;
-
+            
+                    // Set qualifications
+                    qualificationsInput.value = button.dataset.qualifications || '';
+            
+                    // CRITICAL FIX: Set video field explicitly
+                    const currentVideo = button.dataset.courseVideo;
+                    console.log('Video from dataset:', currentVideo); // Debug log
+                    courseVideoInput.value = currentVideo || '';
+            
+                    // Handle image
                     const currentImage = button.dataset.courseImage;
                     currentImageInput.value = currentImage;
-
-                    const currentVideo = button.dataset.courseVideo;
-                    courseVideoInput.value = currentVideo;
-
-                    console.log('Button clicked. Video URL found:', currentVideo);
-
+            
                     if (currentImage) {
-                        // ADJUST THIS PATH if your uploads folder is different
                         imagePreview.src = `../../uploads/course_images/${currentImage}`; 
                         imagePreview.alt = button.dataset.name;
                     } else {
@@ -351,9 +368,16 @@ $instructors_json = json_encode($instructors_list);
                         imagePreview.alt = 'No Image';
                     }
                     
-                    // ... (Your instructor dropdown logic would go here) ...
-                    
+                    // Open modal AFTER all values are set
                     openEditModal();
+                    
+                    // Double-check after modal opens (backup fix)
+                    setTimeout(() => {
+                        if (!courseVideoInput.value && currentVideo) {
+                            courseVideoInput.value = currentVideo;
+                            console.log('Video field re-populated after modal open');
+                        }
+                    }, 100);
                 });
             });
             

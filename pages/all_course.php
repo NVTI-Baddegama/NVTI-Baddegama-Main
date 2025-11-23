@@ -24,7 +24,7 @@ if ($category_id > 0) {
     $cat_name_stmt->close();
 }
 
-$query .= " ORDER BY nvq_level DESC, course_name ASC";
+$query .= " ORDER BY nvq_level DESC, id ASC";
 
 // Prepare and execute the main query
 $stmt = $con->prepare($query);
@@ -96,7 +96,15 @@ $result = $stmt->get_result();
                     
                     <div class="flex items-center gap-2 text-xs md:text-sm text-gray-600 mb-4">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
-                        <span><?php echo htmlspecialchars($course['course_duration']); ?> Months</span>
+                        <span> 
+                        <?php if($course['course_duration']>24){ ?>
+                             <?php echo htmlspecialchars($course['course_duration']); ?> Hrs</span>
+                        <?php }else{ ?>
+                             <?php echo htmlspecialchars($course['course_duration']); ?> Months</span>
+                        <?php } ?>
+                        
+                        
+                       <!--<?php echo htmlspecialchars($course['course_duration']); ?> Months</span>-->
                     </div>
 
                     <div class="mt-auto pt-4"> <a href="course_details.php?course_no=<?php echo htmlspecialchars($course['course_no']); ?>" 

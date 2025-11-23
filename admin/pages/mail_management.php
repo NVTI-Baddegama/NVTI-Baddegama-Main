@@ -54,14 +54,7 @@ if (isset($_SESSION['mail_error_msg'])) {
                 <p class="text-xs text-gray-500 mt-1">Carbon Copy. These recipients will be visible to all.</p>
             </div>
             
-            <div>
-                <label for="bcc_mail" class="block text-sm font-medium text-gray-700 mb-1">BCC Recipient(s) (Optional)</label>
-                <input type="text" id="bcc_mail" name="bcc_mail"
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                       value="<?php echo htmlspecialchars($settings['bcc_mail'] ?? ''); ?>"
-                       placeholder="director@nvti.lk">
-                <p class="text-xs text-gray-500 mt-1">Blind Carbon Copy. These recipients will be hidden from all.</p>
-            </div>
+        
 
         </div>
 

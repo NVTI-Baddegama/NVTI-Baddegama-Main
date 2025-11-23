@@ -17,8 +17,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $description = mysqli_real_escape_string($con, $_POST['description']);
     $contact_details = mysqli_real_escape_string($con, $_POST['contact_details']);
     $youtube_url = mysqli_real_escape_string($con, $_POST['youtube_url']);
+    $course_id = (int)$_POST['course_id']; // අලුතින් එක් කළ course_id
     
-    // 2. Image Path එක: මුලින්ම පරණ Path එක default ලෙස සකස් කිරීම
+    // 2. Image Path එක
     $db_image_path = mysqli_real_escape_string($con, $_POST['existing_image_path']);
 
     // 3. අලුත් පින්තූරයක් upload කර ඇත්දැයි පරීක්ෂා කිරීම
@@ -33,13 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $file_name = uniqid() . '_' . basename($_FILES['story_image']['name']);
         $target_file = $upload_dir . $file_name;
         
-        // අලුත් ගොනුව අදාළ ස්ථානයට Move කිරීම
         if (move_uploaded_file($_FILES['story_image']['tmp_name'], $target_file)) {
-            
-            // (a) DB path එක අලුත් path එකට වෙනස් කිරීම
             $db_image_path = 'uploads/success_stories/' . $file_name;
-            
-            // (b) පැරණි පින්තූරය server එකෙන් delete කිරීම (එය $db_image_path එක නොවේ)
             $old_image_path_from_form = $_POST['existing_image_path'];
             if (!empty($old_image_path_from_form)) {
                 $old_file_to_delete = __DIR__ . '/../../' . $old_image_path_from_form;
@@ -54,8 +50,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // 4. දත්ත ගබඩාව UPDATE කිරීම
-    if (empty($message)) { // පින්තූරය upload කිරීමේදී දෝෂයක් නොමැති නම්
+    if (empty($message)) {
         
+        // SQL Query එකට `course_id` එක් කිරීම
         $sql = "UPDATE success_stories SET 
                     name = ?, 
                     position = ?, 
@@ -63,13 +60,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     description = ?, 
                     image_path = ?, 
                     contact_details = ?, 
-                    youtube_url = ? 
+                    youtube_url = ?, 
+                    course_id = ? 
                 WHERE id = ?";
         
         $stmt = $con->prepare($sql);
         
         if ($stmt) {
-            $stmt->bind_param("sssssssi", 
+            // bind_param එකට 'i' (integer) එකතු කිරීම (sssssssii)
+            $stmt->bind_param("sssssssii", 
                 $name, 
                 $position, 
                 $company_name, 
@@ -77,7 +76,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $db_image_path, 
                 $contact_details, 
                 $youtube_url,
-                $story_id  // ID එක අවසානයට
+                $course_id, // අලුත්
+                $story_id
             );
             
             if ($stmt->execute()) {

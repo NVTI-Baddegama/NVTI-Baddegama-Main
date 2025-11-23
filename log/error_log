@@ -1,0 +1,198 @@
+[01-Nov-2025 07:56:50 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'nvtibadde'@'atlas.webserverlive.com' to database 'nvtibadde_vta_baddegam' in /home/nvtibadde/public_html/include/connection.php:20
+Stack trace:
+#0 /home/nvtibadde/public_html/include/connection.php(20): mysqli->__construct()
+#1 /home/nvtibadde/public_html/log/login_process.php(3): include('/home/nvtibadde...')
+#2 {main}
+  thrown in /home/nvtibadde/public_html/include/connection.php on line 20
+[01-Nov-2025 07:57:09 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'nvtibadde'@'atlas.webserverlive.com' to database 'nvtibadde_vta_baddegam' in /home/nvtibadde/public_html/include/connection.php:20
+Stack trace:
+#0 /home/nvtibadde/public_html/include/connection.php(20): mysqli->__construct()
+#1 /home/nvtibadde/public_html/log/login_process.php(3): include('/home/nvtibadde...')
+#2 {main}
+  thrown in /home/nvtibadde/public_html/include/connection.php on line 20
+[01-Nov-2025 07:57:36 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'nvtibadde'@'atlas.webserverlive.com' to database 'nvtibadde_vta_baddegam' in /home/nvtibadde/public_html/include/connection.php:20
+Stack trace:
+#0 /home/nvtibadde/public_html/include/connection.php(20): mysqli->__construct()
+#1 /home/nvtibadde/public_html/log/login_process.php(3): include('/home/nvtibadde...')
+#2 {main}
+  thrown in /home/nvtibadde/public_html/include/connection.php on line 20
+[01-Nov-2025 07:58:15 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'nvtibadde'@'atlas.webserverlive.com' to database 'nvtibadde_vta_baddegam' in /home/nvtibadde/public_html/include/connection.php:20
+Stack trace:
+#0 /home/nvtibadde/public_html/include/connection.php(20): mysqli->__construct()
+#1 /home/nvtibadde/public_html/log/login_process.php(3): include('/home/nvtibadde...')
+#2 {main}
+  thrown in /home/nvtibadde/public_html/include/connection.php on line 20
+[02-Nov-2025 14:27:22 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[02-Nov-2025 15:23:19 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[02-Nov-2025 15:58:32 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[02-Nov-2025 16:18:16 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[02-Nov-2025 16:27:25 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[02-Nov-2025 16:42:37 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 02:32:44 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 03:00:21 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 03:16:34 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 03:56:19 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 04:07:07 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 04:25:58 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 05:04:06 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 05:43:27 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 05:43:29 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 07:14:34 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 09:44:44 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 14:11:18 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 14:17:31 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 14:39:40 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 15:06:25 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 16:02:11 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 16:11:52 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 17:28:15 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 17:28:16 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 17:35:36 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 17:37:47 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[03-Nov-2025 17:41:40 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[04-Nov-2025 02:18:27 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[04-Nov-2025 02:45:45 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[04-Nov-2025 02:50:35 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[04-Nov-2025 03:17:29 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[04-Nov-2025 03:20:41 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[04-Nov-2025 04:10:15 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[04-Nov-2025 05:07:59 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[04-Nov-2025 06:22:06 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[04-Nov-2025 07:25:14 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[04-Nov-2025 09:42:03 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[04-Nov-2025 15:50:29 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[04-Nov-2025 17:23:59 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[05-Nov-2025 06:19:15 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[05-Nov-2025 06:22:37 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[05-Nov-2025 14:16:29 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[05-Nov-2025 14:27:45 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[05-Nov-2025 15:09:49 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[05-Nov-2025 15:25:28 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[05-Nov-2025 18:01:23 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[05-Nov-2025 18:01:24 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[06-Nov-2025 06:43:09 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[06-Nov-2025 07:19:15 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[06-Nov-2025 07:25:28 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[06-Nov-2025 08:01:01 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[06-Nov-2025 08:01:52 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[06-Nov-2025 09:19:20 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[06-Nov-2025 09:50:20 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[06-Nov-2025 13:49:24 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[06-Nov-2025 18:06:28 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[07-Nov-2025 03:29:07 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[07-Nov-2025 07:55:14 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[07-Nov-2025 17:49:49 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[08-Nov-2025 14:31:29 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[08-Nov-2025 15:47:30 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[08-Nov-2025 15:50:04 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[08-Nov-2025 15:52:17 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[08-Nov-2025 15:57:00 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[08-Nov-2025 16:55:34 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[09-Nov-2025 10:46:32 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[09-Nov-2025 10:46:34 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[10-Nov-2025 07:29:28 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[10-Nov-2025 10:30:40 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[10-Nov-2025 16:44:53 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[10-Nov-2025 17:17:41 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[11-Nov-2025 06:54:10 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[12-Nov-2025 05:30:59 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[12-Nov-2025 06:01:53 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[12-Nov-2025 06:47:20 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[12-Nov-2025 07:21:00 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[12-Nov-2025 08:59:27 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[12-Nov-2025 09:20:36 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[12-Nov-2025 10:44:04 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[12-Nov-2025 12:10:01 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[12-Nov-2025 15:13:17 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[13-Nov-2025 04:23:16 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[13-Nov-2025 04:44:05 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[13-Nov-2025 04:47:52 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[13-Nov-2025 04:48:17 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[13-Nov-2025 04:59:25 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[13-Nov-2025 05:48:59 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[13-Nov-2025 06:07:56 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[13-Nov-2025 07:21:40 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[13-Nov-2025 08:33:49 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[13-Nov-2025 09:05:08 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[13-Nov-2025 09:22:07 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[13-Nov-2025 09:59:20 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[13-Nov-2025 11:07:20 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[13-Nov-2025 12:35:10 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[13-Nov-2025 14:14:43 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[13-Nov-2025 14:30:41 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[13-Nov-2025 15:23:21 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[13-Nov-2025 16:36:24 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[13-Nov-2025 16:37:21 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[13-Nov-2025 17:34:30 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[14-Nov-2025 04:35:27 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[14-Nov-2025 05:10:45 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[14-Nov-2025 05:31:51 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[14-Nov-2025 14:09:10 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[14-Nov-2025 14:40:43 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[14-Nov-2025 16:39:19 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[14-Nov-2025 17:50:58 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[14-Nov-2025 17:56:59 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[14-Nov-2025 17:58:24 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[14-Nov-2025 17:59:27 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[14-Nov-2025 18:08:37 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[14-Nov-2025 18:09:11 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[15-Nov-2025 14:33:13 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[15-Nov-2025 15:06:31 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[15-Nov-2025 15:08:35 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[15-Nov-2025 15:23:13 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[16-Nov-2025 04:49:14 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[16-Nov-2025 07:01:47 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[16-Nov-2025 07:04:53 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[16-Nov-2025 15:36:55 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[16-Nov-2025 16:40:58 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[17-Nov-2025 03:02:20 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[17-Nov-2025 08:13:03 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[17-Nov-2025 08:34:05 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[17-Nov-2025 08:52:50 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[17-Nov-2025 13:43:59 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[17-Nov-2025 13:44:07 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[17-Nov-2025 15:46:00 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[17-Nov-2025 16:06:56 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[17-Nov-2025 16:13:36 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[18-Nov-2025 04:35:53 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[18-Nov-2025 17:06:38 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[19-Nov-2025 00:23:58 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[19-Nov-2025 09:48:10 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[19-Nov-2025 12:38:05 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[21-Nov-2025 04:01:10 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[21-Nov-2025 05:54:52 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[21-Nov-2025 06:43:28 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[21-Nov-2025 08:52:56 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[21-Nov-2025 09:06:10 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[21-Nov-2025 09:46:05 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[21-Nov-2025 10:12:42 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[21-Nov-2025 10:48:40 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[22-Nov-2025 03:03:29 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[22-Nov-2025 04:25:08 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[22-Nov-2025 07:26:44 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[22-Nov-2025 08:26:11 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[22-Nov-2025 16:21:50 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[22-Nov-2025 17:04:14 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[22-Nov-2025 17:16:21 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[22-Nov-2025 17:17:40 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[22-Nov-2025 17:22:18 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[22-Nov-2025 17:22:26 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[22-Nov-2025 17:29:54 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[22-Nov-2025 18:03:02 UTC] PHP Warning:  Undefined array key "first_last" in /home/nvtibadde/public_html/log/login_process.php on line 33
+[22-Nov-2025 18:03:06 UTC] PHP Warning:  Undefined array key "first_last" in /home/nvtibadde/public_html/log/login_process.php on line 33
+[22-Nov-2025 18:03:08 UTC] PHP Warning:  Undefined array key "first_last" in /home/nvtibadde/public_html/log/login_process.php on line 33
+[22-Nov-2025 18:03:59 UTC] PHP Warning:  Undefined array key "last_last" in /home/nvtibadde/public_html/log/login_process.php on line 33
+[22-Nov-2025 18:04:02 UTC] PHP Warning:  Undefined array key "last_last" in /home/nvtibadde/public_html/log/login_process.php on line 33
+[22-Nov-2025 18:04:04 UTC] PHP Warning:  Undefined array key "last_last" in /home/nvtibadde/public_html/log/login_process.php on line 33
+[22-Nov-2025 18:04:25 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[22-Nov-2025 18:04:33 UTC] PHP Warning:  Undefined array key "last_last" in /home/nvtibadde/public_html/log/login_process.php on line 33
+[22-Nov-2025 18:16:53 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[22-Nov-2025 18:17:37 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 84
+[22-Nov-2025 18:40:36 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 85
+[22-Nov-2025 18:44:01 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 85
+[22-Nov-2025 18:47:39 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 85
+[22-Nov-2025 18:49:08 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 85
+[22-Nov-2025 18:58:07 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 85
+[22-Nov-2025 19:02:24 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 85
+[23-Nov-2025 05:33:09 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 85
+[23-Nov-2025 07:19:07 UTC] PHP Warning:  Undefined array key "id" in /home/nvtibadde/public_html/log/login_process.php on line 85

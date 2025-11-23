@@ -1,0 +1,291 @@
+[31-Oct-2025 03:58:41 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/admin/pages/student_register.php on line 244
+[31-Oct-2025 04:14:34 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/admin/pages/student_register.php on line 244
+[31-Oct-2025 18:08:03 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/admin/pages/student_register.php on line 244
+[01-Nov-2025 08:22:10 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/admin/pages/student_register.php on line 244
+[01-Nov-2025 11:42:48 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/admin/pages/student_register.php on line 244
+[01-Nov-2025 11:48:45 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/admin/pages/student_register.php on line 244
+[01-Nov-2025 14:10:23 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/admin/pages/student_register.php on line 244
+[02-Nov-2025 16:27:36 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/admin/pages/student_register.php on line 244
+[03-Nov-2025 03:18:17 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/admin/pages/student_register.php on line 244
+[03-Nov-2025 05:02:23 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/admin/pages/student_register.php on line 244
+[03-Nov-2025 06:07:59 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/admin/pages/student_register.php on line 244
+[03-Nov-2025 16:04:30 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/admin/pages/student_register.php on line 244
+[03-Nov-2025 17:42:36 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/admin/pages/student_register.php on line 244
+[04-Nov-2025 05:29:31 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/admin/pages/student_register.php on line 244
+[12-Nov-2025 07:10:23 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/admin/pages/student_register.php on line 244
+[13-Nov-2025 04:23:24 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.instructor_courses' doesn't exist in /home/nvtibadde/public_html/admin/pages/view_staff_details.php:54
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/view_staff_details.php(54): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/view_staff_details.php on line 54
+[13-Nov-2025 04:23:34 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.instructor_courses' doesn't exist in /home/nvtibadde/public_html/admin/pages/view_staff_details.php:54
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/view_staff_details.php(54): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/view_staff_details.php on line 54
+[13-Nov-2025 04:27:29 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.instructor_courses' doesn't exist in /home/nvtibadde/public_html/admin/pages/view_staff_details.php:54
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/view_staff_details.php(54): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/view_staff_details.php on line 54
+[13-Nov-2025 04:27:46 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.instructor_courses' doesn't exist in /home/nvtibadde/public_html/admin/pages/view_staff_details.php:54
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/view_staff_details.php(54): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/view_staff_details.php on line 54
+[13-Nov-2025 04:37:12 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.instructor_courses' doesn't exist in /home/nvtibadde/public_html/admin/pages/view_staff_details.php:54
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/view_staff_details.php(54): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/view_staff_details.php on line 54
+[13-Nov-2025 04:42:09 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.instructor_courses' doesn't exist in /home/nvtibadde/public_html/admin/pages/view_staff_details.php:54
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/view_staff_details.php(54): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/view_staff_details.php on line 54
+[13-Nov-2025 04:44:12 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.instructor_courses' doesn't exist in /home/nvtibadde/public_html/admin/pages/view_staff_details.php:54
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/view_staff_details.php(54): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/view_staff_details.php on line 54
+[13-Nov-2025 04:44:26 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.instructor_courses' doesn't exist in /home/nvtibadde/public_html/admin/pages/view_staff_details.php:54
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/view_staff_details.php(54): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/view_staff_details.php on line 54
+[13-Nov-2025 04:44:50 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.instructor_courses' doesn't exist in /home/nvtibadde/public_html/admin/pages/view_staff_details.php:54
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/view_staff_details.php(54): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/view_staff_details.php on line 54
+[13-Nov-2025 04:47:59 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.instructor_courses' doesn't exist in /home/nvtibadde/public_html/admin/pages/view_staff_details.php:54
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/view_staff_details.php(54): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/view_staff_details.php on line 54
+[13-Nov-2025 04:55:38 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'ic.course_no' in 'SELECT' in /home/nvtibadde/public_html/admin/pages/view_staff_details.php:54
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/view_staff_details.php(54): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/view_staff_details.php on line 54
+[13-Nov-2025 04:55:41 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'ic.course_no' in 'SELECT' in /home/nvtibadde/public_html/admin/pages/view_staff_details.php:54
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/view_staff_details.php(54): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/view_staff_details.php on line 54
+[13-Nov-2025 04:55:42 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'ic.course_no' in 'SELECT' in /home/nvtibadde/public_html/admin/pages/view_staff_details.php:54
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/view_staff_details.php(54): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/view_staff_details.php on line 54
+[13-Nov-2025 04:55:48 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'ic.course_no' in 'SELECT' in /home/nvtibadde/public_html/admin/pages/view_staff_details.php:54
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/view_staff_details.php(54): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/view_staff_details.php on line 54
+[13-Nov-2025 04:56:23 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'ic.course_no' in 'SELECT' in /home/nvtibadde/public_html/admin/pages/view_staff_details.php:54
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/view_staff_details.php(54): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/view_staff_details.php on line 54
+[13-Nov-2025 04:56:26 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'ic.course_no' in 'SELECT' in /home/nvtibadde/public_html/admin/pages/view_staff_details.php:54
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/view_staff_details.php(54): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/view_staff_details.php on line 54
+[13-Nov-2025 04:56:38 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/admin/pages/student_register.php on line 244
+[13-Nov-2025 04:56:57 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'ic.course_no' in 'SELECT' in /home/nvtibadde/public_html/admin/pages/view_staff_details.php:54
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/view_staff_details.php(54): mysqli->prepare()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/view_staff_details.php on line 54
+[13-Nov-2025 12:51:26 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.courses' doesn't exist in /home/nvtibadde/public_html/admin/pages/manage_success_stories.php:26
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/manage_success_stories.php(26): mysqli->query()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/manage_success_stories.php on line 26
+[13-Nov-2025 12:51:33 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.courses' doesn't exist in /home/nvtibadde/public_html/admin/pages/manage_success_stories.php:26
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/manage_success_stories.php(26): mysqli->query()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/manage_success_stories.php on line 26
+[13-Nov-2025 12:51:40 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.courses' doesn't exist in /home/nvtibadde/public_html/admin/pages/manage_success_stories.php:26
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/manage_success_stories.php(26): mysqli->query()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/manage_success_stories.php on line 26
+[13-Nov-2025 12:52:04 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.courses' doesn't exist in /home/nvtibadde/public_html/admin/pages/edit_success_story.php:17
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/edit_success_story.php(17): mysqli->query()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/edit_success_story.php on line 17
+[13-Nov-2025 12:52:08 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.courses' doesn't exist in /home/nvtibadde/public_html/admin/pages/edit_success_story.php:17
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/edit_success_story.php(17): mysqli->query()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/edit_success_story.php on line 17
+[13-Nov-2025 14:20:38 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.courses' doesn't exist in /home/nvtibadde/public_html/admin/pages/edit_success_story.php:17
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/edit_success_story.php(17): mysqli->query()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/edit_success_story.php on line 17
+[13-Nov-2025 14:20:59 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.courses' doesn't exist in /home/nvtibadde/public_html/admin/pages/edit_success_story.php:17
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/edit_success_story.php(17): mysqli->query()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/edit_success_story.php on line 17
+[13-Nov-2025 14:25:18 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.courses' doesn't exist in /home/nvtibadde/public_html/admin/pages/edit_success_story.php:17
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/edit_success_story.php(17): mysqli->query()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/edit_success_story.php on line 17
+[13-Nov-2025 14:29:59 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.courses' doesn't exist in /home/nvtibadde/public_html/admin/pages/edit_success_story.php:17
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/edit_success_story.php(17): mysqli->query()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/edit_success_story.php on line 17
+[13-Nov-2025 14:30:49 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nvtibadde_vta_baddegama.courses' doesn't exist in /home/nvtibadde/public_html/admin/pages/edit_success_story.php:17
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/edit_success_story.php(17): mysqli->query()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/pages/edit_success_story.php on line 17
+[13-Nov-2025 17:15:50 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/admin/pages/student_register.php on line 244
+[14-Nov-2025 18:06:19 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'username' in 'SELECT' in /home/nvtibadde/public_html/admin/include/header.php:20
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/include/header.php(20): mysqli->prepare()
+#1 /home/nvtibadde/public_html/admin/pages/Dashboard.php(3): include_once('/home/nvtibadde...')
+#2 {main}
+  thrown in /home/nvtibadde/public_html/admin/include/header.php on line 20
+[14-Nov-2025 18:06:27 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'username' in 'SELECT' in /home/nvtibadde/public_html/admin/include/header.php:20
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/include/header.php(20): mysqli->prepare()
+#1 /home/nvtibadde/public_html/admin/pages/Dashboard.php(3): include_once('/home/nvtibadde...')
+#2 {main}
+  thrown in /home/nvtibadde/public_html/admin/include/header.php on line 20
+[14-Nov-2025 18:06:29 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'username' in 'SELECT' in /home/nvtibadde/public_html/admin/include/header.php:20
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/include/header.php(20): mysqli->prepare()
+#1 /home/nvtibadde/public_html/admin/pages/Dashboard.php(3): include_once('/home/nvtibadde...')
+#2 {main}
+  thrown in /home/nvtibadde/public_html/admin/include/header.php on line 20
+[14-Nov-2025 18:06:35 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'username' in 'SELECT' in /home/nvtibadde/public_html/admin/include/header.php:20
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/include/header.php(20): mysqli->prepare()
+#1 /home/nvtibadde/public_html/admin/pages/Dashboard.php(3): include_once('/home/nvtibadde...')
+#2 {main}
+  thrown in /home/nvtibadde/public_html/admin/include/header.php on line 20
+[18-Nov-2025 06:18:17 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/admin/pages/student_register.php on line 244
+[22-Nov-2025 17:16:21 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'username' in 'WHERE' in /home/nvtibadde/public_html/admin/include/header.php:20
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/include/header.php(20): mysqli->prepare()
+#1 /home/nvtibadde/public_html/admin/pages/Dashboard.php(3): include_once('/home/nvtibadde...')
+#2 {main}
+  thrown in /home/nvtibadde/public_html/admin/include/header.php on line 20
+[22-Nov-2025 17:16:36 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'username' in 'WHERE' in /home/nvtibadde/public_html/admin/include/header.php:20
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/include/header.php(20): mysqli->prepare()
+#1 /home/nvtibadde/public_html/admin/pages/Dashboard.php(3): include_once('/home/nvtibadde...')
+#2 {main}
+  thrown in /home/nvtibadde/public_html/admin/include/header.php on line 20
+[22-Nov-2025 17:42:33 UTC] PHP Parse error:  syntax error, unexpected token "if" in /home/nvtibadde/public_html/admin/include/header.php on line 16
+[22-Nov-2025 17:44:58 UTC] PHP Parse error:  syntax error, unexpected token "if" in /home/nvtibadde/public_html/admin/include/header.php on line 16
+[22-Nov-2025 17:45:04 UTC] PHP Parse error:  syntax error, unexpected token "if" in /home/nvtibadde/public_html/admin/include/header.php on line 16
+[22-Nov-2025 17:45:15 UTC] PHP Parse error:  syntax error, unexpected token "if" in /home/nvtibadde/public_html/admin/include/header.php on line 16
+[22-Nov-2025 17:45:16 UTC] PHP Parse error:  syntax error, unexpected token "if" in /home/nvtibadde/public_html/admin/include/header.php on line 16
+[22-Nov-2025 17:45:50 UTC] PHP Parse error:  syntax error, unexpected token "if" in /home/nvtibadde/public_html/admin/include/header.php on line 16
+[22-Nov-2025 17:45:55 UTC] PHP Parse error:  syntax error, unexpected token "if" in /home/nvtibadde/public_html/admin/include/header.php on line 16
+[22-Nov-2025 17:48:12 UTC] PHP Parse error:  syntax error, unexpected token "if" in /home/nvtibadde/public_html/admin/include/header.php on line 16
+[22-Nov-2025 17:48:15 UTC] PHP Parse error:  syntax error, unexpected token "if" in /home/nvtibadde/public_html/admin/include/header.php on line 16
+[22-Nov-2025 17:48:16 UTC] PHP Parse error:  syntax error, unexpected token "if" in /home/nvtibadde/public_html/admin/include/header.php on line 16
+[22-Nov-2025 17:49:28 UTC] PHP Parse error:  syntax error, unexpected token "}" in /home/nvtibadde/public_html/admin/include/header.php on line 6
+[22-Nov-2025 17:50:11 UTC] PHP Parse error:  syntax error, unexpected token "}" in /home/nvtibadde/public_html/admin/include/header.php on line 6
+[22-Nov-2025 17:50:14 UTC] PHP Parse error:  syntax error, unexpected token "}" in /home/nvtibadde/public_html/admin/include/header.php on line 6
+[22-Nov-2025 17:51:33 UTC] PHP Parse error:  syntax error, unexpected token "}" in /home/nvtibadde/public_html/admin/include/header.php on line 6
+[22-Nov-2025 17:51:36 UTC] PHP Parse error:  syntax error, unexpected token "}" in /home/nvtibadde/public_html/admin/include/header.php on line 6
+[22-Nov-2025 17:51:41 UTC] PHP Parse error:  syntax error, unexpected token "}" in /home/nvtibadde/public_html/admin/include/header.php on line 6
+[22-Nov-2025 17:51:41 UTC] PHP Parse error:  syntax error, unexpected token "}" in /home/nvtibadde/public_html/admin/include/header.php on line 6
+[22-Nov-2025 17:52:07 UTC] PHP Parse error:  syntax error, unexpected token "}" in /home/nvtibadde/public_html/admin/include/header.php on line 6
+[22-Nov-2025 17:52:21 UTC] PHP Parse error:  syntax error, unexpected token "}" in /home/nvtibadde/public_html/admin/include/header.php on line 6
+[22-Nov-2025 17:52:42 UTC] PHP Parse error:  syntax error, unexpected token "}" in /home/nvtibadde/public_html/admin/include/header.php on line 6
+[22-Nov-2025 17:53:23 UTC] PHP Parse error:  syntax error, unexpected token "}" in /home/nvtibadde/public_html/admin/include/header.php on line 6
+[22-Nov-2025 17:53:27 UTC] PHP Parse error:  syntax error, unexpected token "}" in /home/nvtibadde/public_html/admin/include/header.php on line 6
+[22-Nov-2025 17:53:58 UTC] PHP Parse error:  syntax error, unexpected token "}" in /home/nvtibadde/public_html/admin/include/header.php on line 6
+[22-Nov-2025 17:53:59 UTC] PHP Parse error:  syntax error, unexpected token "}" in /home/nvtibadde/public_html/admin/include/header.php on line 6
+[22-Nov-2025 17:54:04 UTC] PHP Parse error:  syntax error, unexpected token "}" in /home/nvtibadde/public_html/admin/include/header.php on line 6
+[22-Nov-2025 17:54:05 UTC] PHP Parse error:  syntax error, unexpected token "}" in /home/nvtibadde/public_html/admin/include/header.php on line 6
+[22-Nov-2025 17:54:33 UTC] PHP Parse error:  syntax error, unexpected token "}" in /home/nvtibadde/public_html/admin/include/header.php on line 6
+[22-Nov-2025 17:55:29 UTC] PHP Parse error:  syntax error, unexpected token "if" in /home/nvtibadde/public_html/admin/include/header.php on line 16
+[22-Nov-2025 17:55:30 UTC] PHP Parse error:  syntax error, unexpected token "if" in /home/nvtibadde/public_html/admin/include/header.php on line 16
+[22-Nov-2025 17:55:31 UTC] PHP Parse error:  syntax error, unexpected token "if" in /home/nvtibadde/public_html/admin/include/header.php on line 16
+[22-Nov-2025 17:55:39 UTC] PHP Parse error:  syntax error, unexpected token "if" in /home/nvtibadde/public_html/admin/include/header.php on line 16
+[22-Nov-2025 17:55:40 UTC] PHP Parse error:  syntax error, unexpected token "if" in /home/nvtibadde/public_html/admin/include/header.php on line 16
+[22-Nov-2025 17:56:27 UTC] PHP Parse error:  syntax error, unexpected token "if" in /home/nvtibadde/public_html/admin/include/header.php on line 16
+[22-Nov-2025 17:56:31 UTC] PHP Parse error:  syntax error, unexpected token "if" in /home/nvtibadde/public_html/admin/include/header.php on line 16
+[22-Nov-2025 17:56:31 UTC] PHP Parse error:  syntax error, unexpected token "if" in /home/nvtibadde/public_html/admin/include/header.php on line 16
+[22-Nov-2025 17:58:10 UTC] PHP Parse error:  syntax error, unexpected token "if" in /home/nvtibadde/public_html/admin/include/header.php on line 16
+[22-Nov-2025 17:58:11 UTC] PHP Parse error:  syntax error, unexpected token "if" in /home/nvtibadde/public_html/admin/include/header.php on line 16
+[22-Nov-2025 18:10:06 UTC] PHP Fatal error:  Uncaught TypeError: Unsupported operand types: string + string in /home/nvtibadde/public_html/admin/include/header.php:27
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/Dashboard.php(3): include_once()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/include/header.php on line 27
+[22-Nov-2025 18:10:10 UTC] PHP Fatal error:  Uncaught TypeError: Unsupported operand types: string + string in /home/nvtibadde/public_html/admin/include/header.php:27
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/Dashboard.php(3): include_once()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/include/header.php on line 27
+[22-Nov-2025 18:10:16 UTC] PHP Fatal error:  Uncaught TypeError: Unsupported operand types: string + string in /home/nvtibadde/public_html/admin/include/header.php:27
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/Dashboard.php(3): include_once()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/include/header.php on line 27
+[22-Nov-2025 18:10:57 UTC] PHP Fatal error:  Uncaught TypeError: Unsupported operand types: string + string in /home/nvtibadde/public_html/admin/include/header.php:27
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/Dashboard.php(3): include_once()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/include/header.php on line 27
+[22-Nov-2025 18:11:57 UTC] PHP Parse error:  syntax error, unexpected variable "$admin_data", expecting ")" in /home/nvtibadde/public_html/admin/include/header.php on line 27
+[22-Nov-2025 18:12:12 UTC] PHP Fatal error:  Uncaught TypeError: Unsupported operand types: string + string in /home/nvtibadde/public_html/admin/include/header.php:27
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/Dashboard.php(3): include_once()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/include/header.php on line 27
+[22-Nov-2025 18:12:13 UTC] PHP Fatal error:  Uncaught TypeError: Unsupported operand types: string + string in /home/nvtibadde/public_html/admin/include/header.php:27
+Stack trace:
+#0 /home/nvtibadde/public_html/admin/pages/Dashboard.php(3): include_once()
+#1 {main}
+  thrown in /home/nvtibadde/public_html/admin/include/header.php on line 27
+[22-Nov-2025 18:14:52 UTC] PHP Parse error:  syntax error, unexpected variable "$admin_display_type" in /home/nvtibadde/public_html/admin/include/header.php on line 29
+[22-Nov-2025 18:15:30 UTC] PHP Parse error:  Unclosed '{' on line 25 does not match ')' in /home/nvtibadde/public_html/admin/include/header.php on line 27
+[22-Nov-2025 18:20:20 UTC] PHP Warning:  Undefined array key "profile_photo" in /home/nvtibadde/public_html/admin/include/header.php on line 5
+[22-Nov-2025 18:26:35 UTC] PHP Warning:  Undefined variable $current_staff in /home/nvtibadde/public_html/admin/include/header.php on line 112
+[22-Nov-2025 18:26:35 UTC] PHP Warning:  Trying to access array offset on null in /home/nvtibadde/public_html/admin/include/header.php on line 112
+[22-Nov-2025 18:26:49 UTC] PHP Warning:  Undefined variable $current_staff in /home/nvtibadde/public_html/admin/include/header.php on line 112
+[22-Nov-2025 18:26:49 UTC] PHP Warning:  Trying to access array offset on null in /home/nvtibadde/public_html/admin/include/header.php on line 112
+[22-Nov-2025 18:27:13 UTC] PHP Warning:  Undefined variable $current_staff in /home/nvtibadde/public_html/admin/include/header.php on line 112
+[22-Nov-2025 18:27:13 UTC] PHP Warning:  Trying to access array offset on null in /home/nvtibadde/public_html/admin/include/header.php on line 112
+[22-Nov-2025 18:27:40 UTC] PHP Warning:  Undefined variable $current_staff in /home/nvtibadde/public_html/admin/include/header.php on line 112
+[22-Nov-2025 18:27:40 UTC] PHP Warning:  Trying to access array offset on null in /home/nvtibadde/public_html/admin/include/header.php on line 112
+[22-Nov-2025 18:27:53 UTC] PHP Warning:  Undefined variable $current_staff in /home/nvtibadde/public_html/admin/include/header.php on line 112
+[22-Nov-2025 18:27:53 UTC] PHP Warning:  Trying to access array offset on null in /home/nvtibadde/public_html/admin/include/header.php on line 112
+[22-Nov-2025 18:28:01 UTC] PHP Warning:  Undefined variable $current_staff in /home/nvtibadde/public_html/admin/include/header.php on line 112
+[22-Nov-2025 18:28:01 UTC] PHP Warning:  Trying to access array offset on null in /home/nvtibadde/public_html/admin/include/header.php on line 112
+[22-Nov-2025 18:31:29 UTC] PHP Warning:  Undefined array key "profile_photo" in /home/nvtibadde/public_html/admin/include/header.php on line 112
+[22-Nov-2025 18:31:38 UTC] PHP Warning:  Undefined array key "profile_photo" in /home/nvtibadde/public_html/admin/include/header.php on line 112
+[22-Nov-2025 18:36:52 UTC] PHP Warning:  Undefined array key "profile_photo" in /home/nvtibadde/public_html/admin/include/header.php on line 112
+[22-Nov-2025 18:40:36 UTC] PHP Warning:  Undefined variable $admin_data in /home/nvtibadde/public_html/admin/include/header.php on line 112
+[22-Nov-2025 18:40:36 UTC] PHP Warning:  Trying to access array offset on null in /home/nvtibadde/public_html/admin/include/header.php on line 112
+[22-Nov-2025 18:43:35 UTC] PHP Warning:  Undefined variable $admin_data in /home/nvtibadde/public_html/admin/include/header.php on line 113
+[22-Nov-2025 18:43:35 UTC] PHP Warning:  Trying to access array offset on null in /home/nvtibadde/public_html/admin/include/header.php on line 113
+[22-Nov-2025 18:44:02 UTC] PHP Warning:  Undefined variable $admin_data in /home/nvtibadde/public_html/admin/include/header.php on line 113
+[22-Nov-2025 18:44:02 UTC] PHP Warning:  Trying to access array offset on null in /home/nvtibadde/public_html/admin/include/header.php on line 113
+[22-Nov-2025 18:47:09 UTC] PHP Warning:  Undefined variable $admin_data in /home/nvtibadde/public_html/admin/include/header.php on line 112
+[22-Nov-2025 18:47:09 UTC] PHP Warning:  Trying to access array offset on null in /home/nvtibadde/public_html/admin/include/header.php on line 112
+[22-Nov-2025 18:47:39 UTC] PHP Warning:  Undefined variable $admin_data in /home/nvtibadde/public_html/admin/include/header.php on line 112
+[22-Nov-2025 18:47:39 UTC] PHP Warning:  Trying to access array offset on null in /home/nvtibadde/public_html/admin/include/header.php on line 112
+[22-Nov-2025 18:51:36 UTC] PHP Warning:  Undefined variable $admin_data in /home/nvtibadde/public_html/admin/include/header.php on line 122
+[22-Nov-2025 18:51:36 UTC] PHP Warning:  Trying to access array offset on null in /home/nvtibadde/public_html/admin/include/header.php on line 122
+[22-Nov-2025 18:54:56 UTC] PHP Parse error:  Unmatched '}' in /home/nvtibadde/public_html/admin/include/header.php on line 115
+[22-Nov-2025 18:55:36 UTC] PHP Parse error:  Unclosed '{' on line 111 in /home/nvtibadde/public_html/admin/include/header.php on line 326
+[22-Nov-2025 18:55:38 UTC] PHP Parse error:  Unclosed '{' on line 111 in /home/nvtibadde/public_html/admin/include/header.php on line 326
+[23-Nov-2025 05:33:26 UTC] PHP Warning:  Undefined variable $error_message in /home/nvtibadde/public_html/admin/pages/student_register.php on line 244

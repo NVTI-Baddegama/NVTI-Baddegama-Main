@@ -12,17 +12,23 @@ $sql = "SELECT id,service_id, first_name, last_name, position, profile_photo
                 WHEN position = 'Training Officer' THEN 3
                 WHEN position = 'Finance Officer' THEN 4
                 WHEN position = 'Testing Officer' THEN 5
-                WHEN position = 'Program Officer' THEN 6
-                WHEN position = 'Senior Instructor' THEN 7
-                WHEN service_id ='1119' THEN 8
-                WHEN position = 'Instructor' THEN 9
-                WHEN position = 'Management Assistant' THEN 10
-                WHEN position = 'Driver' THEN 11
-                WHEN position = 'Labor' THEN 12
-                ELSE 13
+                WHEN service_id ='978' THEN 6
+                WHEN service_id ='986' THEN 7
+                WHEN service_id ='987' THEN 8
+                WHEN position = 'Program Officer' THEN 9
+                WHEN position = 'Senior Instructor' THEN 10
+                WHEN service_id ='1119' THEN 11
+                WHEN service_id ='2425' THEN 12
+                WHEN position = 'Instructor' THEN 13
+                WHEN position = 'Assistant Instructor' THEN 14
+                WHEN service_id ='776' THEN 15
+                WHEN service_id ='959' THEN 16
+                WHEN position = 'Management Assistant' THEN 17
+                WHEN position = 'Driver' THEN 18
+                WHEN position = 'Labor' THEN 19
+                ELSE 20
               END ASC, 
-              first_name ASC, 
-              last_name ASC";
+              service_id ASC";
 
 $result = $con->query($sql);
 
@@ -128,8 +134,7 @@ $photo_upload_path = '../uploads/profile_photos/';
                         <p id="modalPosition" class="text-xl text-blue-600 font-semibold mb-4"></p>
                         <hr class="my-4">
                         <h3 class="text-lg font-semibold mb-2">Details</h3>
-                        <p class="mb-2"><strong>Email:</strong> <a id="modalEmail" href="" class="text-blue-500"></a>
-                        </p>
+                        
                         <p class="mb-2"><strong>Contact No:</strong> <span id="modalContact"></span></p>
                         <p class="mb-2"><strong>Gender:</strong> <span id="modalGender"></span></p>
                         <p class="mb-2" id="modalCourseRow" style="display:none;"><strong>Assigned Course:</strong> <span id="modalCourse"></span></p>
@@ -164,7 +169,6 @@ $photo_upload_path = '../uploads/profile_photos/';
             const modalContact = document.getElementById('modalContact');
             const modalGender = document.getElementById('modalGender');
             const modalCourse = document.getElementById('modalCourse');
-            const modalEmail = document.getElementById('modalEmail');
             const viewButtons = document.querySelectorAll('.open-modal-btn');
 
             viewButtons.forEach(button => {
@@ -195,8 +199,6 @@ $photo_upload_path = '../uploads/profile_photos/';
 
                             modalName.textContent = data.full_name || 'N/A';
                             modalPosition.textContent = data.position || 'N/A';
-                            modalEmail.textContent = data.email || 'N/A';
-                            modalEmail.href = `mailto:${data.email || ''}`;
                             modalContact.textContent = data.contact_no || 'N/A';
                             modalGender.textContent = data.gender || 'N/A';
                             
@@ -229,7 +231,6 @@ $photo_upload_path = '../uploads/profile_photos/';
                                             <div>
                                                 <p class="font-semibold text-gray-800">${course.course_name}</p>
                                                 <p class="text-sm text-gray-600">Course No: ${course.course_no}</p>
-                                                <p class="text-xs text-gray-500 mt-1">Assigned: ${new Date(course.assigned_date).toLocaleDateString()}</p>
                                             </div>
                                             <div>
                                                 ${statusBadge}

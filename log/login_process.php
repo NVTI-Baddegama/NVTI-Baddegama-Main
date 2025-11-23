@@ -30,9 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Check if this staff member is ALSO an 'admin' type
             if (isset($staff['type']) && $staff['type'] === 'admin') {
                  // --- LOGIN AS ADMIN (from staff table) ---
-                $_SESSION['admin_username'] = $staff['first_name']; // Use first_name
+                $_SESSION['admin_username'] = $staff['last_name']; // Use first_name
                 $_SESSION['admin_type'] = $staff['type'];
                 $_SESSION['admin_id'] = $staff['staff_id']; // Add admin ID for session tracking
+                 $_SESSION['profile_photo'] = $staff['profile_photo'];
                 header("Location: ../admin/pages/Dashboard.php");
                 exit();
             } else {

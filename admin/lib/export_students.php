@@ -1,7 +1,6 @@
 <?php
 session_start();
-include_once('../../include/connection.php');
-require_once('../../include/fpdf/fpdf.php');
+include_once('../../include/connection.php'); // Go back two folders to reach the root connection
 
 // Check if export parameter is set
 if (!isset($_GET['export']) || !in_array($_GET['export'], ['csv', 'pdf'])) {
@@ -22,7 +21,7 @@ if (isset($_GET['search_nic']) && !empty($_GET['search_nic'])) {
     $search_nic = trim($_GET['search_nic']);
 }
 
-// Build the same query as in manage_students.php
+// Build the same query as in manage_students.php - using SELECT * to get all available columns
 $base_query = "SELECT * FROM student_enrollments";
 $where_clauses = [];
 $params = [];
@@ -89,7 +88,7 @@ if ($export_format === 'csv') {
     // Add UTF-8 BOM for proper Excel compatibility
     fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
 
-    // Define CSV headers - Only requested columns
+    // Define CSV headers - including new fields
     $headers = [
         'Student ID',
         'Full Name',
@@ -97,7 +96,9 @@ if ($export_format === 'csv') {
         'Contact Number',
         'Home Address',
         'Course Choice 1',
-        'Course Choice 2'
+        'Course Choice 2',
+        'Application Date',
+        'Status'
     ];
 
     // Write headers to CSV
@@ -107,26 +108,32 @@ if ($export_format === 'csv') {
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $csv_row = [
-                $row['Student_id'] ?? 'N/A',
-                $row['full_name'] ?? 'N/A',
-                $row['nic'] ?? 'N/A',
-                $row['contact_no'] ?? 'N/A',
-                $row['address'] ?? 'N/A',
-                $row['course_option_one'] ?? 'N/A',
-                $row['course_option_two'] ?? 'N/A'
+                $row['Student_id'] ?? '',
+                $row['full_name'] ?? '',
+                $row['nic'] ?? '',
+                $row['contact_no'] ?? '',
+                $row['address'] ?? '',
+                $row['course_option_one'] ?? '',
+                $row['course_option_two'] ?? '',
+                $row['application_date'] ? date('Y-m-d H:i:s', strtotime($row['application_date'])) : '',
+                ($row['is_processed'] == 1) ? 'Processed' : 'Pending'
             ];
             fputcsv($output, $csv_row);
         }
     } else {
         // If no data, add a row indicating no records found
-        fputcsv($output, ['No records found matching the selected criteria']);
+        $no_data_row = ['No records found matching the selected criteria'];
+        for ($i = 1; $i < count($headers); $i++) {
+            $no_data_row[] = '';
+        }
+        fputcsv($output, $no_data_row);
     }
 
     // Close file pointer
     fclose($output);
 
 } else if ($export_format === 'pdf') {
-    // PDF Export using FPDF
+    // PDF Export using HTML to PDF conversion
     $filename .= '.pdf';
     
     // Collect data for PDF
@@ -137,125 +144,105 @@ if ($export_format === 'csv') {
         }
     }
     
-    // Create PDF with landscape orientation for better table fit
-    class PDF extends FPDF {
-        function Header() {
-            // Logo
-            if (file_exists('../../images/logo/NVTI_logo.png')) {
-                $this->Image('../../images/logo/NVTI_logo.png', 10, 6, 20);
-            }
-            
-            // Title
-            $this->SetFont('Arial', 'B', 16);
-            $this->Cell(0, 10, 'NVTI Baddegama - Student Applications Report', 0, 1, 'C');
-            
-            // Date and info
-            $this->SetFont('Arial', '', 10);
-            $this->Cell(0, 6, 'Generated on: ' . date('Y-m-d H:i:s'), 0, 1, 'C');
-            $this->Ln(5);
-        }
-        
-        function Footer() {
-            $this->SetY(-15);
-            $this->SetFont('Arial', 'I', 8);
-            $this->Cell(0, 10, 'Page ' . $this->PageNo() . ' | NVTI Baddegama - Student Management System', 0, 0, 'C');
-        }
-        
-        // Improved table row with text wrapping for long content
-        function ImprovedCell($w, $h, $txt, $border=0, $ln=0, $align='L', $fill=false, $maxLen=0) {
-            if ($maxLen > 0 && strlen($txt) > $maxLen) {
-                $txt = substr($txt, 0, $maxLen) . '...';
-            }
-            $this->Cell($w, $h, $txt, $border, $ln, $align, $fill);
-        }
-    }
-    
-    $pdf = new PDF('L', 'mm', 'A4'); // Landscape orientation
-    $pdf->AddPage();
-    $pdf->SetFont('Arial', '', 10);
+    // Generate HTML content for PDF
+    $html = '<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Student Enrollments Report</title>
+        <style>
+            body { font-family: Arial, sans-serif; font-size: 10px; margin: 15px; }
+            .header { text-align: center; margin-bottom: 20px; }
+            .header h1 { color: #333; margin: 0; font-size: 18px; }
+            .header p { color: #666; margin: 5px 0; font-size: 12px; }
+            .filters { background: #f5f5f5; padding: 8px; margin-bottom: 15px; border-radius: 3px; font-size: 11px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+            th, td { border: 1px solid #ddd; padding: 6px; text-align: left; font-size: 9px; }
+            th { background-color: #f2f2f2; font-weight: bold; }
+            tr:nth-child(even) { background-color: #f9f9f9; }
+            .status-processed { color: #28a745; font-weight: bold; }
+            .status-pending { color: #ffc107; font-weight: bold; }
+            .footer { margin-top: 20px; text-align: center; font-size: 8px; color: #666; }
+            .address { max-width: 120px; word-wrap: break-word; }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>Student Enrollments Report</h1>
+            <p>Generated on: ' . date('Y-m-d H:i:s') . '</p>
+        </div>';
     
     // Add filter information if applicable
     if ($filter_course || $search_nic) {
-        $pdf->SetFont('Arial', 'B', 11);
-        $pdf->Cell(0, 6, 'Applied Filters:', 0, 1);
-        $pdf->SetFont('Arial', '', 10);
+        $html .= '<div class="filters">
+            <strong>Applied Filters:</strong>';
         if ($filter_course) {
-            $pdf->Cell(0, 5, 'Course: ' . $filter_course, 0, 1);
+            $html .= ' Course: ' . htmlspecialchars($filter_course);
         }
         if ($search_nic) {
-            $pdf->Cell(0, 5, 'NIC Search: ' . $search_nic, 0, 1);
+            $html .= ' | NIC Search: ' . htmlspecialchars($search_nic);
         }
-        $pdf->Ln(5);
+        $html .= '</div>';
     }
     
-    // Table header - Only requested columns
-    $pdf->SetFillColor(59, 89, 152); // Professional blue color
-    $pdf->SetTextColor(255, 255, 255);
-    $pdf->SetFont('Arial', 'B', 10);
-    
-    // Adjusted column widths for better visibility and fit
-    $w = array(25, 45, 30, 25, 65, 50, 50); 
-    // Total: 25+45+30+25+65+50+50 = 290mm (fits well in landscape A4)
-    
-    $headers = array('Student ID', 'Full Name', 'NIC', 'Contact', 'Address', 'Course 1', 'Course 2');
-    
-    for($i = 0; $i < count($headers); $i++) {
-        $pdf->Cell($w[$i], 8, $headers[$i], 1, 0, 'C', true);
-    }
-    $pdf->Ln();
-    
-    // Table data
-    $pdf->SetTextColor(0, 0, 0);
-    $pdf->SetFont('Arial', '', 9);
-    $fill = false;
+    $html .= '<table>
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Full Name</th>
+                <th>NIC</th>
+                <th>Contact No</th>
+                <th>Home Address</th>
+                <th>Course Choice 1</th>
+                <th>Course Choice 2</th>
+                <th>Application Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>';
     
     if (!empty($students)) {
         foreach ($students as $student) {
-            // Alternate row background for better readability
-            $fill = !$fill;
-            if ($fill) {
-                $pdf->SetFillColor(245, 245, 245);
-            } else {
-                $pdf->SetFillColor(255, 255, 255);
-            }
+            $status_class = ($student['is_processed'] == 1) ? 'status-processed' : 'status-pending';
+            $status_text = ($student['is_processed'] == 1) ? 'Processed' : 'Pending';
             
-            // Student ID
-            $pdf->ImprovedCell($w[0], 7, $student['Student_id'] ?? 'N/A', 1, 0, 'L', $fill);
-            
-            // Full Name
-            $pdf->ImprovedCell($w[1], 7, $student['full_name'] ?? 'N/A', 1, 0, 'L', $fill, 30);
-            
-            // NIC
-            $pdf->ImprovedCell($w[2], 7, $student['nic'] ?? 'N/A', 1, 0, 'L', $fill);
-            
-            // Contact
-            $pdf->ImprovedCell($w[3], 7, $student['contact_no'] ?? 'N/A', 1, 0, 'L', $fill);
-            
-            // Address
-            $pdf->ImprovedCell($w[4], 7, $student['address'] ?? 'N/A', 1, 0, 'L', $fill, 35);
-            
-            // Course 1
-            $pdf->ImprovedCell($w[5], 7, $student['course_option_one'] ?? 'N/A', 1, 0, 'L', $fill, 30);
-            
-            // Course 2
-            $pdf->ImprovedCell($w[6], 7, $student['course_option_two'] ?? 'N/A', 1, 0, 'L', $fill, 30);
-            
-            $pdf->Ln();
+            $html .= '<tr>
+                <td>' . htmlspecialchars($student['Student_id'] ?? '') . '</td>
+                <td>' . htmlspecialchars($student['full_name'] ?? '') . '</td>
+                <td>' . htmlspecialchars($student['nic'] ?? '') . '</td>
+                <td>' . htmlspecialchars($student['contact_no'] ?? '') . '</td>
+                <td class="address">' . htmlspecialchars($student['address'] ?? '') . '</td>
+                <td>' . htmlspecialchars($student['course_option_one'] ?? '') . '</td>
+                <td>' . htmlspecialchars($student['course_option_two'] ?? '') . '</td>
+                <td>' . ($student['application_date'] ? date('Y-m-d', strtotime($student['application_date'])) : '') . '</td>
+                <td class="' . $status_class . '">' . $status_text . '</td>
+            </tr>';
         }
     } else {
-        $pdf->SetFont('Arial', 'B', 11);
-        $pdf->Cell(array_sum($w), 10, 'No records found matching the selected criteria', 1, 1, 'C');
+        $html .= '<tr><td colspan="9" style="text-align: center; color: #666;">No records found matching the selected criteria</td></tr>';
     }
     
-    // Summary
-    $pdf->Ln(8);
-    $pdf->SetFont('Arial', 'B', 11);
-    $pdf->SetFillColor(240, 240, 240);
-    $pdf->Cell(60, 8, 'Total Records: ' . count($students), 1, 0, 'C', true);
-    $pdf->Cell(0, 8, '', 0, 1); // Empty cell for proper line break
+    $html .= '</tbody>
+    </table>
     
-    // Output PDF as download
-    $pdf->Output('D', $filename);
+    <div class="footer">
+        <p>Total Records: ' . count($students) . '</p>
+        <p>NVTI Baddegama - Student Management System</p>
+    </div>
+    
+    </body>
+    </html>';
+    
+    // Simple HTML to PDF conversion using browser print functionality
+    header('Content-Type: text/html; charset=utf-8');
+    header('Content-Disposition: inline; filename="' . $filename . '"');
+    
+    echo $html;
+    echo '<script>
+        window.onload = function() {
+            window.print();
+        };
+    </script>';
 }
 
 // Close database connections

@@ -93,6 +93,7 @@ if ($courses_result && $courses_result->num_rows > 0) {
                 <option value="">Select Position</option>
                 <option value="Assistant Director">Assistant Director</option>
                 <option value="Instructor">Instructor</option>
+                <option value="Assistant Instructor">Assistant Instructor</option>
                 <option value="Senior Instructor">Senior Instructor</option>
                 <option value="Finance Officer">Finance officer</option>
                 <option value="Testing Officer">Testing Officer</option>

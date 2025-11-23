@@ -1,9 +1,14 @@
 <?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 // පොදු connection ගොනුවට Path එක
-include_once(__DIR__ . '/../include/connection.php');
+include_once '../include/connection.php';
 
 $message = "";
 $message_type = "";
@@ -17,12 +22,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $description = mysqli_real_escape_string($con, $_POST['description']);
     $contact_details = mysqli_real_escape_string($con, $_POST['contact_details']);
     $youtube_url = mysqli_real_escape_string($con, $_POST['youtube_url']);
+    
+    // 'course_id' එක හිස් නම් (Select Your Course) NULL ලෙස සකස් කිරීම
+    $course_id = !empty($_POST['course_id']) ? (int)$_POST['course_id'] : NULL;
+    
     $db_image_path = NULL;
 
     // 2. පින්තූරය Upload කිරීමේ ක්‍රියාවලිය
     if (isset($_FILES['story_image']) && $_FILES['story_image']['error'] == 0) {
         
-        // 'uploads/success_stories/' ෆෝල්ඩරයට Path එක
         $upload_dir = __DIR__ . '/../uploads/success_stories/'; 
         
         if (!is_dir($upload_dir)) {
@@ -43,23 +51,52 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // 3. දත්ත ගබඩාවට ඇතුළත් කිරීම (INSERT)
     if (empty($message)) { 
         
-        // වැදගත්ම කොටස: is_active = 0 (Pending) ලෙස සකස් කිරීම
-        $sql = "INSERT INTO success_stories (name, position, company_name, description, image_path, contact_details, youtube_url, is_active) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, 0)"; // 0 = Pending
+        // is_active = 0 (Pending) ලෙස සකස් කිරීම
         
-        $stmt = $con->prepare($sql);
-        
-        if ($stmt) {
-            $stmt->bind_param("sssssss", 
-                $name, 
-                $position, 
-                $company_name, 
-                $description, 
-                $db_image_path, 
-                $contact_details, 
-                $youtube_url
-            );
+        // $course_id එක NULL ද යන්න මත පදනම්ව SQL Query එක සකස් කිරීම
+        if ($course_id === NULL) {
+            // Course ID එකක් නොමැතිව Insert කිරීම
+            $sql = "INSERT INTO success_stories (name, position, company_name, description, image_path, contact_details, youtube_url, is_active) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, 0)"; // 0 = Pending
             
+            $stmt = $con->prepare($sql);
+            
+            if ($stmt) {
+                // bind_param එකට 'i' (integer) අවශ්‍ය නැත (sssssss)
+                $stmt->bind_param("sssssss", 
+                    $name, 
+                    $position, 
+                    $company_name, 
+                    $description, 
+                    $db_image_path, 
+                    $contact_details, 
+                    $youtube_url
+                );
+            }
+        } else {
+            // Course ID එකක් සමග Insert කිරීම
+            $sql = "INSERT INTO success_stories (name, position, company_name, description, image_path, contact_details, youtube_url, course_id, is_active) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)"; // 0 = Pending
+            
+            $stmt = $con->prepare($sql);
+            
+            if ($stmt) {
+                // bind_param එකට 'i' (integer) එකතු කිරීම (sssssssi)
+                $stmt->bind_param("sssssssi", 
+                    $name, 
+                    $position, 
+                    $company_name, 
+                    $description, 
+                    $db_image_path, 
+                    $contact_details, 
+                    $youtube_url,
+                    $course_id // අලුත්
+                );
+            }
+        }
+        
+        // --- Query එක Execute කිරීම ---
+        if ($stmt) {
             if ($stmt->execute()) {
                 $message = "Thank you! Your story has been submitted for review.";
                 $message_type = "success";
@@ -77,6 +114,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // 4. පරිශීලකයා නැවත Form පිටුවට යොමු කිරීම
     $_SESSION['message'] = $message;
     $_SESSION['message_type'] = $message_type;
+    header("Location: ../pages/submit_story.php"); // Form එක ඇති submit_story.php පිටුවට යොමු කිරීම
+    exit();
+} else {
+    // POST request එකක් නොවේ නම්
     header("Location: ../pages/submit_story.php");
     exit();
 }
