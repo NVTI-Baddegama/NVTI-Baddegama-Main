@@ -10,7 +10,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 // --- Get Admin Details from Session ---
 $admin_username = isset($_SESSION['admin_username']) ? $_SESSION['admin_username'] : null;
-$admin_display_name = 'Supper Admin'; // Default display name
+$admin_display_name = 'Super Admin'; // Default display name
 $admin_display_type = 'Admin'; // Default display type
 
 // Fetch details ONLY IF username is set (Avoid DB call if not logged in)
