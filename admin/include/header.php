@@ -128,14 +128,8 @@ if (!isset($_SESSION['admin_username']) || !isset($admin_type_from_db) || $admin
                 </div>
                 <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
                     <li>
-                        <a href="add_admin.php"
-                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Add
-                            New Admin</a>
-                    </li>
-                    <li>
-                        <a href="change_password.php"
-                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Change
-                            Password</a>
+                        <a href="profile_update.php"
+                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile Update</a>
                     </li>
                 </ul>
                 <div class="py-1">
