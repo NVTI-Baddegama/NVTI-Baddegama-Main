@@ -7,24 +7,7 @@ Stack trace:
   thrown in /home/nvtibadde/public_html/include/connection.php on line 20
 [01-Nov-2025 07:58:21 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'nvtibadde'@'atlas.webserverlive.com' to database 'nvtibadde_vta_baddegam' in /home/nvtibadde/public_html/include/connection.php:20
 Stack trace:
-#0 /home/nvtibadde/public_html/include/connection.php(20): mysqli->__construct()
-#1 /home/nvtibadde/public_html/include/header.php(7): include_once('/home/nvtibadde...')
-#2 /home/nvtibadde/public_html/pages/index.php(1): include_once('/home/nvtibadde...')
-#3 {main}
-  thrown in /home/nvtibadde/public_html/include/connection.php on line 20
-[01-Nov-2025 07:58:38 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'nvtibadde'@'atlas.webserverlive.com' to database 'nvtibadde_vta_baddegam' in /home/nvtibadde/public_html/include/connection.php:20
-Stack trace:
-#0 /home/nvtibadde/public_html/include/connection.php(20): mysqli->__construct()
-#1 /home/nvtibadde/public_html/include/header.php(7): include_once('/home/nvtibadde...')
-#2 /home/nvtibadde/public_html/pages/index.php(1): include_once('/home/nvtibadde...')
-#3 {main}
-  thrown in /home/nvtibadde/public_html/include/connection.php on line 20
-[01-Nov-2025 07:58:43 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'nvtibadde'@'atlas.webserverlive.com' to database 'nvtibadde_vta_baddegam' in /home/nvtibadde/public_html/include/connection.php:20
-Stack trace:
-#0 /home/nvtibadde/public_html/include/connection.php(20): mysqli->__construct()
-#1 /home/nvtibadde/public_html/include/header.php(7): include_once('/home/nvtibadde...')
-#2 /home/nvtibadde/public_html/pages/index.php(1): include_once('/home/nvtibadde...')
-#3 {main}
+
   thrown in /home/nvtibadde/public_html/include/connection.php on line 20
 [01-Nov-2025 07:58:47 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'nvtibadde'@'atlas.webserverlive.com' to database 'nvtibadde_vta_baddegam' in /home/nvtibadde/public_html/include/connection.php:20
 Stack trace:
