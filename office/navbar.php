@@ -113,8 +113,7 @@ if (isset($_SESSION['position'])) {
                         </li>
                         <li>
                             <a href="logout.php" 
-                               class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
-                               onclick="return confirm('Are you sure you want to sign out?')">
+                               class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200">
                                 <i class="fas fa-sign-out-alt mr-3 text-red-500 w-5"></i>
                                 <span class="font-medium">Sign Out</span>
                             </a>
