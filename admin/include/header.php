@@ -108,7 +108,7 @@ if (!isset($_SESSION['admin_username']) || !isset($admin_type_from_db) || $admin
 
             <button id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
                 data-dropdown-placement="bottom-start" class="flex items-center space-x-3 cursor-pointer group">
-               <?php if($admin_display_name !== 'Supper Admin'){ ?>
+               <?php if($admin_display_name !== 'Super Admin'){ ?>
     <img class="h-10 w-10 rounded-full object-cover border-2 border-green-500"
          src="/../uploads/profile_photos/<?php echo htmlspecialchars($admin_data['profile_photo']); ?>"
          alt="Admin Profile">

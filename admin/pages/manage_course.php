@@ -83,8 +83,8 @@ $instructors_json = json_encode($instructors_list);
 <body class="bg-gray-100 p-6 sm:p-8">
 
     <div class="max-w-7xl mx-auto">
-
         <h2 class="text-3xl font-bold text-gray-800 mb-6">Manage Courses</h2>
+
 
         <?php if (!empty($message)): ?>
             <div id="alert-message" class="relative <?php echo ($message_type == 'success') ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700'; ?> border px-4 py-3 rounded-lg mb-6" role="alert">
@@ -96,7 +96,43 @@ $instructors_json = json_encode($instructors_list);
         <?php endif; ?>
 
         <div class="bg-white p-6 rounded-xl shadow-lg mt-8">
-            <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Manage Courses</h3>
+            
+            <div class="flex flex-col sm:flex-row justify-between items-center border-b pb-2  gap-4">
+        
+                <h3 class="text-xl font-semibold text-gray-800 mb-4  pb-2">Manage Courses</h3>
+                
+                <!-- Export Buttons -->
+                <!--<div class="flex gap-2">-->
+                    <!-- CSV Export Button -->
+                <!--    <a href="../lib/export_course_csv.php" target="_blank" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">-->
+                <!--        <svg class="w-4 h-4 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>-->
+                <!--        Export CSV-->
+                <!--    </a>-->
+        
+                    <!-- PDF Export Button -->
+                <!--    <a href="../lib/export_course_pdf.php" target="_blank" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">-->
+                <!--        <svg class="w-4 h-4 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>-->
+                <!--        Export PDF-->
+                <!--    </a>-->
+                <!--</div>-->
+                
+                <!-- Export Buttons -->
+                <div class="flex gap-2 justify-end mb-4">
+                    <a href="../lib/export_course_csv.php" target="_blank" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <svg class="w-4 h-4 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Export CSV
+                    </a>
+                    <a href="../lib/export_course_pdf.php" target="_blank" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                        <svg class="w-4 h-4 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                        Export PDF
+                    </a>
+                </div>
+          
+    
+            </div>
+            
+        
+        
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">

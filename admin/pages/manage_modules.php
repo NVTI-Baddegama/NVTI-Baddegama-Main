@@ -2,15 +2,9 @@
 include_once('../include/header.php');
 include('../../include/connection.php');
 
-// We should check if the user is an admin
-// if(!isset($_SESSION['username']) || $_SESSION['role'] != 'admin') {
-//     header("Location: ../login.php");
-//     exit();
-// }
-
 // --- Handle Status Messages ---
 $message = '';
-$message_type = ''; // 'success' or 'error'
+$message_type = ''; 
 
 if (isset($_GET['status'])) {
     switch ($_GET['status']) {
@@ -71,34 +65,26 @@ if ($selected_course_id) {
     $query .= " WHERE m.course_id = $sanitized_course_id";
 } else {
     // If no course is selected, show no modules.
-    $query .= " WHERE 1 = 0"; // This is a safe way to return 0 results
+    $query .= " WHERE 1 = 0"; 
 }
 
 // Sort by the code/letter, then by name
 $query .= " ORDER BY m.order_no ASC, m.module_name ASC"; 
 
 $modules = mysqli_query($con, $query);
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Modules Dashboard</title>
-    <!-- Include Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
     <style>
-        /* Apply the Inter font to the whole page */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+        body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-
 <body class="bg-gray-100 p-6 sm:p-8">
 
     <div class="max-w-7xl mx-auto">
@@ -115,7 +101,6 @@ $modules = mysqli_query($con, $query);
                 <button onclick="document.getElementById('statusAlert').style.display='none'" class="text-2xl font-bold">&times;</button>
             </div>
         <?php endif; ?>
-
 
         <!-- Course Filter Dropdown -->
         <div class="bg-white p-6 rounded-xl shadow-lg mb-6">
@@ -135,30 +120,50 @@ $modules = mysqli_query($con, $query);
 
         <!-- Manage Modules Table -->
         <div class="bg-white p-6 rounded-xl shadow-lg mt-8">
-            <div class="flex justify-between items-center border-b pb-2 mb-4">
+            <div class="flex flex-col md:flex-row justify-between items-center border-b pb-4 mb-4 gap-4">
                 <h3 class="text-xl font-semibold text-gray-800">Modules</h3>
-                <button id="addModuleBtn" 
-                        class="bg-primary-accent text-white px-4 py-2 rounded-lg transition duration-150">
-                    Add New Module
-                </button>
+                
+                <div class="flex flex-wrap gap-4 items-center">
+                    <!-- Add Button -->
+                    <button id="addModuleBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition duration-150 shadow-md">
+                        Add New Module
+                    </button>
+                    
+                    <!-- Export Buttons Group -->
+                    <div class="flex gap-2">
+                        <?php if($selected_course_id): ?>
+                            <!-- Active Buttons (Course Selected) -->
+                            <a href="../lib/export_module_csv.php?course_id=<?php echo $selected_course_id; ?>" target="_blank" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150">
+                                <svg class="w-4 h-4 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                Export CSV
+                            </a>
+                            <a href="../lib/export_module_pdf.php?course_id=<?php echo $selected_course_id; ?>" target="_blank" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150">
+                                <svg class="w-4 h-4 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                                Export PDF
+                            </a>
+                        <?php else: ?>
+                            <!-- Disabled Buttons (No Course Selected) -->
+                            <span class="inline-flex items-center px-3 py-2 border border-gray-200 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-400 bg-gray-100 cursor-not-allowed" title="Select a course first to export">
+                                <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                Export CSV
+                            </span>
+                            <span class="inline-flex items-center px-3 py-2 border border-gray-200 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-400 bg-gray-100 cursor-not-allowed" title="Select a course first to export">
+                                <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                                Export PDF
+                            </span>
+                        <?php endif; ?>
+                    </div>
+                </div>
             </div>
+
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tl-lg">
-                                Module Name
-                            </th>
-                            <!-- UPDATED HEADER -->
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Module Code / Letter
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Course
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tr-lg">
-                                Actions
-                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tl-lg">Module Name</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Module Code / Letter</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tr-lg">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -167,7 +172,7 @@ $modules = mysqli_query($con, $query);
                         if (!$selected_course_id) {
                         ?>
                             <tr>
-                                <td colspan="4" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                <td colspan="4" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center italic">
                                     Please select a course from the dropdown above to see its modules.
                                 </td>
                             </tr>
@@ -175,12 +180,11 @@ $modules = mysqli_query($con, $query);
                         } elseif ($modules && mysqli_num_rows($modules) > 0) {
                             while ($row = mysqli_fetch_assoc($modules)) {
                         ?>
-                                <tr>
+                                <tr class="hover:bg-gray-50 transition duration-150">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         <?php echo htmlspecialchars($row['module_name']); ?>
                                     </td>
-                                    <!-- UPDATED COLUMN DATA -->
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">
                                         <?php echo htmlspecialchars($row['order_no'] ?? 'N/A'); ?>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -188,16 +192,16 @@ $modules = mysqli_query($con, $query);
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                                         <!-- Edit button -->
-                                        <button type="button" class="text-indigo-600 hover:text-indigo-900 transition duration-150 edit-btn" 
+                                        <button type="button" class="text-indigo-600 hover:text-indigo-900 transition duration-150 edit-btn font-semibold" 
                                             data-id="<?php echo $row['id']; ?>" 
                                             data-name="<?php echo htmlspecialchars($row['module_name']); ?>" 
                                             data-course-id="<?php echo htmlspecialchars($row['course_id']); ?>"
-                                            data-order-no="<?php echo htmlspecialchars($row['order_no']); ?>"> <!-- This now holds text -->
+                                            data-order-no="<?php echo htmlspecialchars($row['order_no']); ?>">
                                             Edit
                                         </button>
-                                        
+                                        <span class="text-gray-300">|</span>
                                         <!-- Delete button -->
-                                        <button type="button" class="text-red-600 hover:text-red-900 transition duration-150 delete-btn" 
+                                        <button type="button" class="text-red-600 hover:text-red-900 transition duration-150 delete-btn font-semibold" 
                                             data-id="<?php echo $row['id']; ?>" 
                                             data-name="<?php echo htmlspecialchars($row['module_name']); ?>">
                                             Delete
@@ -205,18 +209,17 @@ $modules = mysqli_query($con, $query);
                                     </td>
                                 </tr>
                             <?php
-                            } // End while
+                            } 
                         } else {
                             ?>
                             <tr>
-                                <td colspan="4" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                <td colspan="4" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center italic">
                                     No modules found for this course.
                                 </td>
                             </tr>
                         <?php
-                        } // End if/else
+                        } 
                         ?>
-
                     </tbody>
                 </table>
             </div>
@@ -224,7 +227,7 @@ $modules = mysqli_query($con, $query);
     </div>
 
     <!-- Add Module Modal -->
-    <div id="addModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center p-4">
+    <div id="addModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-lg">
             <div class="flex justify-between items-center p-4 border-b">
                 <h3 class="text-xl font-semibold text-gray-800">Add New Module</h3>
@@ -233,12 +236,11 @@ $modules = mysqli_query($con, $query);
             <form action="../lib/add_module.php" method="POST" class="p-6 space-y-4">
                 <div>
                     <label for="add_module_name" class="block text-sm font-medium text-gray-700">Module Name</label>
-                    <input type="text" id="add_module_name" name="module_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                    <input type="text" id="add_module_name" name="module_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-10 px-3" required>
                 </div>
-                <!-- UPDATED FIELD -->
                 <div>
                     <label for="add_order_no" class="block text-sm font-medium text-gray-700">Module Code / Letter</label>
-                    <input type="text" id="add_order_no" name="order_no" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="e.g., A, B, C or M-01, M-02">
+                    <input type="text" id="add_order_no" name="order_no" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-10 px-3" placeholder="e.g., A, B, C or M-01, M-02">
                 </div>
                 <div>
                     <label for="add_course_id" class="block text-sm font-medium text-gray-700">Course</label>
@@ -252,15 +254,15 @@ $modules = mysqli_query($con, $query);
                     </select>
                 </div>
                 <div class="flex justify-end pt-4">
-                    <button type="button" id="cancelAddButton" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 mr-2">Cancel</button>
-                    <button type="submit" class="bg-primary-accent text-white px-4 py-2 rounded-lg hover:bg-primary-dark">Add Module</button>
+                    <button type="button" id="cancelAddButton" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 mr-2 transition">Cancel</button>
+                    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">Add Module</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Edit Module Modal -->
-    <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center p-4">
+    <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-lg">
             <div class="flex justify-between items-center p-4 border-b">
                 <h3 class="text-xl font-semibold text-gray-800">Edit Module</h3>
@@ -271,15 +273,14 @@ $modules = mysqli_query($con, $query);
                 
                 <div>
                     <label for="edit_module_name" class="block text-sm font-medium text-gray-700">Module Name</label>
-                    <input type="text" id="edit_module_name" name="module_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                    <input type="text" id="edit_module_name" name="module_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-10 px-3" required>
                 </div>
-                <!-- UPDATED FIELD -->
                 <div>
                     <label for="edit_order_no" class="block text-sm font-medium text-gray-700">Module Code / Letter</label>
-                    <input type="text" id="edit_order_no" name="order_no" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="e.g., A, B, C or M-01, M-02">
+                    <input type="text" id="edit_order_no" name="order_no" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-10 px-3" placeholder="e.g., A, B, C or M-01, M-02">
                 </div>
                 <div>
-                    <label for="edit_course_id" class="block text-sm font-medium text-gray-700">Course</LabeL>
+                    <label for="edit_course_id" class="block text-sm font-medium text-gray-700">Course</label>
                     <select id="edit_course_id" name="course_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-10" required>
                         <option value="">Select a course</option>
                         <?php foreach ($courses_list as $course) : ?>
@@ -291,15 +292,15 @@ $modules = mysqli_query($con, $query);
                 </div>
 
                 <div class="flex justify-end pt-4">
-                    <button type="button" id="cancelEditButton" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 mr-2">Cancel</button>
-                    <button type="submit" class="bg-primary-accent text-white px-4 py-2 rounded-lg hover:bg-primary-dark">Update Module</button>
+                    <button type="button" id="cancelEditButton" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 mr-2 transition">Cancel</button>
+                    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">Update Module</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Delete Module Modal -->
-    <div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center p-4">
+    <div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-md">
             <div class="flex justify-between items-center p-4 border-b">
                 <h3 class="text-xl font-semibold text-gray-800">Confirm Deletion</h3>
@@ -313,12 +314,11 @@ $modules = mysqli_query($con, $query);
                 <p class="text-sm text-red-600 mt-2">This action cannot be undone.</p>
             </div>
             <div class="flex justify-end p-4 bg-gray-50 rounded-b-xl">
-                <button type="button" id="cancelDeleteButton" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 mr-2">Cancel</button>
-                <a id="confirmDeleteButton" href="#" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Delete</a>
+                <button type="button" id="cancelDeleteButton" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 mr-2 transition">Cancel</button>
+                <a id="confirmDeleteButton" href="#" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">Delete</a>
             </div>
         </div>
     </div>
-
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -378,14 +378,14 @@ $modules = mysqli_query($con, $query);
             const moduleIdInput = document.getElementById('edit_module_id');
             const moduleNameInput = document.getElementById('edit_module_name');
             const courseIdInput = document.getElementById('edit_course_id');
-            const orderNoInput = document.getElementById('edit_order_no'); // This is now a text field
+            const orderNoInput = document.getElementById('edit_order_no'); 
             
             editButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     moduleIdInput.value = button.dataset.id;
                     moduleNameInput.value = button.dataset.name;
                     courseIdInput.value = button.dataset.courseId;
-                    orderNoInput.value = button.dataset.orderNo; // Populates the text field
+                    orderNoInput.value = button.dataset.orderNo;
                     openModal(editModal);
                 });
             });
@@ -405,7 +405,6 @@ $modules = mysqli_query($con, $query);
                     const name = button.dataset.name;
                     
                     deleteModuleName.textContent = name;
-                    // Note: This URL doesn't change, the delete file only needs the ID
                     confirmDeleteButton.href = `../lib/delete_module.php?id=${id}`;
                     openModal(deleteModal);
                 });
@@ -416,5 +415,4 @@ $modules = mysqli_query($con, $query);
     <?php include_once('../include/footer.php'); ?>
 
 </body>
-
 </html>

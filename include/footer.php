@@ -108,6 +108,16 @@
                             class="text-gray-300 hover:text-white transition duration-300 text-sm">Gallery</a></li>
                     <li><a href="../pages/staff.php"
                             class="text-gray-300 hover:text-white transition duration-300 text-sm">Staff</a></li>
+                    <li><a href="https://course.vta.lk/" target="_blank"
+                            class="text-gray-300 hover:text-white transition duration-300 text-sm">VTA Sri Lanka</a></li>
+                    <li><a href="https://nvq.gov.lk/Report_Inquires/Certificate_Enquiry_home.php?srchtxt=" target="_blank"
+                            class="text-gray-300 hover:text-white transition duration-300 text-sm">Student search in TVEC</a></li>
+                    <li><a href="https://nvq.gov.lk/Report_Inquires/Search_Skill.php" target="_blank"
+                            class="text-gray-300 hover:text-white transition duration-300 text-sm">NCS in TVEC</a></li>
+                    <li><a href="https://mohe.gov.lk/index.php?lang=en" target="_blank"
+                            class="text-gray-300 hover:text-white transition duration-300 text-sm">Minister of Education and Higher Education</a></li>
+                    <li><a href="https://www.tvec.gov.lk/" target="_blank"
+                            class="text-gray-300 hover:text-white transition duration-300 text-sm">Tertiary and Vocational Education Commission</a></li>
                 </ul>
             </div>
 
@@ -158,6 +168,22 @@
                         <svg class="w-5 h-5 text-primary mr-3 flex-shrink-0" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                        <span class="text-gray-300 text-sm">+94 71 824 9323 IU Wickramanayaka<br>(Assistant Director)</span>
+                    </div>
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 text-primary mr-3 flex-shrink-0" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                        <span class="text-gray-300 text-sm">+94 71 824 9323 EAR Lakshman<br>(Softwere Developer Instructor)</span>
+                    </div>
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 text-primary mr-3 flex-shrink-0" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
                         <span class="text-gray-300 text-sm">nvtibaddegama@vtasl.gov.lk</span><br>
@@ -172,6 +198,16 @@
                         <span class="text-gray-300 text-sm">infor@nvtibaddegama.site</span><br>
                         
                     </div>
+                     <div class="flex items-center">
+                        <svg class="w-5 h-5 text-primary mr-3 flex-shrink-0" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        <span class="text-gray-300 text-sm">baddegamanvti@gmail.com</span><br>
+                        
+                    </div>
+                    
                 </div>
             </div>
         </div>

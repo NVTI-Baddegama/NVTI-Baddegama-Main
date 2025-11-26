@@ -28,7 +28,7 @@ class PDF extends FPDF
     }
 }
 
-$query = "SELECT service_id, first_name, last_name, position, status FROM staff ORDER BY position ASC, first_name ASC";
+$query = "SELECT service_id, first_name, last_name, position, status,type FROM staff ORDER BY CAST(service_id AS UNSIGNED) ASC";
 $stmt = $con->prepare($query);
 
 if (!$stmt) {

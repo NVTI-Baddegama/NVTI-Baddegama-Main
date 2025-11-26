@@ -7,7 +7,24 @@ Stack trace:
   thrown in /home/nvtibadde/public_html/include/connection.php on line 20
 [01-Nov-2025 07:58:21 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'nvtibadde'@'atlas.webserverlive.com' to database 'nvtibadde_vta_baddegam' in /home/nvtibadde/public_html/include/connection.php:20
 Stack trace:
-
+#0 /home/nvtibadde/public_html/include/connection.php(20): mysqli->__construct()
+#1 /home/nvtibadde/public_html/include/header.php(7): include_once('/home/nvtibadde...')
+#2 /home/nvtibadde/public_html/pages/index.php(1): include_once('/home/nvtibadde...')
+#3 {main}
+  thrown in /home/nvtibadde/public_html/include/connection.php on line 20
+[01-Nov-2025 07:58:38 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'nvtibadde'@'atlas.webserverlive.com' to database 'nvtibadde_vta_baddegam' in /home/nvtibadde/public_html/include/connection.php:20
+Stack trace:
+#0 /home/nvtibadde/public_html/include/connection.php(20): mysqli->__construct()
+#1 /home/nvtibadde/public_html/include/header.php(7): include_once('/home/nvtibadde...')
+#2 /home/nvtibadde/public_html/pages/index.php(1): include_once('/home/nvtibadde...')
+#3 {main}
+  thrown in /home/nvtibadde/public_html/include/connection.php on line 20
+[01-Nov-2025 07:58:43 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'nvtibadde'@'atlas.webserverlive.com' to database 'nvtibadde_vta_baddegam' in /home/nvtibadde/public_html/include/connection.php:20
+Stack trace:
+#0 /home/nvtibadde/public_html/include/connection.php(20): mysqli->__construct()
+#1 /home/nvtibadde/public_html/include/header.php(7): include_once('/home/nvtibadde...')
+#2 /home/nvtibadde/public_html/pages/index.php(1): include_once('/home/nvtibadde...')
+#3 {main}
   thrown in /home/nvtibadde/public_html/include/connection.php on line 20
 [01-Nov-2025 07:58:47 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'nvtibadde'@'atlas.webserverlive.com' to database 'nvtibadde_vta_baddegam' in /home/nvtibadde/public_html/include/connection.php:20
 Stack trace:
@@ -255,3 +272,12 @@ Stack trace:
 [14-Nov-2025 16:27:28 UTC] PHP Warning:  Trying to access array offset on null in /home/nvtibadde/public_html/pages/course_details.php on line 131
 [17-Nov-2025 09:16:14 UTC] PHP Warning:  Trying to access array offset on null in /home/nvtibadde/public_html/pages/course_details.php on line 131
 [17-Nov-2025 15:28:30 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/nvtibadde/public_html/include/header.php:22) in /home/nvtibadde/public_html/pages/course_details.php on line 8
+[25-Nov-2025 01:43:08 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/nvtibadde/public_html/include/header.php:22) in /home/nvtibadde/public_html/pages/course_details.php on line 8
+[25-Nov-2025 06:55:08 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Connection refused in /home/nvtibadde/public_html/include/connection.php:20
+Stack trace:
+#0 /home/nvtibadde/public_html/include/connection.php(20): mysqli->__construct()
+#1 /home/nvtibadde/public_html/include/header.php(7): include_once('/home/nvtibadde...')
+#2 /home/nvtibadde/public_html/pages/course_details.php(3): include_once('/home/nvtibadde...')
+#3 {main}
+  thrown in /home/nvtibadde/public_html/include/connection.php on line 20
+[25-Nov-2025 23:06:47 UTC] PHP Warning:  Trying to access array offset on null in /home/nvtibadde/public_html/pages/course_details.php on line 131

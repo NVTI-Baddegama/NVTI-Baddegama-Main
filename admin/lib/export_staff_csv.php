@@ -5,7 +5,7 @@ include_once('../../include/connection.php');
 
 // --- 1. Query Data ---
 // We select specific columns appropriate for a spreadsheet
-$query = "SELECT service_id, first_name, last_name, position, email, contact_no, status FROM staff ORDER BY position ASC, first_name ASC";
+$query = "SELECT service_id, first_name, last_name, position, email, contact_no, status FROM staff ORDER BY CAST(service_id AS UNSIGNED) ASC";
 
 $stmt = $con->prepare($query);
 $stmt->execute();
