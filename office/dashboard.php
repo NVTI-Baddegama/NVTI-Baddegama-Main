@@ -745,41 +745,30 @@ $current_staff = $staff_result->fetch_assoc();
         });
 
         <?php if (($position === 'Instructor' || $position === 'Senior Instructor') && count($assigned_courses) > 0): ?>
-        // Handle student actions
+        // Handle student actions - CONFIRM MODAL REMOVED
         function handleStudentAction(studentId, action) {
-            let confirmMessage;
-            if (action === 'accept') {
-                confirmMessage = 'Are you sure you want to accept this student application?';
-            } else {
-                confirmMessage = 'Are you sure you want to reject this student application?\n\n' +
-                               'Note: If this is their Course Choice 1, they will be moved to Course Choice 2 instructor. ' +
-                               'If this is their final choice, they will be removed from the database.';
-            }
+            const formData = new FormData();
+            formData.append('student_id', studentId);
+            formData.append('action', action);
+            formData.append('course_name', '<?php echo addslashes($active_course_name); ?>');
             
-            if (confirm(confirmMessage)) {
-                const formData = new FormData();
-                formData.append('student_id', studentId);
-                formData.append('action', action);
-                formData.append('course_name', '<?php echo addslashes($active_course_name); ?>');
-                
-                fetch('student_action.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(data.message);
-                        location.reload();
-                    } else {
-                        alert(data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred while processing the request.');
-                });
-            }
+            fetch('student_action.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while processing the request.');
+            });
         }
 
         // Bulk operations
@@ -819,7 +808,7 @@ $current_staff = $staff_result->fetch_assoc();
             }
         }
 
-        // Reject all pending students without selection
+        // Reject all pending students without selection - CONFIRM MODAL REMOVED
         function rejectAllPending() {
             const pendingCount = <?php echo $pending_applications; ?>;
             
@@ -828,25 +817,23 @@ $current_staff = $staff_result->fetch_assoc();
                 return;
             }
             
-            if (confirm(`Are you sure you want to reject all ${pendingCount} pending student(s) for this course?\n\nNote:\n- Students with Course Choice 2 will be moved to their second choice instructor\n- Students without Course Choice 2 will be removed from the database\n\nThis action cannot be undone!`)) {
-                const formData = new FormData();
-                formData.append('action', 'bulk_reject_all_pending');
-                formData.append('course_name', '<?php echo addslashes($active_course_name); ?>');
-                
-                fetch('student_action.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                    if (data.success) location.reload();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred while rejecting pending students.');
-                });
-            }
+            const formData = new FormData();
+            formData.append('action', 'bulk_reject_all_pending');
+            formData.append('course_name', '<?php echo addslashes($active_course_name); ?>');
+            
+            fetch('student_action.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.success) location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while rejecting pending students.');
+            });
         }
 
         function exportToPDF() {
