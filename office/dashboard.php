@@ -702,7 +702,8 @@ $current_staff = $staff_result->fetch_assoc();
             document.getElementById('studentDetailsModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
             
-            fetch('get_student_details.php?id=' + studentId)
+            // Changed to call get_student_enrollment_details.php instead
+            fetch('get_student_enrollment_details.php?id=' + studentId)
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById('studentDetailsContent').innerHTML = data;
@@ -745,7 +746,7 @@ $current_staff = $staff_result->fetch_assoc();
         });
 
         <?php if (($position === 'Instructor' || $position === 'Senior Instructor') && count($assigned_courses) > 0): ?>
-        // Handle student actions - CONFIRM MODAL REMOVED
+        // Handle student actions
         function handleStudentAction(studentId, action) {
             const formData = new FormData();
             formData.append('student_id', studentId);
@@ -778,7 +779,7 @@ $current_staff = $staff_result->fetch_assoc();
             checkboxes.forEach(cb => cb.checked = selectAll.checked);
         }
 
-        // Accept all pending students without selection
+        // Accept all pending students
         function acceptAllPending() {
             const pendingCount = <?php echo $pending_applications; ?>;
             
@@ -808,7 +809,7 @@ $current_staff = $staff_result->fetch_assoc();
             }
         }
 
-        // Reject all pending students without selection - CONFIRM MODAL REMOVED
+        // Reject all pending students
         function rejectAllPending() {
             const pendingCount = <?php echo $pending_applications; ?>;
             
