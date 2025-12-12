@@ -199,6 +199,7 @@ if (isset($_SESSION['staff_error_msg'])) {
                         <option value="Assistant Instructor" <?php echo ($staff['position'] == 'Assistant Instructor') ? 'selected' : ''; ?>>Assistant Instructor</option>
                         <option value="Senior Instructor" <?php echo ($staff['position'] == 'Senior Instructor') ? 'selected' : ''; ?>>Senior Instructor</option>
                         <option value="Demonstrator" <?php echo ($staff['position'] == 'Demonstrator') ? 'selected' : ''; ?>>Demonstrator</option>
+                        <option value="Deputy Director" <?php echo ($staff['position'] == 'Deputy Director') ? 'selected' : ''; ?>>Deputy Director</option>
                         <option value="Finance Officer" <?php echo ($staff['position'] == 'Finance Officer') ? 'selected' : ''; ?>>Finance officer</option>
                         <option value="Testing Officer" <?php echo ($staff['position'] == 'Testing Officer') ? 'selected' : ''; ?>>Testing Officer</option>
                         <option value="Management Assistant" <?php echo ($staff['position'] == 'Management Assistant') ? 'selected' : ''; ?>>Management Assistant</option>
