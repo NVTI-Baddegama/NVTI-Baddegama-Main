@@ -4,6 +4,7 @@
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Merriweather:wght@400;700;900&display=swap');
 </style>
 
+
 <script>
     tailwind.config = {
         theme: {

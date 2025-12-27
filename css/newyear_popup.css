@@ -1,0 +1,113 @@
+/* Pop-up Overlay */
+.ny-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Modal Content Box */
+.ny-modal-content {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    color: #fff;
+    padding: 40px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+    border: 2px solid #d4af37;
+    transform: scale(0.7);
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.ny-festive-icon {
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+
+.ny-modal-content h1 {
+    color: #d4af37;
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.ny-modal-content p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #cccccc;
+    margin-bottom: 25px;
+}
+
+/* Close Button (X) */
+.ny-close {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.ny-close:hover {
+    color: #d4af37;
+}
+
+/* Action Button */
+.ny-btn {
+    background: linear-gradient(90deg, #d4af37, #f4df4e);
+    color: #000;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ny-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+}
+
+/* Confetti Effect */
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background-color: #f2d74e;
+    top: -10px;
+    z-index: 10000;
+    border-radius: 50%;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes popIn {
+    to { transform: scale(1); }
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
